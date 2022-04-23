@@ -32,18 +32,13 @@ import view.right.Right
 @Composable
 @Preview
 fun App() {
+    Database.connect(
+        url = "jdbc:postgresql://localhost:5432/vmm",
+        driver = "org.postgresql.Driver",
+        user = "postgres",
+        password = "postgres"
+    )
     val usersRepo: UsersRepo = UsersRepoImpl()
-    val database =
-        Database.connect(
-            url = "jdbc:postgresql://localhost:5432/vmm",
-            driver = "org.postgresql.Driver",
-            user = "postgres",
-            password = "postgres"
-        )
-    transaction(database) {
-        addLogger(StdOutSqlLogger)
-        usersRepo.addAll(User.all())
-    }
 
     MaterialTheme(colors = darkThemeColors) {
         val selectedUser = remember { mutableStateOf(usersRepo.getFirst()) }

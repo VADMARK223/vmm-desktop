@@ -3,6 +3,9 @@ package repository
 import androidx.compose.runtime.mutableStateListOf
 import db.User
 import org.jetbrains.exposed.sql.SizedIterable
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * @author Markitanov Vadim
@@ -10,6 +13,14 @@ import org.jetbrains.exposed.sql.SizedIterable
  */
 class UsersRepoImpl : UsersRepo {
     private val list = mutableStateListOf<User>()
+
+    init {
+        transaction {
+            addLogger(StdOutSqlLogger)
+
+            list.addAll(User.all())
+        }
+    }
 
     override fun addUser(user: User) {
         list.add(user)
