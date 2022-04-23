@@ -44,7 +44,7 @@ fun UserItem(user: User, modifier: Modifier) {
         ) {
             val vadmarkModifier = Modifier.width(50.dp).clip(RoundedCornerShape(25.dp))
             Image(
-                painter = painterResource("vadmark.jpg"),//painterResource("vadmark.jpg"),
+                painter = painterResource("vadmark.jpg"),
                 contentDescription = "",
                 modifier = vadmarkModifier,
                 contentScale = ContentScale.FillWidth

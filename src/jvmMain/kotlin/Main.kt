@@ -5,6 +5,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,9 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import repository.*
+import repository.MessagesRepo
+import repository.MessagesRepoImpl
+import repository.UsersRepo
 import resources.darkThemeColors
 import service.databaseConnect
+import view.common.NewContact
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
@@ -26,7 +31,7 @@ fun App() {
     databaseConnect()
 
     MaterialTheme(colors = darkThemeColors) {
-//        val selectedUser = remember { mutableStateOf(UsersRepo.getFirst()) }
+        val newContactShow = remember { mutableStateOf(false) }
         val messagesRepo: MessagesRepo = MessagesRepoImpl(UsersRepo)
 
         if (UsersRepo.selected.value == null) {
@@ -38,11 +43,11 @@ fun App() {
                 Button(
                     modifier = Modifier.align(Alignment.Center),
                     onClick = {
-                        UsersRepo.addUser()
-//                        selectedUser.value = UsersRepo.getFirst()
+                        newContactShow.value = true
+//                        UsersRepo.addUser()
                     },
                 ) {
-                    Text("Add user")
+                    Text("Create contact")
                 }
             }
         } else {
@@ -54,7 +59,8 @@ fun App() {
                         .fillMaxHeight(),
                     onUserClick = { user ->
                         messagesRepo.updateMessagesByUserId(user.id.value)
-                    }
+                    },
+                    newContactShow = newContactShow
                 )
                 Column(
                     modifier = Modifier
@@ -71,6 +77,10 @@ fun App() {
                     InputMessage(messagesRepo)
                 }
             }
+        }
+
+        if (newContactShow.value) {
+            NewContact(newContactShow)
         }
     }
 }

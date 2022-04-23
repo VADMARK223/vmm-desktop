@@ -7,20 +7,20 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import repository.UsersRepo
 
 /**
  * @author Markitanov Vadim
  * @since 23.04.2022
  */
 @Composable
-fun Top() {
+fun Top(newContactShow: MutableState<Boolean>) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -58,7 +58,8 @@ fun Top() {
             }
         ) {
             DropdownMenuItem(onClick = {
-                UsersRepo.addUser()
+//                UsersRepo.addUser()
+                newContactShow.value = true
                 expanded.value = false
             }) {
                 Text(text = "Add user")

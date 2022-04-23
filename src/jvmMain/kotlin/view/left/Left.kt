@@ -13,9 +13,9 @@ import db.User
  * @since 23.04.2022
  */
 @Composable
-fun Left( modifier: Modifier, onUserClick: (User) -> Unit) {
+fun Left(modifier: Modifier, onUserClick: (User) -> Unit, newContactShow: MutableState<Boolean>) {
     Column(modifier = Modifier.width(300.dp)) {
-        Top()
+        Top(newContactShow)
         Users(
             modifier = modifier,
             onUserClick = onUserClick

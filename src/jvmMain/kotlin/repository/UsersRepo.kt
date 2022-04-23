@@ -25,11 +25,14 @@ object UsersRepo {
         return list
     }
 
-    fun addUser() {
+    fun addUser(
+        firstNameOut: String = "First#" + Random.nextInt(10),
+        lastNameOut: String = "Last#" + Random.nextInt(10)
+    ) {
         transaction {
             val user = User.new {
-                firstName = "FirstName#" + Random.nextInt(100)
-                lastName = "LastName#" + Random.nextInt(100)
+                firstName = firstNameOut
+                lastName = lastNameOut
                 activityTime = Instant.now()
             }
             list.add(user)
