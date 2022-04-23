@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import data.User
+import db.User
 
 /**
  * @author Markitanov Vadim
@@ -34,8 +34,9 @@ fun UserInfo(selectedUserState: MutableState<User>) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                val minutesAgoText =
-                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago (${selectedUser.activityTime})"
+//                val minutesAgoText =
+//                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago (${selectedUser.activityTime})"
+                val minutesAgoText = "Last activity: ${selectedUser.activityTime}"
                 Text(
                     text = "${selectedUser.lastName} ${selectedUser.firstName}",
                     style = MaterialTheme.typography.h6,

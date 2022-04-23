@@ -14,12 +14,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import org.jetbrains.exposed.dao.id.LongIdTable
+import db.User
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.javatime.timestamp
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.MessagesRepo
 import repository.MessagesRepoImpl
@@ -47,7 +45,7 @@ fun App(usersRepo: UsersRepo) {
                     .background(Color(14, 22, 33))
                     .fillMaxHeight(),
                 onUserClick = { user ->
-                    messagesRepo.updateMessagesByUserId(user.id)
+                    messagesRepo.updateMessagesByUserId(user.id.value)
                 }
             )
             Column(
@@ -68,12 +66,6 @@ fun App(usersRepo: UsersRepo) {
     }
 }
 
-object Users : LongIdTable("users") {
-    val firstName = varchar("first_name", 50)
-    val lastName = varchar("last_name", 50)
-    val activityTime = timestamp("activity_time")
-}
-
 fun main() = application {
     val usersRepo: UsersRepo = UsersRepoImpl()
     val database =
@@ -86,12 +78,23 @@ fun main() = application {
     transaction(database) {
         addLogger(StdOutSqlLogger)
 
-        for (user in Users.selectAll()) {
-            usersRepo.addUser(user[Users.id].value,
-                user[Users.firstName],
-                user[Users.lastName],
-                user[Users.activityTime])
+        User.all().forEach { user ->
+            run {
+                println("User: $user")
+                usersRepo.addUser(
+                    user
+                )
+            }
         }
+
+//        for (user in Users.selectAll()) {
+//            usersRepo.addUser(
+//                user[Users.id].value,
+//                user[Users.firstName],
+//                user[Users.lastName],
+//                user[Users.activityTime]
+//            )
+//        }
     }
 
     val icon = painterResource("favicon.ico")

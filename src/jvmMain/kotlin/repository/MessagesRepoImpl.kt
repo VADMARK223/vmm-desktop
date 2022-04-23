@@ -2,7 +2,7 @@ package repository
 
 import androidx.compose.runtime.mutableStateListOf
 import data.Message
-import data.User
+import db.User
 import kotlin.random.Random
 
 /**
