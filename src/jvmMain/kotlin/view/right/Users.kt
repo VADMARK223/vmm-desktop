@@ -20,16 +20,15 @@ import view.item.user.UserItem
  * @since 23.04.2022
  */
 @Composable
-fun Users(selectedUser: MutableState<User?>, usersRepo: UsersRepo, modifier: Modifier, onUserClick: (User) -> Unit) {
+fun Users(selectedUser: MutableState<User?>, modifier: Modifier, onUserClick: (User) -> Unit) {
     val usersLazyListState = rememberLazyListState()
     LazyColumn(
         state = usersLazyListState,
         modifier = modifier
     ) {
         transaction {
-            items(items = usersRepo.users()) { user ->
+            items(items = UsersRepo.users()) { user ->
                 UserItem(
-                    usersRepo,
                     user = user,
                     modifier = Modifier
                         .background(if (selectedUser.value == user) Color(43, 82, 120) else Color(23, 33, 43))

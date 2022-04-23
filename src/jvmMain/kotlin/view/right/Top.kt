@@ -20,7 +20,7 @@ import repository.UsersRepo
  * @since 23.04.2022
  */
 @Composable
-fun Top(repo: UsersRepo) {
+fun Top() {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -58,7 +58,7 @@ fun Top(repo: UsersRepo) {
             }
         ) {
             DropdownMenuItem(onClick = {
-                repo.addUser()
+                UsersRepo.addUser()
                 expanded.value = false
             }) {
                 Text(text = "Add user")

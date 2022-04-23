@@ -29,7 +29,7 @@ import kotlin.random.nextInt
  * @since 23.04.2022
  */
 @Composable
-fun UserItem(usersRepo: UsersRepo, user: User, modifier: Modifier) {
+fun UserItem(user: User, modifier: Modifier) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = UserAction.values()
 
@@ -93,7 +93,7 @@ fun UserItem(usersRepo: UsersRepo, user: User, modifier: Modifier) {
                             transaction { user.lastName = "Edit" + Random.nextInt(1..10) }
                         }
                         UserAction.REMOVE -> {
-                            usersRepo.remove(user)
+                            UsersRepo.remove(user)
                         }
                     }
 

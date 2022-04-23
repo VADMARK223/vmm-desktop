@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
  * @since 23.04.2022
  */
 val darkThemeColors = darkColors(
-    primary = Color(0xFFBB86FC),
+    primary = Color(39, 104, 153),
     primaryVariant = Color(0xFF3700B3),
     secondary = Color(37, 38, 61),
     secondaryVariant = Color(0xFF03DAC6),

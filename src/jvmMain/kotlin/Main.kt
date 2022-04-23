@@ -14,16 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import db.User
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
-import repository.MessagesRepo
-import repository.MessagesRepoImpl
-import repository.UsersRepo
-import repository.UsersRepoImpl
+import repository.*
 import resources.darkThemeColors
+import service.databaseConnect
 import view.InputMessage
 import view.Messages
 import view.UserInfo
@@ -32,17 +25,11 @@ import view.right.Right
 @Composable
 @Preview
 fun App() {
-    Database.connect(
-        url = "jdbc:postgresql://localhost:5432/vmm",
-        driver = "org.postgresql.Driver",
-        user = "postgres",
-        password = "postgres"
-    )
-    val usersRepo: UsersRepo = UsersRepoImpl()
+    databaseConnect()
 
     MaterialTheme(colors = darkThemeColors) {
-        val selectedUser = remember { mutableStateOf(usersRepo.getFirst()) }
-        val messagesRepo: MessagesRepo = MessagesRepoImpl(usersRepo)
+        val selectedUser = remember { mutableStateOf(UsersRepo.getFirst()) }
+        val messagesRepo: MessagesRepo = MessagesRepoImpl(UsersRepo)
 
         if (selectedUser.value == null) {
             Box(
@@ -53,22 +40,17 @@ fun App() {
                 Button(
                     modifier = Modifier.align(Alignment.Center),
                     onClick = {
-                        transaction {
-                            addLogger(StdOutSqlLogger)
-                            usersRepo.addAll(User.all())
-                        }
-
-                        selectedUser.value = usersRepo.getFirst()
+                        UsersRepo.addUser()
+                        selectedUser.value = UsersRepo.getFirst()
                     },
                 ) {
-                    Text("Load users")
+                    Text("Add user")
                 }
             }
         } else {
             Row {
                 Right(
                     selectedUser,
-                    usersRepo = usersRepo,
                     modifier = Modifier
                         .weight(1.0f)
                         .background(Color(14, 22, 33))
