@@ -43,6 +43,8 @@ fun App() {
     transaction(database) {
         addLogger(StdOutSqlLogger)
         usersRepo.addAll(User.all())
+
+//        User[1].lastName="a"
     }
 
     MaterialTheme(colors = darkThemeColors) {

@@ -19,6 +19,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import db.User
+import org.jetbrains.exposed.sql.transactions.transaction
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 /**
  * @author Markitanov Vadim
@@ -85,7 +88,10 @@ fun UserItem(user: User, modifier: Modifier) {
             menuItems.forEach {
                 DropdownMenuItem(onClick = {
                     when (it) {
-                        UserAction.EDIT -> println("Edit user: " + user.id)
+                        UserAction.EDIT -> {
+                            println("Edit user: " + user.id)
+                            transaction { User[user.id].lastName = "B"+ Random.nextInt(1..10) }
+                        }
                         UserAction.REMOVE -> println("Remove user: " + user.id)
                     }
 
