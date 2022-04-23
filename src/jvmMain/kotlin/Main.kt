@@ -17,10 +17,10 @@ import androidx.compose.ui.window.*
 import repository.*
 import resources.darkThemeColors
 import service.databaseConnect
-import view.InputMessage
-import view.Messages
-import view.UserInfo
-import view.right.Right
+import view.right.InputMessage
+import view.right.Messages
+import view.right.UserInfo
+import view.left.Left
 
 @Composable
 @Preview
@@ -49,7 +49,7 @@ fun App() {
             }
         } else {
             Row {
-                Right(
+                Left(
                     selectedUser,
                     modifier = Modifier
                         .weight(1.0f)

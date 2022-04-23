@@ -50,11 +50,11 @@ fun UserItem(user: User, modifier: Modifier) {
                 contentScale = ContentScale.FillWidth
             )
 
-            Column {
+            Column (modifier = Modifier.width(160.dp)){
                 Text(
                     text = user.lastName + " " + user.firstName,
                     style = MaterialTheme.typography.h6,
-                    maxLines = 2,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.White
                 )

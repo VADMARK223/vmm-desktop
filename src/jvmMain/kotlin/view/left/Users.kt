@@ -1,4 +1,4 @@
-package view.right
+package view.left
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
