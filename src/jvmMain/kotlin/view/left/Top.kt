@@ -1,7 +1,9 @@
 package view.left
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,7 +13,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
@@ -57,8 +62,18 @@ fun Top(newContactShow: MutableState<Boolean>) {
                 expanded.value = false
             }
         ) {
+            DropdownMenuItem (onClick = {
+                println("Click ava")
+            }){
+                val vadmarkModifier = Modifier.width(50.dp).clip(RoundedCornerShape(25.dp))
+                Image(
+                    painter = painterResource("vadmark.jpg"),
+                    contentDescription = "",
+                    modifier = vadmarkModifier,
+                    contentScale = ContentScale.FillWidth
+                )
+            }
             DropdownMenuItem(onClick = {
-//                UsersRepo.addUser()
                 newContactShow.value = true
                 expanded.value = false
             }) {
