@@ -27,7 +27,7 @@ import resources.darkThemeColors
 import view.InputMessage
 import view.Messages
 import view.UserInfo
-import view.Users
+import view.right.Right
 
 @Composable
 @Preview
@@ -71,7 +71,7 @@ fun App() {
             }
         } else {
             Row {
-                Users(
+                Right(
                     selectedUser,
                     repo = usersRepo,
                     modifier = Modifier
