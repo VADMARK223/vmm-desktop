@@ -5,8 +5,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,10 +15,10 @@ import androidx.compose.ui.window.*
 import repository.*
 import resources.darkThemeColors
 import service.databaseConnect
+import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
 import view.right.UserInfo
-import view.left.Left
 
 @Composable
 @Preview
@@ -28,10 +26,10 @@ fun App() {
     databaseConnect()
 
     MaterialTheme(colors = darkThemeColors) {
-        val selectedUser = remember { mutableStateOf(UsersRepo.getFirst()) }
+//        val selectedUser = remember { mutableStateOf(UsersRepo.getFirst()) }
         val messagesRepo: MessagesRepo = MessagesRepoImpl(UsersRepo)
 
-        if (selectedUser.value == null) {
+        if (UsersRepo.selected.value == null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -41,7 +39,7 @@ fun App() {
                     modifier = Modifier.align(Alignment.Center),
                     onClick = {
                         UsersRepo.addUser()
-                        selectedUser.value = UsersRepo.getFirst()
+//                        selectedUser.value = UsersRepo.getFirst()
                     },
                 ) {
                     Text("Add user")
@@ -50,7 +48,6 @@ fun App() {
         } else {
             Row {
                 Left(
-                    selectedUser,
                     modifier = Modifier
                         .weight(1.0f)
                         .background(Color(14, 22, 33))
@@ -64,7 +61,7 @@ fun App() {
                         .fillMaxSize()
                         .weight(2.0f)
                 ) {
-                    UserInfo(selectedUser)
+                    UserInfo()
                     Messages(
                         Modifier
                             .weight(1f)

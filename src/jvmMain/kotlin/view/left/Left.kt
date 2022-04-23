@@ -13,11 +13,10 @@ import db.User
  * @since 23.04.2022
  */
 @Composable
-fun Left(selectedUser: MutableState<User?>, modifier: Modifier, onUserClick: (User) -> Unit) {
+fun Left( modifier: Modifier, onUserClick: (User) -> Unit) {
     Column(modifier = Modifier.width(300.dp)) {
         Top()
         Users(
-            selectedUser,
             modifier = modifier,
             onUserClick = onUserClick
         )

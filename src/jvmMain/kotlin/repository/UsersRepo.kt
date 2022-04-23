@@ -1,6 +1,7 @@
 package repository
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import db.User
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
@@ -9,12 +10,14 @@ import java.time.Instant
 import kotlin.random.Random
 
 object UsersRepo {
+    val selected = mutableStateOf<User?>(null)
     private var list = mutableStateListOf<User>()
 
     init {
         transaction {
             addLogger(StdOutSqlLogger)
             list.addAll(User.all())
+            selectFirst()
         }
     }
 
@@ -25,16 +28,13 @@ object UsersRepo {
     fun addUser() {
         transaction {
             val user = User.new {
-                firstName = "FirstName#" + Random.nextInt(1000)
-                lastName = "LastName#" + Random.nextInt(1000)
+                firstName = "FirstName#" + Random.nextInt(100)
+                lastName = "LastName#" + Random.nextInt(100)
                 activityTime = Instant.now()
             }
             list.add(user)
+            selected.value = user
         }
-    }
-
-    fun getFirst(): User? {
-        return if (!list.isEmpty()) list.first() else null
     }
 
     fun remove(user: User) {
@@ -43,6 +43,11 @@ object UsersRepo {
         }
 
         list.remove(user)
+        selectFirst()
+    }
+
+    private fun selectFirst() {
+        selected.value = if (!list.isEmpty()) list.first() else null
     }
 }
 
