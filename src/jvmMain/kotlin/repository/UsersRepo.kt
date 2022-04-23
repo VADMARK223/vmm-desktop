@@ -10,6 +10,6 @@ import org.jetbrains.exposed.sql.SizedIterable
 interface UsersRepo {
     fun addUser(user: User)
     fun items(): List<User>
-    fun getFirst(): User
+    fun getFirst(): User?
     fun addAll(users: SizedIterable<User>)
 }

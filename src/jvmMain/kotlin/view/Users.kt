@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import db.User
 import repository.UsersRepo
-import view.item.UserItem
+import view.item.user.UserItem
 
 /**
  * @author Markitanov Vadim
  * @since 23.04.2022
  */
 @Composable
-fun Users(selectedUser: MutableState<User>, repo: UsersRepo, modifier: Modifier, onUserClick: (User) -> Unit) {
+fun Users(selectedUser: MutableState<User?>, repo: UsersRepo, modifier: Modifier, onUserClick: (User) -> Unit) {
     val usersLazyListState = rememberLazyListState()
     LazyColumn(
         state = usersLazyListState,

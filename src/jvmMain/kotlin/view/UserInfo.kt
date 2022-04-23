@@ -18,7 +18,7 @@ import db.User
  * @since 23.04.2022
  */
 @Composable
-fun UserInfo(selectedUserState: MutableState<User>) {
+fun UserInfo(selectedUserState: MutableState<User?>) {
     val selectedUser = selectedUserState.value
 
     Box(
@@ -36,9 +36,9 @@ fun UserInfo(selectedUserState: MutableState<User>) {
             Column {
 //                val minutesAgoText =
 //                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago (${selectedUser.activityTime})"
-                val minutesAgoText = "Last activity: ${selectedUser.activityTime}"
+                val minutesAgoText = "Last activity: ${selectedUser?.activityTime}"
                 Text(
-                    text = "${selectedUser.lastName} ${selectedUser.firstName}",
+                    text = "${selectedUser?.lastName} ${selectedUser?.firstName}",
                     style = MaterialTheme.typography.h6,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

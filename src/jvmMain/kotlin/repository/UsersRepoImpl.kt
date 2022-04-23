@@ -19,8 +19,8 @@ class UsersRepoImpl : UsersRepo {
         return list
     }
 
-    override fun getFirst(): User {
-        return list.first()
+    override fun getFirst(): User? {
+        return if (!list.isEmpty()) list.first() else null
     }
 
     override fun addAll(users: SizedIterable<User>) {
