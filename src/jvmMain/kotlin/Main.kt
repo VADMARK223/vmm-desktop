@@ -31,7 +31,20 @@ import view.Users
 
 @Composable
 @Preview
-fun App(usersRepo: UsersRepo) {
+fun App() {
+    val usersRepo: UsersRepo = UsersRepoImpl()
+    val database =
+        Database.connect(
+            url = "jdbc:postgresql://localhost:5432/vmm",
+            driver = "org.postgresql.Driver",
+            user = "postgres",
+            password = "postgres"
+        )
+    transaction(database) {
+        addLogger(StdOutSqlLogger)
+        usersRepo.addAll(User.all())
+    }
+
     MaterialTheme(colors = darkThemeColors) {
         val selectedUser = remember { mutableStateOf(usersRepo.getFirst()) }
         val messagesRepo: MessagesRepo = MessagesRepoImpl(usersRepo)
@@ -67,36 +80,6 @@ fun App(usersRepo: UsersRepo) {
 }
 
 fun main() = application {
-    val usersRepo: UsersRepo = UsersRepoImpl()
-    val database =
-        Database.connect(
-            url = "jdbc:postgresql://localhost:5432/vmm",
-            driver = "org.postgresql.Driver",
-            user = "postgres",
-            password = "postgres"
-        )
-    transaction(database) {
-        addLogger(StdOutSqlLogger)
-
-        User.all().forEach { user ->
-            run {
-                println("User: $user")
-                usersRepo.addUser(
-                    user
-                )
-            }
-        }
-
-//        for (user in Users.selectAll()) {
-//            usersRepo.addUser(
-//                user[Users.id].value,
-//                user[Users.firstName],
-//                user[Users.lastName],
-//                user[Users.activityTime]
-//            )
-//        }
-    }
-
     val icon = painterResource("favicon.ico")
     val width = 1000.dp
     val height = 700.dp
@@ -120,6 +103,6 @@ fun main() = application {
         "Vadmark`s messenger",
         icon = icon
     ) {
-        App(usersRepo)
+        App()
     }
 }

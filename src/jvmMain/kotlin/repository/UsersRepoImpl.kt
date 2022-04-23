@@ -2,6 +2,7 @@ package repository
 
 import androidx.compose.runtime.mutableStateListOf
 import db.User
+import org.jetbrains.exposed.sql.SizedIterable
 
 /**
  * @author Markitanov Vadim
@@ -20,5 +21,9 @@ class UsersRepoImpl : UsersRepo {
 
     override fun getFirst(): User {
         return list.first()
+    }
+
+    override fun addAll(users: SizedIterable<User>) {
+        list.addAll(users)
     }
 }

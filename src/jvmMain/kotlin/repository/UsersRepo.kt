@@ -1,6 +1,7 @@
 package repository
 
 import db.User
+import org.jetbrains.exposed.sql.SizedIterable
 
 /**
  * @author Markitanov Vadim
@@ -10,4 +11,5 @@ interface UsersRepo {
     fun addUser(user: User)
     fun items(): List<User>
     fun getFirst(): User
+    fun addAll(users: SizedIterable<User>)
 }
