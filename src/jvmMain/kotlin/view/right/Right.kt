@@ -15,12 +15,12 @@ import repository.UsersRepo
  * @since 23.04.2022
  */
 @Composable
-fun Right(selectedUser: MutableState<User?>, repo: UsersRepo, modifier: Modifier, onUserClick: (User) -> Unit) {
+fun Right(selectedUser: MutableState<User?>, usersRepo: UsersRepo, modifier: Modifier, onUserClick: (User) -> Unit) {
     Column (modifier = Modifier.width(300.dp)){
-        Top(repo = repo)
+        Top(repo = usersRepo)
         Users(
             selectedUser,
-            repo = repo,
+            usersRepo = usersRepo,
             modifier = modifier,
             onUserClick = onUserClick
         )

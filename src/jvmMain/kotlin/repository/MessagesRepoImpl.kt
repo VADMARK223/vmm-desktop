@@ -14,11 +14,11 @@ class MessagesRepoImpl(usersRepo: UsersRepo) : MessagesRepo {
     private val userMessageMap = mutableMapOf<Long, List<Message>>()
 
     init {
-        usersRepo.items().forEach { user ->
-            userMessageMap[userMessageMap.size.toLong() + 1] = createRandomMessages(user)
-        }
-
-        messages.addAll(userMessageMap[1] ?: mutableStateListOf())
+//        usersRepo.items().forEach { user ->
+//            userMessageMap[userMessageMap.size.toLong() + 1] = createRandomMessages(user)
+//        }
+//
+//        messages.addAll(userMessageMap[1] ?: mutableStateListOf())
     }
 
     private fun createRandomMessages(user: User): List<Message> {

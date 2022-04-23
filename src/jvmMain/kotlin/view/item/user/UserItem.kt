@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import db.User
 import org.jetbrains.exposed.sql.transactions.transaction
+import repository.UsersRepo
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -28,7 +29,7 @@ import kotlin.random.nextInt
  * @since 23.04.2022
  */
 @Composable
-fun UserItem(user: User, modifier: Modifier) {
+fun UserItem(usersRepo: UsersRepo, user: User, modifier: Modifier) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = UserAction.values()
 
@@ -89,12 +90,10 @@ fun UserItem(user: User, modifier: Modifier) {
                 DropdownMenuItem(onClick = {
                     when (it) {
                         UserAction.EDIT -> {
-                            println("Edit user: " + user.id)
-                            transaction { user.lastName = "B" + Random.nextInt(1..10) }
+                            transaction { user.lastName = "Edit" + Random.nextInt(1..10) }
                         }
                         UserAction.REMOVE -> {
-                            println("Remove user: " + user.id)
-                            transaction { user.delete() }
+                            usersRepo.remove(user)
                         }
                     }
 

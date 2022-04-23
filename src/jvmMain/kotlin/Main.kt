@@ -68,7 +68,7 @@ fun App() {
             Row {
                 Right(
                     selectedUser,
-                    repo = usersRepo,
+                    usersRepo = usersRepo,
                     modifier = Modifier
                         .weight(1.0f)
                         .background(Color(14, 22, 33))

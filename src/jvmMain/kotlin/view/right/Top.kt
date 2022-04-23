@@ -13,11 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import db.User
-import org.jetbrains.exposed.sql.transactions.transaction
 import repository.UsersRepo
-import java.time.Instant
-import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
@@ -62,15 +58,7 @@ fun Top(repo: UsersRepo) {
             }
         ) {
             DropdownMenuItem(onClick = {
-                transaction {
-                    val user = User.new {
-                        firstName = "FirstName#" + Random.nextInt(1000)
-                        lastName = "LastName#" + Random.nextInt(1000)
-                        activityTime = Instant.now()
-                    }
-                    repo.addUser(user)
-                }
-
+                repo.addUser()
                 expanded.value = false
             }) {
                 Text(text = "Add user")
