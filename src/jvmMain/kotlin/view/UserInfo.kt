@@ -35,7 +35,7 @@ fun UserInfo(selectedUserState: MutableState<User>) {
         ) {
             Column {
                 val minutesAgoText =
-                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago"
+                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago (${selectedUser.activityTime})"
                 Text(
                     text = "${selectedUser.lastName} ${selectedUser.firstName}",
                     style = MaterialTheme.typography.h6,
@@ -44,7 +44,7 @@ fun UserInfo(selectedUserState: MutableState<User>) {
                     color = Color.White
                 )
                 Text(
-                    text = minutesAgoText,//,
+                    text = minutesAgoText,
                     style = MaterialTheme.typography.overline,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

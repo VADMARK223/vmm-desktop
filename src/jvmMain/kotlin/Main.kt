@@ -18,6 +18,7 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.MessagesRepo
@@ -70,13 +71,14 @@ fun App(usersRepo: UsersRepo) {
 object Users : LongIdTable("users") {
     val firstName = varchar("first_name", 50)
     val lastName = varchar("last_name", 50)
+    val activityTime = timestamp("activity_time")
 }
 
 fun main() = application {
     val usersRepo: UsersRepo = UsersRepoImpl()
     val database =
         Database.connect(
-            url = "jdbc:postgresql://localhost:5432/vmh",
+            url = "jdbc:postgresql://localhost:5432/vmm",
             driver = "org.postgresql.Driver",
             user = "postgres",
             password = "postgres"
@@ -85,7 +87,10 @@ fun main() = application {
         addLogger(StdOutSqlLogger)
 
         for (user in Users.selectAll()) {
-            usersRepo.addUser(user[Users.id].value, user[Users.firstName], user[Users.lastName])
+            usersRepo.addUser(user[Users.id].value,
+                user[Users.firstName],
+                user[Users.lastName],
+                user[Users.activityTime])
         }
     }
 

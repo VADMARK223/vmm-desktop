@@ -35,6 +35,7 @@ kotlin {
                 implementation("org.jetbrains.exposed:exposed-core:" + extra["jetbrains.exposed.version"])
                 implementation("org.jetbrains.exposed:exposed-dao:" + extra["jetbrains.exposed.version"])
                 implementation("org.jetbrains.exposed:exposed-jdbc:" + extra["jetbrains.exposed.version"])
+                implementation("org.jetbrains.exposed:exposed-java-time:" + extra["jetbrains.exposed.version"])
             }
         }
         val jvmTest by getting
