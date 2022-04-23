@@ -32,7 +32,7 @@ fun App() {
 
     MaterialTheme(colors = darkThemeColors) {
         val newContactShow = remember { mutableStateOf(false) }
-        val messagesRepo: MessagesRepo = MessagesRepoImpl(UsersRepo)
+        val messagesRepo: MessagesRepo = MessagesRepoImpl()
 
         if (UsersRepo.selected.value == null) {
             Box(

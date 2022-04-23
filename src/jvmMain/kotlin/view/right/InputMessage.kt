@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import data.Message
+import db.Message
 import repository.MessagesRepo
 
 /**
@@ -63,7 +63,7 @@ fun InputMessage(messagesRepo: MessagesRepo) {
 
                     IconButton(
                         onClick = {
-                            messagesRepo.addMessage(Message(21, mainOutput.value.text))
+//                            messagesRepo.addMessage(Message(21, mainOutput.value.text))
                             mainOutput.value = TextFieldValue("")
                         }
                     ) {

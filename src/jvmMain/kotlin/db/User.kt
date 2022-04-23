@@ -14,4 +14,8 @@ class User(id: EntityID<Long>) : Entity<Long>(id) {
     var firstName by Users.firstName
     var lastName by Users.lastName
     var activityTime by Users.activityTime
+
+    override fun toString(): String {
+        return "User(firstName='$firstName', lastName='$lastName')"
+    }
 }
