@@ -17,7 +17,7 @@ import repository.UsersRepo
 @Composable
 fun Right(selectedUser: MutableState<User?>, repo: UsersRepo, modifier: Modifier, onUserClick: (User) -> Unit) {
     Column (modifier = Modifier.width(300.dp)){
-        Top()
+        Top(repo = repo)
         Users(
             selectedUser,
             repo = repo,
