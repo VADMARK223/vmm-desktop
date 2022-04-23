@@ -90,9 +90,12 @@ fun UserItem(user: User, modifier: Modifier) {
                     when (it) {
                         UserAction.EDIT -> {
                             println("Edit user: " + user.id)
-                            transaction { User[user.id].lastName = "B"+ Random.nextInt(1..10) }
+                            transaction { user.lastName = "B" + Random.nextInt(1..10) }
                         }
-                        UserAction.REMOVE -> println("Remove user: " + user.id)
+                        UserAction.REMOVE -> {
+                            println("Remove user: " + user.id)
+                            transaction { user.delete() }
+                        }
                     }
 
                     expanded.value = false
