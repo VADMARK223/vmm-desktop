@@ -10,4 +10,5 @@ interface MessagesRepo {
     fun messageList(): List<Message>
     fun addMessage(textOut: String)
     fun updateMessagesByUserId(userId: Long)
+    fun removeMessage(message: Message)
 }

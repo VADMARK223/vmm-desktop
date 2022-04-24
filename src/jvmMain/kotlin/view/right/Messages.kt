@@ -48,7 +48,7 @@ fun Messages(modifier: Modifier, messagesRepo: MessagesRepo) {
                     }
                 ) {
                     item {
-                        MessageItem(message)
+                        MessageItem(message, messagesRepo)
                     }
                 }
                 Spacer(modifier = Modifier.height(5.dp))

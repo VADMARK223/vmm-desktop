@@ -6,9 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.awtEventOrNull
@@ -17,6 +21,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import db.Message
+import repository.MessagesRepo
 import java.awt.event.MouseEvent
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -27,7 +32,8 @@ import java.time.format.DateTimeFormatter
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: Message) {
+fun MessageItem(message: Message, messagesRepo: MessagesRepo) {
+    val expanded = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .background(
@@ -41,7 +47,7 @@ fun MessageItem(message: Message) {
             .onPointerEvent(PointerEventType.Press) {
                 when (it.awtEventOrNull?.button) {
                     MouseEvent.BUTTON3 -> {
-                        println("Right")
+                        expanded.value = true
                     }
                 }
             }
@@ -59,6 +65,20 @@ fun MessageItem(message: Message) {
                 style = MaterialTheme.typography.overline,
                 color = Color.Gray
             )
+        }
+
+        DropdownMenu(
+            expanded = expanded.value,
+            onDismissRequest = {
+                expanded.value = false
+            }
+        ) {
+            DropdownMenuItem(onClick = {
+                messagesRepo.removeMessage(message)
+                expanded.value = false
+            }) {
+                Text(text = "Remove message")
+            }
         }
     }
 }

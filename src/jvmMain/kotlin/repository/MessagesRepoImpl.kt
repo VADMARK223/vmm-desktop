@@ -50,6 +50,13 @@ class MessagesRepoImpl : MessagesRepo {
         userMessageMap[userId]?.let { messages.addAll(it) }
     }
 
+    override fun removeMessage(message: Message) {
+        transaction {
+            message.delete()
+            messages.remove(message)
+        }
+    }
+
     private fun clearMessages() {
         messages.clear()
     }
