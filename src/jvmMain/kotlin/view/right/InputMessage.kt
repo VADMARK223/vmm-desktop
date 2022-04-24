@@ -31,6 +31,7 @@ import repository.MessagesRepo
 @Composable
 fun InputMessage(messagesRepo: MessagesRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
+    val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(
             value = mainOutput.value,
@@ -71,12 +72,14 @@ fun InputMessage(messagesRepo: MessagesRepo) {
                         Icon(Icons.Filled.Face, contentDescription = "Add emoji")
                     }
 
-                    IconButton(
-                        onClick = {
-                            sendMessage(mainOutput, messagesRepo)
+                    if (mainOutputEmpty.value) {
+                        IconButton(
+                            onClick = {
+                                sendMessage(mainOutput, messagesRepo)
+                            }
+                        ) {
+                            Icon(Icons.Filled.Send, contentDescription = "Send message")
                         }
-                    ) {
-                        Icon(Icons.Filled.Send, contentDescription = "Send message")
                     }
                 }
             }
