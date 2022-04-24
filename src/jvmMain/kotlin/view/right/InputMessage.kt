@@ -78,7 +78,7 @@ fun InputMessage(messagesRepo: MessagesRepo) {
                                 sendMessage(mainOutput, messagesRepo)
                             }
                         ) {
-                            Icon(Icons.Filled.Send, contentDescription = "Send message")
+                            Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))
                         }
                     }
                 }

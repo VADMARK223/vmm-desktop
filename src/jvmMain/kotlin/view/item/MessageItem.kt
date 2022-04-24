@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import db.Message
 import java.text.SimpleDateFormat
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -37,8 +39,13 @@ fun MessageItem(message: Message) {
         Row(
             horizontalArrangement = Arrangement.End
         ) {
+//            val pattern = "dd.MM.yyyy";
+            val pattern = "hh:mm:ss";
+            val formatter = DateTimeFormatter.ofPattern(pattern)
+                .withZone(ZoneId.systemDefault());
+            val messageCurrentTime = formatter.format(message.currentTime)
             Text(
-                text = SimpleDateFormat("hh:mm:ss", Locale.getDefault()).format(Date()),
+                text = messageCurrentTime,
                 style = MaterialTheme.typography.overline,
                 color = Color.Gray
             )

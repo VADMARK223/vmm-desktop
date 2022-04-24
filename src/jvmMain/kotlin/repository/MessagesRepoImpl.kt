@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import db.Message
 import db.Messages
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.Instant
 
 /**
  * @author Markitanov Vadim
@@ -38,6 +39,7 @@ class MessagesRepoImpl : MessagesRepo {
                 userId = selectedUserId
                 text = textOut
                 isMy = true
+                currentTime = Instant.now()
             }
             messages.add(newMessage)
         }

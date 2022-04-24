@@ -11,6 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import repository.UsersRepo
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 /**
  * @author Markitanov Vadim
@@ -35,7 +37,11 @@ fun UserInfo() {
             Column {
 //                val minutesAgoText =
 //                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago (${selectedUser.activityTime})"
-                val minutesAgoText = "Last activity: ${selectedUser?.activityTime}"
+//                val minutesAgoText = "Last activity: ${selectedUser?.activityTime}"
+                val pattern = "dd.MM.yyyy";
+                val formatter = DateTimeFormatter.ofPattern(pattern)
+                    .withZone(ZoneId.systemDefault());
+                val createTime = "Create time: " + formatter.format(selectedUser?.activityTime)
                 Text(
                     text = "${selectedUser?.lastName} ${selectedUser?.firstName}",
                     style = MaterialTheme.typography.h6,
@@ -44,7 +50,7 @@ fun UserInfo() {
                     color = Color.White
                 )
                 Text(
-                    text = minutesAgoText,
+                    text = createTime,
                     style = MaterialTheme.typography.overline,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
