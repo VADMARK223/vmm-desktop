@@ -1,6 +1,6 @@
 package view.item.user
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -13,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -32,6 +30,7 @@ import kotlin.random.nextInt
 fun UserItem(user: User, modifier: Modifier) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = UserAction.values()
+    val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
 
     Box(
         modifier = modifier,
@@ -42,29 +41,32 @@ fun UserItem(user: User, modifier: Modifier) {
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val vadmarkModifier = Modifier.width(50.dp).clip(RoundedCornerShape(25.dp))
-            Image(
-                painter = painterResource("vadmark.jpg"),
-                contentDescription = "",
-                modifier = vadmarkModifier,
-                contentScale = ContentScale.FillWidth
-            )
-
-            Column (modifier = Modifier.width(160.dp)){
+            val size = 30.dp
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(size))
+            ) {
+                val avaText = user.lastName.first().toString() + user.firstName.first().toString()
                 Text(
+                    text = avaText,
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(
+                            color = bgColor.value
+                        )
+                        .padding(size / 2)
+                )
+            }
+
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
                     text = user.lastName + " " + user.firstName,
                     style = MaterialTheme.typography.h6,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.White
                 )
-                /*Text(
-                    text = "${Random.nextInt(1, 10)} minutes ago",
-                    style = MaterialTheme.typography.overline,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray
-                )*/
             }
 
         }

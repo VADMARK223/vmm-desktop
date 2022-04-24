@@ -44,7 +44,6 @@ fun App() {
                     modifier = Modifier.align(Alignment.Center),
                     onClick = {
                         newContactShow.value = true
-//                        UsersRepo.addUser()
                     },
                 ) {
                     Text("Create contact")
@@ -54,7 +53,6 @@ fun App() {
             Row {
                 Left(
                     modifier = Modifier
-                        .weight(1.0f)
                         .background(Color(14, 22, 33))
                         .fillMaxHeight(),
                     onUserClick = { user ->
@@ -65,7 +63,6 @@ fun App() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(2.0f)
                 ) {
                     UserInfo()
                     Messages(
