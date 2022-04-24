@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import repository.MessagesRepo
-import view.item.MessageItem
+import view.right.item.MessageItem
 
 /**
  * @author Markitanov Vadim

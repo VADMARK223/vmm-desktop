@@ -1,4 +1,4 @@
-package view.item
+package view.right.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +34,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun MessageItem(message: Message, messagesRepo: MessagesRepo) {
     val expanded = remember { mutableStateOf(false) }
+    val menuItems = MessageAction.values()
     Column(
         modifier = Modifier
             .background(
@@ -73,11 +74,21 @@ fun MessageItem(message: Message, messagesRepo: MessagesRepo) {
                 expanded.value = false
             }
         ) {
-            DropdownMenuItem(onClick = {
-                messagesRepo.removeMessage(message)
-                expanded.value = false
-            }) {
-                Text(text = "Remove message")
+            menuItems.forEach {
+                DropdownMenuItem(onClick = {
+                    when (it) {
+                        MessageAction.EDIT -> {
+                            println("Edit: " + message.text)
+                        }
+                        MessageAction.REMOVE -> {
+                            messagesRepo.removeMessage(message)
+                        }
+                    }
+
+                    expanded.value = false
+                }) {
+                    Text(text = it.text)
+                }
             }
         }
     }
