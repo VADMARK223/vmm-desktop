@@ -1,10 +1,12 @@
 package view.right
 
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -33,9 +35,9 @@ fun Messages(modifier: Modifier, messagesRepo: MessagesRepo) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp),
+                .padding(start = 10.dp, end = 10.dp),
             state = lazyListState,
-            reverseLayout = true
+            reverseLayout = true,
         ) {
             itemsIndexed(items = messagesRepo.messageList().reversed()) { index, message ->
                 LazyRow(
@@ -71,13 +73,12 @@ fun Messages(modifier: Modifier, messagesRepo: MessagesRepo) {
             }
         }
 
-
-        /*VerticalScrollbar(
+        VerticalScrollbar(
             modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
             adapter = rememberScrollbarAdapter(
-                scrollState = state
+                scrollState = lazyListState
             ),
             reverseLayout = true
-        )*/
+        )
     }
 }
