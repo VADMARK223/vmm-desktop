@@ -24,17 +24,23 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
-
     override fun messageList(): List<Message> {
         return messages
     }
 
-    override fun addMessage(item: Message) {
-        messages.add(item)
-    }
+    override fun addMessage(textOut: String) {
+        if (textOut.isEmpty()) return
 
-    override fun clearMessages() {
-        messages.clear()
+        val selectedUserId = UsersRepo.selected.value?.id?.value as Long
+
+        transaction {
+            val newMessage = Message.new {
+                userId = selectedUserId
+                text = textOut
+                isMy = true
+            }
+            messages.add(newMessage)
+        }
     }
 
     override fun updateMessagesByUserId(userId: Long) {
@@ -42,7 +48,7 @@ class MessagesRepoImpl : MessagesRepo {
         userMessageMap[userId]?.let { messages.addAll(it) }
     }
 
-    override fun messagesByUserId(userId: Long): List<Message> {
-        return userMessageMap[userId]!!
+    private fun clearMessages() {
+        messages.clear()
     }
 }

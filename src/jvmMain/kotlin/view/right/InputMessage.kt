@@ -10,19 +10,24 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import db.Message
 import repository.MessagesRepo
 
 /**
  * @author Markitanov Vadim
  * @since 23.04.2022
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InputMessage(messagesRepo: MessagesRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
@@ -32,7 +37,12 @@ fun InputMessage(messagesRepo: MessagesRepo) {
             onValueChange = {
                 mainOutput.value = it
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().onKeyEvent {
+                if (it.key == Key.Enter) {
+                    sendMessage(mainOutput, messagesRepo)
+                }
+                false
+            },
             placeholder = { Text("Write a message...") },
             maxLines = 1,
             shape = RoundedCornerShape(0.dp),
@@ -63,8 +73,7 @@ fun InputMessage(messagesRepo: MessagesRepo) {
 
                     IconButton(
                         onClick = {
-//                            messagesRepo.addMessage(Message(21, mainOutput.value.text))
-                            mainOutput.value = TextFieldValue("")
+                            sendMessage(mainOutput, messagesRepo)
                         }
                     ) {
                         Icon(Icons.Filled.Send, contentDescription = "Send message")
@@ -73,4 +82,9 @@ fun InputMessage(messagesRepo: MessagesRepo) {
             }
         )
     }
+}
+
+private fun sendMessage(mainOutput: MutableState<TextFieldValue>, messagesRepo: MessagesRepo) {
+    messagesRepo.addMessage(mainOutput.value.text)
+    mainOutput.value = TextFieldValue("")
 }

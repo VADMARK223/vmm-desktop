@@ -13,7 +13,7 @@ class Message(id: EntityID<Long>) : Entity<Long>(id) {
 
     var userId by Messages.userId
     var text by Messages.text
-    val isMy by Messages.isMy
+    var isMy by Messages.isMy
 
     override fun toString(): String {
         return "Message(userId=$userId, text='$text')"

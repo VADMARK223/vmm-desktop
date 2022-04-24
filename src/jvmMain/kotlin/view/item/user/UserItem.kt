@@ -61,7 +61,7 @@ fun UserItem(user: User, modifier: Modifier) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = user.lastName + " " + user.firstName,
+                    text = user.id.value.toString() + " " + user.lastName + " " + user.firstName,
                     style = MaterialTheme.typography.h6,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

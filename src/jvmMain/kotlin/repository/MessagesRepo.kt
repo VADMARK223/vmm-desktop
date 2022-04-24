@@ -8,8 +8,6 @@ import db.Message
  */
 interface MessagesRepo {
     fun messageList(): List<Message>
-    fun addMessage(item: Message)
-    fun clearMessages()
+    fun addMessage(textOut: String)
     fun updateMessagesByUserId(userId: Long)
-    fun messagesByUserId(userId: Long): List<Message>
 }
