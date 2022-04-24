@@ -38,9 +38,9 @@ fun UserInfo() {
 //                val minutesAgoText =
 //                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago (${selectedUser.activityTime})"
 //                val minutesAgoText = "Last activity: ${selectedUser?.activityTime}"
-                val pattern = "dd.MM.yyyy";
+                val pattern = "dd.MM.yyyy"
                 val formatter = DateTimeFormatter.ofPattern(pattern)
-                    .withZone(ZoneId.systemDefault());
+                    .withZone(ZoneId.systemDefault())
                 val createTime = "Create time: " + formatter.format(selectedUser?.activityTime)
                 Text(
                     text = "${selectedUser?.lastName} ${selectedUser?.firstName}",
