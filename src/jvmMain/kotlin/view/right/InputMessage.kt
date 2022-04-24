@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +28,7 @@ import repository.MessagesRepo
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputMessage(messagesRepo: MessagesRepo) {
-    val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
+fun InputMessage(messagesRepo: MessagesRepo, mainOutput: MutableState<TextFieldValue>) {
     val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(

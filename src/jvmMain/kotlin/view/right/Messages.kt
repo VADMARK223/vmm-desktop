@@ -11,12 +11,10 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import repository.MessagesRepo
@@ -27,7 +25,7 @@ import view.right.item.MessageItem
  * @since 23.04.2022
  */
 @Composable
-fun Messages(modifier: Modifier, messagesRepo: MessagesRepo) {
+fun Messages(modifier: Modifier, messagesRepo: MessagesRepo, mainOutput: MutableState<TextFieldValue>) {
     Box(modifier = modifier) {
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
@@ -48,7 +46,7 @@ fun Messages(modifier: Modifier, messagesRepo: MessagesRepo) {
                     }
                 ) {
                     item {
-                        MessageItem(message, messagesRepo)
+                        MessageItem(message, messagesRepo, mainOutput)
                     }
                 }
                 Spacer(modifier = Modifier.height(5.dp))

@@ -40,6 +40,7 @@ class MessagesRepoImpl : MessagesRepo {
                 text = textOut
                 isMy = true
                 currentTime = Instant.now()
+                edited = false
             }
             messages.add(newMessage)
         }

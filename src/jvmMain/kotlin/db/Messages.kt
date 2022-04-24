@@ -12,4 +12,5 @@ object Messages : LongIdTable("messages") {
     val text = text("text")
     val isMy = bool("is_my")
     val createTime = timestamp("create_time")
+    val edited = bool("edited")
 }

@@ -15,6 +15,7 @@ class Message(id: EntityID<Long>) : Entity<Long>(id) {
     var text by Messages.text
     var isMy by Messages.isMy
     var currentTime by Messages.createTime
+    var edited by Messages.edited
 
     override fun toString(): String {
         return "Message(userId=$userId, text='$text')"

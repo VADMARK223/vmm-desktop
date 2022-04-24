@@ -11,6 +11,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -19,8 +20,10 @@ import androidx.compose.ui.awt.awtEventOrNull
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import db.Message
+import org.jetbrains.exposed.sql.transactions.transaction
 import repository.MessagesRepo
 import java.awt.event.MouseEvent
 import java.time.ZoneId
@@ -32,7 +35,7 @@ import java.time.format.DateTimeFormatter
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: Message, messagesRepo: MessagesRepo) {
+fun MessageItem(message: Message, messagesRepo: MessagesRepo, mainOutput: MutableState<TextFieldValue>) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = MessageAction.values()
     Column(
@@ -57,6 +60,13 @@ fun MessageItem(message: Message, messagesRepo: MessagesRepo) {
         Row(
             horizontalArrangement = Arrangement.End
         ) {
+            if (message.edited) {
+                Text(
+                    text = "edited",
+                    style = MaterialTheme.typography.overline,
+                    color = Color.Gray
+                )
+            }
             val pattern = "hh:mm:ss"
             val formatter = DateTimeFormatter.ofPattern(pattern)
                 .withZone(ZoneId.systemDefault())
@@ -66,6 +76,7 @@ fun MessageItem(message: Message, messagesRepo: MessagesRepo) {
                 style = MaterialTheme.typography.overline,
                 color = Color.Gray
             )
+
         }
 
         DropdownMenu(
@@ -78,7 +89,8 @@ fun MessageItem(message: Message, messagesRepo: MessagesRepo) {
                 DropdownMenuItem(onClick = {
                     when (it) {
                         MessageAction.EDIT -> {
-                            println("Edit: " + message.text)
+                            mainOutput.value = TextFieldValue(message.text)
+                            transaction { message.edited = true }
                         }
                         MessageAction.REMOVE -> {
                             messagesRepo.removeMessage(message)

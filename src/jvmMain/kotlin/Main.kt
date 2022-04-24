@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
@@ -29,6 +30,7 @@ import view.right.UserInfo
 @Preview
 fun App() {
     databaseConnect()
+    val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     MaterialTheme(colors = darkThemeColors) {
         val newContactShow = remember { mutableStateOf(false) }
@@ -69,9 +71,10 @@ fun App() {
                         Modifier
                             .weight(1f)
                             .background(color = Color(14, 22, 33)),
-                        messagesRepo
+                        messagesRepo,
+                        mainOutput
                     )
-                    InputMessage(messagesRepo)
+                    InputMessage(messagesRepo, mainOutput)
                 }
             }
         }
