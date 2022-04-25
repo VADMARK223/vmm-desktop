@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import org.jetbrains.exposed.sql.transactions.transaction
 import repository.UsersRepo
 import service.generateContactCredentials
 import kotlin.random.Random
@@ -28,11 +29,11 @@ import kotlin.random.Random
  * @since 23.04.2022
  */
 @Composable
-fun NewContact(newContactShow: MutableState<Boolean>) {
+fun Contact(contactState: MutableState<ContactState>) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(0.5F)).clickable { newContactShow.value = false }
+            .background(Color.Black.copy(0.5F)).clickable { contactState.value = ContactState.HIDE }
     ) {
         Box(
             modifier = Modifier
@@ -46,7 +47,11 @@ fun NewContact(newContactShow: MutableState<Boolean>) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "New Contact",
+                    text = when (contactState.value) {
+                        ContactState.CREATE -> "New Contact"
+                        ContactState.EDIT -> "Edit contact name"
+                        else -> ""
+                    },
                     color = Color.White
                 )
 
@@ -122,26 +127,40 @@ fun NewContact(newContactShow: MutableState<Boolean>) {
                 ) {
                     Button(
                         onClick = {
-                            newContactShow.value = false
+                            contactState.value = ContactState.HIDE
                         },
                     ) {
                         Text("CANCEL")
                     }
                     Button(
                         onClick = {
-                            firstNameEmpty.value = false
-                            lastNameEmpty.value = false
-                            if (firstName.value.text.isEmpty()) {
-                                firstNameEmpty.value = true
-                            } else if (lastName.value.text.isEmpty()) {
-                                lastNameEmpty.value = true
-                            } else {
-                                UsersRepo.addUser(firstName.value.text, lastName.value.text)
-                                newContactShow.value = false
+                            if(contactState.value == ContactState.CREATE){
+                                firstNameEmpty.value = false
+                                lastNameEmpty.value = false
+                                if (firstName.value.text.isEmpty()) {
+                                    firstNameEmpty.value = true
+                                } else if (lastName.value.text.isEmpty()) {
+                                    lastNameEmpty.value = true
+                                } else {
+                                    UsersRepo.addUser(firstName.value.text, lastName.value.text)
+                                    contactState.value = ContactState.HIDE
+                                }
+                            } else if (contactState.value == ContactState.EDIT) {
+                                transaction {
+                                    UsersRepo.selected.value?.firstName = firstName.value.text
+                                    UsersRepo.selected.value?.lastName = lastName.value.text
+                                }
+                                contactState.value = ContactState.HIDE
                             }
                         },
                     ) {
-                        Text("CREATE")
+                        Text(
+                            text = when (contactState.value) {
+                                ContactState.CREATE -> "CREATE"
+                                ContactState.EDIT -> "DONE"
+                                else -> ""
+                            }
+                        )
                     }
                 }
             }

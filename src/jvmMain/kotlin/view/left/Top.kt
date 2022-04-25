@@ -19,13 +19,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import view.common.ContactState
 
 /**
  * @author Markitanov Vadim
  * @since 23.04.2022
  */
 @Composable
-fun Top(newContactShow: MutableState<Boolean>) {
+fun Top(contactState: MutableState<ContactState>) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -74,7 +75,7 @@ fun Top(newContactShow: MutableState<Boolean>) {
                 )
             }
             DropdownMenuItem(onClick = {
-                newContactShow.value = true
+                contactState.value = ContactState.CREATE
                 expanded.value = false
             }) {
                 Text(text = "Add user")

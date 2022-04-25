@@ -20,7 +20,8 @@ import repository.MessagesRepoImpl
 import repository.UsersRepo
 import resources.darkThemeColors
 import service.databaseConnect
-import view.common.NewContact
+import view.common.Contact
+import view.common.ContactState
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
@@ -33,7 +34,7 @@ fun App() {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     MaterialTheme(colors = darkThemeColors) {
-        val newContactShow = remember { mutableStateOf(false) }
+        val contactState = remember { mutableStateOf(ContactState.HIDE) }
         val messagesRepo: MessagesRepo = MessagesRepoImpl()
 
         if (UsersRepo.selected.value == null) {
@@ -45,7 +46,7 @@ fun App() {
                 Button(
                     modifier = Modifier.align(Alignment.Center),
                     onClick = {
-                        newContactShow.value = true
+                        contactState.value = ContactState.CREATE
                     },
                 ) {
                     Text("Create contact")
@@ -60,7 +61,7 @@ fun App() {
                     onUserClick = { user ->
                         messagesRepo.updateMessagesByUserId(user.id.value)
                     },
-                    newContactShow = newContactShow
+                    contactState = contactState
                 )
                 Column(
                     modifier = Modifier
@@ -79,8 +80,8 @@ fun App() {
             }
         }
 
-        if (newContactShow.value) {
-            NewContact(newContactShow)
+        if (contactState.value != ContactState.HIDE) {
+            Contact(contactState)
         }
     }
 }
@@ -98,7 +99,7 @@ fun main() = application {
     Tray(
         icon = icon,
         menu = {
-            Item("Close app", onClick = ::exitApplication)
+            Item("Quit vmm", onClick = ::exitApplication)
         }
     )
 

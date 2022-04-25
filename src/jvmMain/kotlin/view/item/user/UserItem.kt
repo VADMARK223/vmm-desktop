@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,17 +18,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import db.User
-import org.jetbrains.exposed.sql.transactions.transaction
 import repository.UsersRepo
+import view.common.ContactState
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 /**
  * @author Markitanov Vadim
  * @since 23.04.2022
  */
 @Composable
-fun UserItem(user: User, modifier: Modifier) {
+fun UserItem(user: User, modifier: Modifier, contactState: MutableState<ContactState>) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = UserAction.values()
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
@@ -92,7 +92,7 @@ fun UserItem(user: User, modifier: Modifier) {
                 DropdownMenuItem(onClick = {
                     when (it) {
                         UserAction.EDIT -> {
-                            transaction { user.lastName = "Edit" + Random.nextInt(1..10) }
+                            contactState.value = ContactState.EDIT
                         }
                         UserAction.REMOVE -> {
                             UsersRepo.remove(user)
