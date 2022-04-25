@@ -1,16 +1,21 @@
-package view.right
+package view.right.info
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import repository.UsersRepo
+import view.common.ContactState
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -19,18 +24,19 @@ import java.time.format.DateTimeFormatter
  * @since 23.04.2022
  */
 @Composable
-fun UserInfo() {
+fun Info(contactState: MutableState<ContactState>) {
     val selectedUser = UsersRepo.selected.value
+    val expanded = remember { mutableStateOf(false) }
+    val menuItems = InfoAction.values()
 
     Box(
         modifier = Modifier
+            .fillMaxWidth()
             .background(Color(23, 33, 43))
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-                .background(Color(23, 33, 43)),
+                .padding(10.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -56,6 +62,45 @@ fun UserInfo() {
                     overflow = TextOverflow.Ellipsis,
                     color = Color.Gray
                 )
+            }
+        }
+
+        IconButton(
+            modifier = Modifier.align(Alignment.CenterEnd),
+            onClick = {
+                expanded.value = true
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded.value,
+            onDismissRequest = {
+                expanded.value = false
+            }
+        ) {
+            menuItems.forEach {
+                DropdownMenuItem(onClick = {
+                    when (it) {
+                        InfoAction.VIEW_PROFILE -> {
+                            println("View pro")
+                        }
+
+                        InfoAction.EDIT_CONTACT -> {
+                            println("Edit contact")
+                            contactState.value = ContactState.EDIT
+                        }
+                    }
+
+                    expanded.value = false
+                }) {
+                    Text(text = it.text)
+                }
             }
         }
     }

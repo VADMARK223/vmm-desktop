@@ -3,6 +3,8 @@ package repository
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import db.User
+import db.Users
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -16,7 +18,7 @@ object UsersRepo {
     init {
         transaction {
             addLogger(StdOutSqlLogger)
-            list.addAll(User.all())
+            list.addAll(User.all().orderBy(Users.id to SortOrder.ASC))
             selectFirst()
         }
     }

@@ -25,7 +25,7 @@ import view.common.ContactState
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
-import view.right.UserInfo
+import view.right.info.Info
 
 @Composable
 @Preview
@@ -67,7 +67,7 @@ fun App() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    UserInfo()
+                    Info(contactState = contactState)
                     Messages(
                         Modifier
                             .weight(1f)
