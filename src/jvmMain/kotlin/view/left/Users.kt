@@ -11,14 +11,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import db.User
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.UsersRepo
-import view.common.ContactState
 import view.item.user.UserItem
 
 /**

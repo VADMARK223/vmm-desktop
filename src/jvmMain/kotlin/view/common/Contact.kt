@@ -152,10 +152,8 @@ fun Contact(contactState: MutableState<ContactState>) {
                                     contactState.value = ContactState.HIDE
                                 }
                             } else if (contactState.value == ContactState.EDIT) {
-                                transaction {
-                                    UsersRepo.selected.value?.firstName = firstName.value.text
-                                    UsersRepo.selected.value?.lastName = lastName.value.text
-                                }
+                                UsersRepo.update(firstName.value.text, lastName.value.text);
+//
                                 contactState.value = ContactState.HIDE
                             }
                         },
