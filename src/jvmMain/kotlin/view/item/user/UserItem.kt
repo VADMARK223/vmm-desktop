@@ -7,7 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,7 +18,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import db.User
 import repository.UsersRepo
-import view.common.ContactState
 import kotlin.random.Random
 
 /**
@@ -46,7 +44,7 @@ fun UserItem(user: User, modifier: Modifier) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(size))
             ) {
-                val avaText = user.lastName.first().toString() + user.firstName.first().toString()
+                val avaText = user.firstName.first().toString() + user.lastName.first().toString()
                 Text(
                     text = avaText,
                     color = Color.White,
@@ -61,7 +59,7 @@ fun UserItem(user: User, modifier: Modifier) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = user.id.value.toString() + " " + user.lastName + " " + user.firstName,
+                    text = user.id.value.toString() + " " + user.firstName + " " + user.lastName,
                     style = MaterialTheme.typography.h6,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

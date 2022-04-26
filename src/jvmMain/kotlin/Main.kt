@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import db.User
 import repository.MessagesRepo
 import repository.MessagesRepoImpl
 import repository.UsersRepo
@@ -67,7 +68,7 @@ fun App() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    Info(contactState = contactState)
+                    Info(user = UsersRepo.selected.value, contactState = contactState)
                     Messages(
                         Modifier
                             .weight(1f)

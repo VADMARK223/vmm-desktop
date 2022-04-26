@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import repository.UsersRepo
+import db.User
 import view.common.ContactState
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -24,8 +24,7 @@ import java.time.format.DateTimeFormatter
  * @since 23.04.2022
  */
 @Composable
-fun Info(contactState: MutableState<ContactState>) {
-    val selectedUser = UsersRepo.selected.value
+fun Info(user: User?, contactState: MutableState<ContactState>) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = InfoAction.values()
 
@@ -37,7 +36,7 @@ fun Info(contactState: MutableState<ContactState>) {
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
-                text = "${selectedUser?.lastName} ${selectedUser?.firstName}",
+                text = "${user?.firstName} ${user?.lastName}",
                 style = MaterialTheme.typography.h6,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -47,7 +46,7 @@ fun Info(contactState: MutableState<ContactState>) {
             val pattern = "dd.MM.yyyy"
             val formatter = DateTimeFormatter.ofPattern(pattern)
                 .withZone(ZoneId.systemDefault())
-            val createTime = "Creation time: " + formatter.format(selectedUser?.activityTime)
+            val createTime = "Creation time: " + formatter.format(user?.activityTime)
             Text(
                 text = createTime,
                 style = MaterialTheme.typography.overline,
