@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import org.jetbrains.exposed.sql.transactions.transaction
 import repository.UsersRepo
 import service.generateContactCredentials
 import kotlin.random.Random
@@ -152,8 +151,7 @@ fun Contact(contactState: MutableState<ContactState>) {
                                     contactState.value = ContactState.HIDE
                                 }
                             } else if (contactState.value == ContactState.EDIT) {
-                                UsersRepo.update(firstName.value.text, lastName.value.text);
-//
+                                UsersRepo.update(firstName.value.text, lastName.value.text)
                                 contactState.value = ContactState.HIDE
                             }
                         },

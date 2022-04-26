@@ -58,17 +58,14 @@ object UsersRepo {
     fun update(firstName: String, lastName: String) {
         transaction {
             addLogger(StdOutSqlLogger)
-
-            /*
-            val selectedUserId = selected.value?.id?.value as Long
-            val updatedUser = Users.update({ Users.id eq selectedUserId }) {
-                it[Users.firstName] = firstName
-                it[Users.lastName] = lastName
-            }
-            println("updatedUsers :$updatedUser")*/
-
             selected.value?.firstName = firstName
             selected.value?.lastName = lastName
+
+            /*val selectedUserId = selected.value?.id?.value as Long
+            Users.update({ Users.id eq selectedUserId }) {
+                it[Users.firstName] = firstName
+                it[Users.lastName] = lastName
+            }*/
         }
     }
 }
