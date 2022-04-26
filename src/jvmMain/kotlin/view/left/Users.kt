@@ -26,7 +26,7 @@ import view.item.user.UserItem
  * @since 23.04.2022
  */
 @Composable
-fun Users(modifier: Modifier, onUserClick: (User) -> Unit, contactState: MutableState<ContactState>) {
+fun Users(modifier: Modifier, onUserClick: (User) -> Unit) {
     Box(modifier = modifier) {
         val usersLazyListState = rememberLazyListState()
         LazyColumn(
@@ -46,8 +46,7 @@ fun Users(modifier: Modifier, onUserClick: (User) -> Unit, contactState: Mutable
                                         UsersRepo.selected.value = user
                                         onUserClick(user)
                                     }
-                                }),
-                        contactState = contactState
+                                })
                     )
                 }
             }

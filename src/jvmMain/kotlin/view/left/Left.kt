@@ -19,8 +19,7 @@ fun Left(modifier: Modifier, onUserClick: (User) -> Unit, contactState: MutableS
         Top(contactState)
         Users(
             modifier = modifier,
-            onUserClick = onUserClick,
-            contactState = contactState
+            onUserClick = onUserClick
         )
     }
 }

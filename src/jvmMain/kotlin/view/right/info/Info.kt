@@ -33,36 +33,28 @@ fun Info(contactState: MutableState<ContactState>) {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(23, 33, 43))
+            .padding(12.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-//                val minutesAgoText =
-//                    if (selectedUser.minutesAgo == 0) "last seen recently" else "${selectedUser.minutesAgo} minutes ago (${selectedUser.activityTime})"
-//                val minutesAgoText = "Last activity: ${selectedUser?.activityTime}"
-                val pattern = "dd.MM.yyyy"
-                val formatter = DateTimeFormatter.ofPattern(pattern)
-                    .withZone(ZoneId.systemDefault())
-                val createTime = "Create time: " + formatter.format(selectedUser?.activityTime)
-                Text(
-                    text = "${selectedUser?.lastName} ${selectedUser?.firstName}",
-                    style = MaterialTheme.typography.h6,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.White
-                )
-                Text(
-                    text = createTime,
-                    style = MaterialTheme.typography.overline,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray
-                )
-            }
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text(
+                text = "${selectedUser?.lastName} ${selectedUser?.firstName}",
+                style = MaterialTheme.typography.h6,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.White
+            )
+
+            val pattern = "dd.MM.yyyy"
+            val formatter = DateTimeFormatter.ofPattern(pattern)
+                .withZone(ZoneId.systemDefault())
+            val createTime = "Creation time: " + formatter.format(selectedUser?.activityTime)
+            Text(
+                text = createTime,
+                style = MaterialTheme.typography.overline,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.Gray
+            )
         }
 
         IconButton(
@@ -74,32 +66,32 @@ fun Info(contactState: MutableState<ContactState>) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = null,
-                tint = Color.White
+                tint = Color.Gray
             )
         }
-
-        DropdownMenu(
-            expanded = expanded.value,
-            onDismissRequest = {
-                expanded.value = false
-            }
-        ) {
-            menuItems.forEach {
-                DropdownMenuItem(onClick = {
-                    when (it) {
-                        InfoAction.VIEW_PROFILE -> {
-                            println("View pro")
-                        }
-
-                        InfoAction.EDIT_CONTACT -> {
-                            println("Edit contact")
-                            contactState.value = ContactState.EDIT
-                        }
-                    }
-
+        Box(modifier = Modifier.align(Alignment.BottomEnd)) {
+            DropdownMenu(
+                expanded = expanded.value,
+                onDismissRequest = {
                     expanded.value = false
-                }) {
-                    Text(text = it.text)
+                }
+            ) {
+                menuItems.forEach {
+                    DropdownMenuItem(onClick = {
+                        when (it) {
+                            InfoAction.VIEW_PROFILE -> {
+                                println("View pro")
+                            }
+
+                            InfoAction.EDIT_CONTACT -> {
+                                contactState.value = ContactState.EDIT
+                            }
+                        }
+
+                        expanded.value = false
+                    }) {
+                        Text(text = it.text)
+                    }
                 }
             }
         }

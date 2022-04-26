@@ -58,7 +58,10 @@ fun Contact(contactState: MutableState<ContactState>) {
                 val firstName = remember {
                     mutableStateOf(
                         TextFieldValue(
-                            if (generateContactCredentials()) "First#" + Random.nextInt(10) else ""
+                            if (contactState.value == ContactState.EDIT)
+                                UsersRepo.selected.value?.firstName as String
+                            else
+                                if (generateContactCredentials()) "First#" + Random.nextInt(10) else ""
                         )
                     )
                 }
@@ -82,7 +85,10 @@ fun Contact(contactState: MutableState<ContactState>) {
                 val lastName = remember {
                     mutableStateOf(
                         TextFieldValue(
-                            if (generateContactCredentials()) "Last#" + Random.nextInt(10) else ""
+                            if (contactState.value == ContactState.EDIT)
+                                UsersRepo.selected.value?.lastName as String
+                            else
+                                if (generateContactCredentials()) "Last#" + Random.nextInt(10) else ""
                         )
                     )
                 }
@@ -134,7 +140,7 @@ fun Contact(contactState: MutableState<ContactState>) {
                     }
                     Button(
                         onClick = {
-                            if(contactState.value == ContactState.CREATE){
+                            if (contactState.value == ContactState.CREATE) {
                                 firstNameEmpty.value = false
                                 lastNameEmpty.value = false
                                 if (firstName.value.text.isEmpty()) {

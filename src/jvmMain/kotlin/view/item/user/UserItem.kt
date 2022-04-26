@@ -27,7 +27,7 @@ import kotlin.random.Random
  * @since 23.04.2022
  */
 @Composable
-fun UserItem(user: User, modifier: Modifier, contactState: MutableState<ContactState>) {
+fun UserItem(user: User, modifier: Modifier) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = UserAction.values()
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
@@ -91,9 +91,6 @@ fun UserItem(user: User, modifier: Modifier, contactState: MutableState<ContactS
             menuItems.forEach {
                 DropdownMenuItem(onClick = {
                     when (it) {
-                        UserAction.EDIT -> {
-                            contactState.value = ContactState.EDIT
-                        }
                         UserAction.REMOVE -> {
                             UsersRepo.remove(user)
                         }

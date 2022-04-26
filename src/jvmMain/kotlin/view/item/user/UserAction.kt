@@ -5,6 +5,6 @@ package view.item.user
  * @since 23.04.2022
  */
 enum class UserAction(val id: Int, val text: String) {
-    EDIT(1, "Edit"),
+//    EDIT(1, "Edit"),
     REMOVE(2, "Remove")
 }
