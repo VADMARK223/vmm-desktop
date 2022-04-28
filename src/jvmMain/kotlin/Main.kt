@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +16,16 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import db.User
+import db.TempUser
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.launch
+import repository.ConversationRepoImpl
 import repository.MessagesRepo
 import repository.MessagesRepoImpl
 import repository.UsersRepo
@@ -33,6 +43,13 @@ import view.right.info.Info
 fun App() {
     databaseConnect()
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
+
+    val conversationRepo = ConversationRepoImpl()
+    conversationRepo.all()
+    val coroutineScope = rememberCoroutineScope()
+    coroutineScope.launch{
+        test()
+    }
 
     MaterialTheme(colors = darkThemeColors) {
         val contactState = remember { mutableStateOf(ContactState.HIDE) }
@@ -104,6 +121,7 @@ fun main() = application {
         }
     )
 
+
     Window(
         onCloseRequest = ::exitApplication,
         state = state,
@@ -113,4 +131,18 @@ fun main() = application {
     ) {
         App()
     }
+}
+
+suspend fun test() {
+    val client = HttpClient(CIO) {
+        install(ContentNegotiation) {
+            json()
+        }
+    }
+//    val response: HttpResponse = client.get("https://ktor.io/")
+//    val response: HttpResponse = client.get("http://localhost:8888/users")
+//    println(response.status)
+    val user: TempUser = client.get("http://localhost:8888/user/3").body()
+    println("USer : $user")
+    client.close()
 }

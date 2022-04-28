@@ -1,10 +1,10 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
+    kotlin("plugin.serialization") version "1.4.21"
 }
 
 group = "com.vadmark223.vmm-desktop"
@@ -14,6 +14,7 @@ repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
 kotlin {
@@ -36,6 +37,13 @@ kotlin {
                 implementation("org.jetbrains.exposed:exposed-dao:" + extra["jetbrains.exposed.version"])
                 implementation("org.jetbrains.exposed:exposed-jdbc:" + extra["jetbrains.exposed.version"])
                 implementation("org.jetbrains.exposed:exposed-java-time:" + extra["jetbrains.exposed.version"])
+
+                implementation("io.ktor:ktor-client-core:2.0.0")
+                implementation("io.ktor:ktor-client-cio:2.0.0")
+                implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2")
             }
         }
         val jvmTest by getting
