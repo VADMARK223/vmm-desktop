@@ -16,20 +16,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import db.TempUser
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.serialization.kotlinx.json.*
-import kotlinx.coroutines.launch
 import repository.ConversationRepoImpl
 import repository.MessagesRepo
 import repository.MessagesRepoImpl
 import repository.UsersRepo
 import resources.darkThemeColors
+import service.HttpService
 import service.databaseConnect
 import view.common.Contact
 import view.common.ContactState
@@ -37,6 +29,7 @@ import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
 import view.right.info.Info
+import view.right.info.Info1
 
 @Composable
 @Preview
@@ -46,10 +39,8 @@ fun App() {
 
     val conversationRepo = ConversationRepoImpl()
     conversationRepo.all()
-    val coroutineScope = rememberCoroutineScope()
-    coroutineScope.launch{
-        test()
-    }
+
+    HttpService.selectUser(rememberCoroutineScope(), 4)
 
     MaterialTheme(colors = darkThemeColors) {
         val contactState = remember { mutableStateOf(ContactState.HIDE) }
@@ -86,6 +77,7 @@ fun App() {
                         .fillMaxSize()
                 ) {
                     Info(user = UsersRepo.selected.value, contactState = contactState)
+                    Info1(user = HttpService.selectedUser.value)
                     Messages(
                         Modifier
                             .weight(1f)
@@ -121,7 +113,6 @@ fun main() = application {
         }
     )
 
-
     Window(
         onCloseRequest = ::exitApplication,
         state = state,
@@ -131,18 +122,4 @@ fun main() = application {
     ) {
         App()
     }
-}
-
-suspend fun test() {
-    val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json()
-        }
-    }
-//    val response: HttpResponse = client.get("https://ktor.io/")
-//    val response: HttpResponse = client.get("http://localhost:8888/users")
-//    println(response.status)
-    val user: TempUser = client.get("http://localhost:8888/user/3").body()
-    println("USer : $user")
-    client.close()
 }
