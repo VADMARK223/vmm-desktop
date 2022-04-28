@@ -19,7 +19,7 @@ class MessagesRepoImpl : MessagesRepo {
             val selectedUserId = UsersRepo.selected.value?.id?.value as Long
 
             transaction {
-                val messagesByUserId = Message.find { Messages.userId eq selectedUserId }
+                val messagesByUserId = Message.find { Messages.conversationId eq selectedUserId }
                 messages.addAll(messagesByUserId)
             }
         }
@@ -36,7 +36,7 @@ class MessagesRepoImpl : MessagesRepo {
 
         transaction {
             val newMessage = Message.new {
-                userId = selectedUserId
+                conversationId = selectedUserId
                 text = textOut
                 isMy = true
                 currentTime = Instant.now()

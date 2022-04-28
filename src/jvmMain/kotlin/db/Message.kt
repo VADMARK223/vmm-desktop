@@ -11,13 +11,13 @@ import org.jetbrains.exposed.dao.id.EntityID
 class Message(id: EntityID<Long>) : Entity<Long>(id) {
     companion object : EntityClass<Long, Message>(Messages)
 
-    var userId by Messages.userId
+    var conversationId by Messages.conversationId
     var text by Messages.text
     var isMy by Messages.isMy
     var currentTime by Messages.createTime
     var edited by Messages.edited
 
     override fun toString(): String {
-        return "Message(userId=$userId, text='$text')"
+        return "Message(userId=$conversationId, text='$text')"
     }
 }

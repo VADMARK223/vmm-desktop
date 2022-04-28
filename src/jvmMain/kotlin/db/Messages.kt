@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.javatime.timestamp
  * @since 24.04.2022
  */
 object Messages : LongIdTable("messages") {
-    val userId = long("user_id")
+    val conversationId = long("conversation_id")
     val text = text("text")
     val isMy = bool("is_my")
     val createTime = timestamp("create_time")
