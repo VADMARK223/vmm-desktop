@@ -16,6 +16,7 @@ object UsersRepo {
     private var list = mutableStateListOf<User>()
 
     init {
+        println("Users repo init.")
         transaction {
             addLogger(StdOutSqlLogger)
             list.addAll(User.all().orderBy(Users.id to SortOrder.ASC))
@@ -32,6 +33,7 @@ object UsersRepo {
         lastNameOut: String = "Last#" + Random.nextInt(10)
     ) {
         transaction {
+            addLogger(StdOutSqlLogger)
             val user = User.new {
                 firstName = firstNameOut
                 lastName = lastNameOut

@@ -17,7 +17,11 @@ import view.common.ContactState
 fun Left(modifier: Modifier, onUserClick: (User) -> Unit, contactState: MutableState<ContactState>) {
     Column(modifier = Modifier.width(450.dp)) {
         Top(contactState)
-        Users(
+//        Users(
+//            modifier = modifier,
+//            onUserClick = onUserClick
+//        )
+        Conversations(
             modifier = modifier,
             onUserClick = onUserClick
         )
