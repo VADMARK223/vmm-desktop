@@ -16,7 +16,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import repository.ConversationRepoImpl
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import repository.MessagesRepo
 import repository.MessagesRepoImpl
 import repository.UsersRepo
@@ -29,18 +30,18 @@ import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
 import view.right.info.Info
-import view.right.info.Info1
 
 @Composable
 @Preview
 fun App() {
+//    val objectMapper: ObjectMapper = DatabindCodec.mapper()
+//    objectMapper.registerModule(JavaTimeModule())
+
     databaseConnect()
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
-    val conversationRepo = ConversationRepoImpl()
-    conversationRepo.all()
-
-    HttpService.selectUser(rememberCoroutineScope(), 4)
+    HttpService.coroutineScope = rememberCoroutineScope()
+    HttpService.requestAllConversation()
 
     MaterialTheme(colors = darkThemeColors) {
         val contactState = remember { mutableStateOf(ContactState.HIDE) }
@@ -67,8 +68,9 @@ fun App() {
                     modifier = Modifier
                         .background(Color(14, 22, 33))
                         .fillMaxHeight(),
-                    onUserClick = { user ->
-                        messagesRepo.updateMessagesByUserId(user.id.value)
+                    onConversationClick = { conversation ->
+//                        messagesRepo.updateMessagesByUserId(conversation.id.value)
+                        HttpService.messagesById(conversation.id)
                     },
                     contactState = contactState
                 )
@@ -76,13 +78,11 @@ fun App() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    Info(user = UsersRepo.selected.value, contactState = contactState)
-                    Info1(user = HttpService.selectedUser.value)
+                    Info(conversation = HttpService.selectedConversation.value, contactState = contactState)
                     Messages(
                         Modifier
                             .weight(1f)
                             .background(color = Color(14, 22, 33)),
-                        messagesRepo,
                         mainOutput
                     )
                     InputMessage(messagesRepo, mainOutput)

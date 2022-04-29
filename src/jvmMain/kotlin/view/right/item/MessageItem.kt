@@ -23,6 +23,7 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import db.Message
+import db.MessageNew
 import org.jetbrains.exposed.sql.transactions.transaction
 import repository.MessagesRepo
 import java.awt.event.MouseEvent
@@ -35,7 +36,7 @@ import java.time.format.DateTimeFormatter
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: Message, messagesRepo: MessagesRepo, mainOutput: MutableState<TextFieldValue>) {
+fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = MessageAction.values()
     Column(
@@ -70,7 +71,7 @@ fun MessageItem(message: Message, messagesRepo: MessagesRepo, mainOutput: Mutabl
             val pattern = "hh:mm:ss"
             val formatter = DateTimeFormatter.ofPattern(pattern)
                 .withZone(ZoneId.systemDefault())
-            val messageCurrentTime = formatter.format(message.currentTime)
+            val messageCurrentTime = "formatter.format(message.currentTime)"
             Text(
                 text = messageCurrentTime,
                 style = MaterialTheme.typography.overline,
@@ -90,10 +91,10 @@ fun MessageItem(message: Message, messagesRepo: MessagesRepo, mainOutput: Mutabl
                     when (it) {
                         MessageAction.EDIT -> {
                             mainOutput.value = TextFieldValue(message.text)
-                            transaction { message.edited = true }
+//                            transaction { message.edited = true }
                         }
                         MessageAction.REMOVE -> {
-                            messagesRepo.removeMessage(message)
+//                            messagesRepo.removeMessage(message)
                         }
                     }
 

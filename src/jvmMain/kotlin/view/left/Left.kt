@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import db.User
+import db.Conversation
 import view.common.ContactState
 
 /**
@@ -14,16 +14,12 @@ import view.common.ContactState
  * @since 23.04.2022
  */
 @Composable
-fun Left(modifier: Modifier, onUserClick: (User) -> Unit, contactState: MutableState<ContactState>) {
+fun Left(modifier: Modifier, onConversationClick: (Conversation) -> Unit, contactState: MutableState<ContactState>) {
     Column(modifier = Modifier.width(450.dp)) {
         Top(contactState)
-//        Users(
-//            modifier = modifier,
-//            onUserClick = onUserClick
-//        )
         Conversations(
             modifier = modifier,
-            onUserClick = onUserClick
+            onConversationClick = onConversationClick
         )
     }
 }

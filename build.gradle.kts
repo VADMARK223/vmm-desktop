@@ -44,6 +44,8 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2")
+
+                implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2")
             }
         }
         val jvmTest by getting

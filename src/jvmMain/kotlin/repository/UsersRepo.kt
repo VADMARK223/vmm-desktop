@@ -16,7 +16,6 @@ object UsersRepo {
     private var list = mutableStateListOf<User>()
 
     init {
-        println("Users repo init.")
         transaction {
             addLogger(StdOutSqlLogger)
             list.addAll(User.all().orderBy(Users.id to SortOrder.ASC))
