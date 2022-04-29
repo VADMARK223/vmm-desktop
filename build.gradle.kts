@@ -45,6 +45,8 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2")
 
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
+
                 implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2")
             }
         }

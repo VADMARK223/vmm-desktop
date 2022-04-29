@@ -1,7 +1,6 @@
 package db
 
-import kotlinx.serialization.Contextual
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 /**
  * @author Markitanov Vadim
@@ -13,6 +12,5 @@ data class MessageNew(
     val text: String = "Unknown",
     val isMy: Boolean = false,
     val edited: Boolean = false,
-//    @Contextual
-//    val createTime: LocalDateTime
+    val createTime: LocalDateTime
 )

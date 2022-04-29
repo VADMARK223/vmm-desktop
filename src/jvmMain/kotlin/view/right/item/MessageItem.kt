@@ -22,10 +22,8 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import db.Message
 import db.MessageNew
-import org.jetbrains.exposed.sql.transactions.transaction
-import repository.MessagesRepo
+import kotlinx.datetime.toJavaLocalDateTime
 import java.awt.event.MouseEvent
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -71,7 +69,7 @@ fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>) {
             val pattern = "hh:mm:ss"
             val formatter = DateTimeFormatter.ofPattern(pattern)
                 .withZone(ZoneId.systemDefault())
-            val messageCurrentTime = "formatter.format(message.currentTime)"
+            val messageCurrentTime = formatter.format(message.createTime.toJavaLocalDateTime())
             Text(
                 text = messageCurrentTime,
                 style = MaterialTheme.typography.overline,
