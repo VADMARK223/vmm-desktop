@@ -1,14 +1,11 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -34,7 +31,6 @@ fun App() {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     HttpService.coroutineScope = rememberCoroutineScope()
-//    HttpService.requestAllConversation()
 
     val conversationsRepo = ConversationsRepoImpl()
     val messagesRepo: MessagesRepoNew = MessagesRepoNewImpl()
@@ -64,8 +60,7 @@ fun App() {
                         .background(Color(14, 22, 33))
                         .fillMaxHeight(),
                     onConversationClick = { conversation ->
-//                        messagesRepo.updateMessagesByUserId(conversation.id.value)
-                        HttpService.messagesById(conversation.id)
+                        messagesRepo.messagesByConversationId(conversation.id)
                     },
                     contactState = contactState,
                     repo = conversationsRepo

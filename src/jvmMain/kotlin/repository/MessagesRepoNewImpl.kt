@@ -15,8 +15,6 @@ class MessagesRepoNewImpl : MessagesRepoNew {
     private val messages = mutableStateListOf<MessageNew>()
 
     init {
-        println("Messages repo init.")
-
         HttpService.coroutineScope.launch {
             messages.clear()
             val responseMessages =
@@ -31,6 +29,19 @@ class MessagesRepoNewImpl : MessagesRepoNew {
     }
 
     override fun delete(message: MessageNew) {
+        HttpService.coroutineScope.launch {
+            HttpService.client.delete("${HttpService.host}/messages/${message.id}")
+            messages.remove(message)
+        }
         messages.remove(message)
+    }
+
+    override fun messagesByConversationId(id: Long) {
+        messages.clear()
+        HttpService.coroutineScope.launch {
+            val responseMessages =
+                HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<MessageNew>>()
+            messages.addAll(responseMessages)
+        }
     }
 }
