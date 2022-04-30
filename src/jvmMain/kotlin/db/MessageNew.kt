@@ -1,6 +1,6 @@
 package db
 
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.*
 
 /**
  * @author Markitanov Vadim
@@ -12,5 +12,5 @@ data class MessageNew(
     val text: String = "Unknown",
     val isMy: Boolean = false,
     val edited: Boolean = false,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 )

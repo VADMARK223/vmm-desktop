@@ -14,6 +14,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object HttpService {
     private const val host: String = "http://localhost:8888"
@@ -72,5 +73,15 @@ object HttpService {
 
     fun messagesList(): List<MessageNew> {
         return messages
+    }
+
+    fun removeMessage(message: MessageNew) {
+//        coroutineScope.launch {
+//            client.delete("$host/messages/${message.id}")
+//            messages.remove(message)
+//        }
+        transaction {
+            messages.remove(message)
+        }
     }
 }

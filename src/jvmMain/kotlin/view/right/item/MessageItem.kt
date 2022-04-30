@@ -23,7 +23,9 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import db.MessageNew
+import io.ktor.client.*
 import kotlinx.datetime.toJavaLocalDateTime
+import service.HttpService
 import java.awt.event.MouseEvent
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -92,7 +94,7 @@ fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>) {
 //                            transaction { message.edited = true }
                         }
                         MessageAction.REMOVE -> {
-//                            messagesRepo.removeMessage(message)
+                            HttpService.removeMessage(message)
                         }
                     }
 
