@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import db.MessageNew
 import io.ktor.client.*
 import kotlinx.datetime.toJavaLocalDateTime
+import repository.MessagesRepoNew
 import service.HttpService
 import java.awt.event.MouseEvent
 import java.time.ZoneId
@@ -36,7 +37,7 @@ import java.time.format.DateTimeFormatter
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>) {
+fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepoNew) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = MessageAction.values()
     Column(
@@ -94,7 +95,8 @@ fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>) {
 //                            transaction { message.edited = true }
                         }
                         MessageAction.REMOVE -> {
-                            HttpService.removeMessage(message)
+                            repo.delete(message)
+//                            HttpService.removeMessage(message)
                         }
                     }
 

@@ -16,11 +16,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import repository.MessagesRepo
-import repository.MessagesRepoImpl
-import repository.UsersRepo
+import repository.*
 import resources.darkThemeColors
 import service.HttpService
 import service.databaseConnect
@@ -34,20 +30,19 @@ import view.right.info.Info
 @Composable
 @Preview
 fun App() {
-//    val objectMapper: ObjectMapper = DatabindCodec.mapper()
-//    objectMapper.registerModule(JavaTimeModule())
-
     databaseConnect()
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     HttpService.coroutineScope = rememberCoroutineScope()
-    HttpService.requestAllConversation()
+//    HttpService.requestAllConversation()
+
+    val conversationsRepo = ConversationsRepoImpl()
+    val messagesRepo: MessagesRepoNew = MessagesRepoNewImpl()
 
     MaterialTheme(colors = darkThemeColors) {
         val contactState = remember { mutableStateOf(ContactState.HIDE) }
-        val messagesRepo: MessagesRepo = MessagesRepoImpl()
 
-        if (UsersRepo.selected.value == null) {
+        /*if (UsersRepo.selected.value == null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -62,7 +57,7 @@ fun App() {
                     Text("Create contact")
                 }
             }
-        } else {
+        } else {*/
             Row {
                 Left(
                     modifier = Modifier
@@ -72,23 +67,25 @@ fun App() {
 //                        messagesRepo.updateMessagesByUserId(conversation.id.value)
                         HttpService.messagesById(conversation.id)
                     },
-                    contactState = contactState
+                    contactState = contactState,
+                    repo = conversationsRepo
                 )
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    Info(conversation = HttpService.selectedConversation.value, contactState = contactState)
+                    Info(conversation = conversationsRepo.selected().value, contactState = contactState)
                     Messages(
                         Modifier
                             .weight(1f)
                             .background(color = Color(14, 22, 33)),
-                        mainOutput
+                        mainOutput,
+                        repo = messagesRepo
                     )
-                    InputMessage(messagesRepo, mainOutput)
+                    InputMessage(/*messagesRepo, */mainOutput)
                 }
             }
-        }
+//        }
 
         if (contactState.value != ContactState.HIDE) {
             Contact(contactState)

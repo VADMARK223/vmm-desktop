@@ -8,4 +8,5 @@ import db.MessageNew
  */
 interface MessagesRepoNew {
     fun all(): List<MessageNew>
+    fun delete(message: MessageNew)
 }

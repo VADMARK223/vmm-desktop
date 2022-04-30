@@ -11,19 +11,18 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import db.Conversation
-import service.HttpService
+import repository.ConversationsRepo
 
 /**
  * @author Markitanov Vadim
  * @since 29.04.2022
  */
 @Composable
-fun Conversations(modifier: Modifier, onConversationClick: (Conversation) -> Unit) {
+fun Conversations(modifier: Modifier, onConversationClick: (Conversation) -> Unit, repo: ConversationsRepo) {
     Box(modifier = modifier) {
         val usersLazyListState = rememberLazyListState()
 
@@ -31,23 +30,22 @@ fun Conversations(modifier: Modifier, onConversationClick: (Conversation) -> Uni
             state = usersLazyListState,
             modifier = modifier
         ) {
-            items(items = HttpService.getConversationList()) { conversation ->
-//                Text(text = conversation.name, color = Color.Red)
+            items(items = repo.all()) { conversation ->
                 ConversationItem(
                     conversation = conversation,
                     modifier = Modifier
                         .background(
-                            if (HttpService.selectedConversation.value == conversation) Color(
+                            if (repo.selected().value == conversation) Color(
                                 43,
                                 82,
                                 120
                             ) else Color(23, 33, 43)
                         )
                         .fillMaxWidth()
-                        .selectable(conversation == HttpService.selectedConversation.value,
+                        .selectable(conversation == repo.selected().value,
                             onClick = {
-                                if (HttpService.selectedConversation.value != conversation) {
-                                    HttpService.selectedConversation.value = conversation
+                                if (repo.selected().value != conversation) {
+                                    repo.selected().value = conversation
                                     onConversationClick(conversation)
                                 }
                             })

@@ -40,7 +40,12 @@ kotlin {
 
                 implementation("io.ktor:ktor-client-core:2.0.0")
                 implementation("io.ktor:ktor-client-cio:2.0.0")
+                // Ktor plugins
                 implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
+                // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+                implementation("ch.qos.logback:logback-classic:1.3.0-alpha14")
+                implementation("io.ktor:ktor-client-logging:2.0.0")
+
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2")

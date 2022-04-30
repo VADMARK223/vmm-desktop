@@ -2,7 +2,6 @@ package service
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import db.Conversation
 import db.MessageNew
 import db.TempUser
 import io.ktor.client.*
@@ -17,27 +16,27 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object HttpService {
-    private const val host: String = "http://localhost:8888"
+    const val host: String = "http://localhost:8888"
 
     lateinit var coroutineScope: CoroutineScope
 
     private val selectedUser = mutableStateOf<TempUser?>(null)
-    val selectedConversation = mutableStateOf<Conversation?>(null)
-    private var conversationList = mutableStateListOf<Conversation>()
+//    val selectedConversation = mutableStateOf<Conversation?>(null)
+//    private var conversationList = mutableStateListOf<Conversation>()
 
     private val messages = mutableStateListOf<MessageNew>()
 
-    private val client = HttpClient(CIO) {
+    val client = HttpClient(CIO) {
+        /*install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.HEADERS
+        }*/
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
                 ignoreUnknownKeys = true
             })
         }
-    }
-
-    init {
-        println("Init const.")
     }
 
     fun selectUser(coroutineScope: CoroutineScope, userId: Long) {
@@ -48,19 +47,19 @@ object HttpService {
         }
     }
 
-    fun getConversationList(): List<Conversation> {
-        return conversationList
-    }
+//    fun getConversationList(): List<Conversation> {
+//        return conversationList
+//    }
 
-    fun requestAllConversation() {
-        println("Request all conversation.")
-        coroutineScope.launch {
-            val conversations = client.get("$host/conversations").call.body<List<Conversation>>()
-            conversationList.addAll(conversations)
-            selectedConversation.value = conversations.first()
-            messagesById(selectedConversation.value?.id as Long)
-        }
-    }
+//    fun requestAllConversation() {
+//        println("Request all conversation.")
+//        coroutineScope.launch {
+//            val conversations = client.get("$host/conversations").call.body<List<Conversation>>()
+//            conversationList.addAll(conversations)
+//            selectedConversation.value = conversations.first()
+//            messagesById(selectedConversation.value?.id as Long)
+//        }
+//    }
 
     fun messagesById(conversationId: Long) {
         messages.clear()

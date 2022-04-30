@@ -28,7 +28,7 @@ import repository.MessagesRepo
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputMessage(messagesRepo: MessagesRepo, mainOutput: MutableState<TextFieldValue>) {
+fun InputMessage(/*messagesRepo: MessagesRepo,*/ mainOutput: MutableState<TextFieldValue>) {
     val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -38,7 +38,7 @@ fun InputMessage(messagesRepo: MessagesRepo, mainOutput: MutableState<TextFieldV
             },
             modifier = Modifier.fillMaxWidth().onKeyEvent {
                 if (it.key == Key.Enter) {
-                    sendMessage(mainOutput, messagesRepo)
+//                    sendMessage(mainOutput, messagesRepo)
                 }
                 false
             },
@@ -73,7 +73,7 @@ fun InputMessage(messagesRepo: MessagesRepo, mainOutput: MutableState<TextFieldV
                     if (mainOutputEmpty.value) {
                         IconButton(
                             onClick = {
-                                sendMessage(mainOutput, messagesRepo)
+//                                sendMessage(mainOutput, messagesRepo)
                             }
                         ) {
                             Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))

@@ -17,8 +17,8 @@ object UsersRepo {
 
     init {
         transaction {
-            addLogger(StdOutSqlLogger)
-            list.addAll(User.all().orderBy(Users.id to SortOrder.ASC))
+//            addLogger(StdOutSqlLogger)
+//            list.addAll(User.all().orderBy(Users.id to SortOrder.ASC))
             selectFirst()
         }
     }
