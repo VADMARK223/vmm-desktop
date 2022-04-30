@@ -20,7 +20,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import repository.MessagesRepo
+import repository.MessagesRepoNew
 
 /**
  * @author Markitanov Vadim
@@ -28,7 +28,7 @@ import repository.MessagesRepo
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputMessage(/*messagesRepo: MessagesRepo,*/ mainOutput: MutableState<TextFieldValue>) {
+fun InputMessage(messagesRepo: MessagesRepoNew, mainOutput: MutableState<TextFieldValue>) {
     val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -38,7 +38,7 @@ fun InputMessage(/*messagesRepo: MessagesRepo,*/ mainOutput: MutableState<TextFi
             },
             modifier = Modifier.fillMaxWidth().onKeyEvent {
                 if (it.key == Key.Enter) {
-//                    sendMessage(mainOutput, messagesRepo)
+                    sendMessage(mainOutput, messagesRepo)
                 }
                 false
             },
@@ -73,7 +73,7 @@ fun InputMessage(/*messagesRepo: MessagesRepo,*/ mainOutput: MutableState<TextFi
                     if (mainOutputEmpty.value) {
                         IconButton(
                             onClick = {
-//                                sendMessage(mainOutput, messagesRepo)
+                                sendMessage(mainOutput, messagesRepo)
                             }
                         ) {
                             Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))
@@ -85,7 +85,9 @@ fun InputMessage(/*messagesRepo: MessagesRepo,*/ mainOutput: MutableState<TextFi
     }
 }
 
-private fun sendMessage(mainOutput: MutableState<TextFieldValue>, messagesRepo: MessagesRepo) {
-    messagesRepo.addMessage(mainOutput.value.text)
-    mainOutput.value = TextFieldValue("")
+private fun sendMessage(mainOutput: MutableState<TextFieldValue>, messagesRepo: MessagesRepoNew) {
+    if (mainOutput.value.text.isNotEmpty()) {
+        messagesRepo.addMessage(mainOutput.value.text)
+        mainOutput.value = TextFieldValue("")
+    }
 }

@@ -77,7 +77,7 @@ fun App() {
                         mainOutput,
                         repo = messagesRepo
                     )
-                    InputMessage(/*messagesRepo, */mainOutput)
+                    InputMessage(messagesRepo, mainOutput)
                 }
             }
 //        }

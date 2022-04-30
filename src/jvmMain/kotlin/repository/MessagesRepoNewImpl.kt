@@ -6,6 +6,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.launch
 import service.HttpService
+import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
@@ -43,5 +44,10 @@ class MessagesRepoNewImpl : MessagesRepoNew {
                 HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<MessageNew>>()
             messages.addAll(responseMessages)
         }
+    }
+
+    override fun addMessage(text: String) {
+        println("Add message: $text")
+        messages.add(MessageNew(Random.nextLong(), text = text))
     }
 }
