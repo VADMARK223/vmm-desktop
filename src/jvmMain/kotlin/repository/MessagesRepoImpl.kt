@@ -16,16 +16,6 @@ import service.HttpService
 class MessagesRepoImpl : MessagesRepo {
     private val messages = mutableStateListOf<Message>()
 
-    init {
-        HttpService.coroutineScope.launch {
-            messages.clear()
-            val responseMessages =
-                HttpService.client.get("${HttpService.host}/messages/conversation/2").call.body<List<Message>>()
-            println("Response messages size: " + responseMessages.size)
-            messages.addAll(responseMessages)
-        }
-    }
-
     override fun all(): List<Message> {
         return messages
     }

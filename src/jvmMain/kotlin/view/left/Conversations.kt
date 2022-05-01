@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import db.Conversation
 import repository.ConversationsRepo
 
 /**
@@ -23,7 +22,7 @@ import repository.ConversationsRepo
  * @since 29.04.2022
  */
 @Composable
-fun Conversations(onConversationClick: (Conversation) -> Unit, repo: ConversationsRepo) {
+fun Conversations(repo: ConversationsRepo) {
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
 
@@ -46,7 +45,6 @@ fun Conversations(onConversationClick: (Conversation) -> Unit, repo: Conversatio
                             onClick = {
                                 if (repo.selected().value != conversation) {
                                     repo.selected().value = conversation
-                                    onConversationClick(conversation)
                                 }
                             })
                 )
@@ -59,7 +57,5 @@ fun Conversations(onConversationClick: (Conversation) -> Unit, repo: Conversatio
                 scrollState = usersLazyListState
             )
         )
-
-//        HttpService.requestAllConversation(rememberCoroutineScope())
     }
 }

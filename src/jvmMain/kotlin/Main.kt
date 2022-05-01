@@ -1,6 +1,8 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -13,7 +15,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import repository.*
+import repository.ConversationsRepoImpl
+import repository.MessagesRepoImpl
 import resources.darkThemeColors
 import service.HttpService
 import service.databaseConnect
@@ -54,33 +57,37 @@ fun App() {
                 }
             }
         } else {*/
-            Row {
-                Left(
-                    onConversationClick = { conversation ->
-                        messagesRepo.messagesByConversationId(conversation.id)
-                    },
-                    contactState = contactState,
-                    repo = conversationsRepo
+        Row {
+            Left(
+                contactState = contactState,
+                repo = conversationsRepo
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Info(conversation = conversationsRepo.selected().value, contactState = contactState)
+                Messages(
+                    Modifier
+                        .weight(1f)
+                        .background(color = Color(14, 22, 33)),
+                    mainOutput,
+                    repo = messagesRepo
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    Info(conversation = conversationsRepo.selected().value, contactState = contactState)
-                    Messages(
-                        Modifier
-                            .weight(1f)
-                            .background(color = Color(14, 22, 33)),
-                        mainOutput,
-                        repo = messagesRepo
-                    )
-                    InputMessage(messagesRepo, conversationsRepo, mainOutput)
-                }
+                InputMessage(messagesRepo, conversationsRepo, mainOutput)
             }
+        }
 //        }
 
         if (contactState.value != ContactState.HIDE) {
             Contact(contactState)
+        }
+
+        if (conversationsRepo.selected().value != null) {
+            println("Conservation selected: ${conversationsRepo.selected().value?.id}")
+            messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
+        } else {
+            println("Conservation not selected.")
         }
     }
 }
