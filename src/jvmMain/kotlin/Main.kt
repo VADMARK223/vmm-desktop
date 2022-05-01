@@ -33,7 +33,7 @@ fun App() {
     HttpService.coroutineScope = rememberCoroutineScope()
 
     val conversationsRepo = ConversationsRepoImpl()
-    val messagesRepo: MessagesRepoNew = MessagesRepoNewImpl()
+    val messagesRepo: MessagesRepo = MessagesRepoImpl()
 
     MaterialTheme(colors = darkThemeColors) {
         val contactState = remember { mutableStateOf(ContactState.HIDE) }

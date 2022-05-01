@@ -1,14 +1,14 @@
 package repository
 
-import db.MessageNew
+import db.Message
 
 /**
  * @author Markitanov Vadim
  * @since 30.04.2022
  */
-interface MessagesRepoNew {
-    fun all(): List<MessageNew>
-    fun delete(message: MessageNew)
+interface MessagesRepo {
+    fun all(): List<Message>
+    fun delete(message: Message)
     fun messagesByConversationId(id: Long)
     fun addMessage(text: String, conversationId: Long?)
 }

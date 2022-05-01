@@ -1,7 +1,7 @@
 package repository
 
 import androidx.compose.runtime.mutableStateListOf
-import db.MessageNew
+import db.Message
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -13,24 +13,24 @@ import service.HttpService
  * @author Markitanov Vadim
  * @since 30.04.2022
  */
-class MessagesRepoNewImpl : MessagesRepoNew {
-    private val messages = mutableStateListOf<MessageNew>()
+class MessagesRepoImpl : MessagesRepo {
+    private val messages = mutableStateListOf<Message>()
 
     init {
         HttpService.coroutineScope.launch {
             messages.clear()
             val responseMessages =
-                HttpService.client.get("${HttpService.host}/messages/conversation/2").call.body<List<MessageNew>>()
+                HttpService.client.get("${HttpService.host}/messages/conversation/2").call.body<List<Message>>()
             println("Response messages size: " + responseMessages.size)
             messages.addAll(responseMessages)
         }
     }
 
-    override fun all(): List<MessageNew> {
+    override fun all(): List<Message> {
         return messages
     }
 
-    override fun delete(message: MessageNew) {
+    override fun delete(message: Message) {
         HttpService.coroutineScope.launch {
             HttpService.client.delete("${HttpService.host}/messages/${message.id}")
             messages.remove(message)
@@ -42,7 +42,7 @@ class MessagesRepoNewImpl : MessagesRepoNew {
         messages.clear()
         HttpService.coroutineScope.launch {
             val responseMessages =
-                HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<MessageNew>>()
+                HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<Message>>()
             messages.addAll(responseMessages)
         }
     }
@@ -58,7 +58,7 @@ class MessagesRepoNewImpl : MessagesRepoNew {
             }
             println("Response: $response")
             if (response.status == HttpStatusCode.OK) {
-                val newMessage = response.body<MessageNew>()
+                val newMessage = response.body<Message>()
                 println("New message: $newMessage")
                 messages.add(newMessage)
             }

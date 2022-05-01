@@ -17,9 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import repository.MessagesRepoNew
-import repository.MessagesRepoNewImpl
-import service.HttpService
+import repository.MessagesRepo
 import view.right.item.MessageItem
 
 /**
@@ -27,7 +25,7 @@ import view.right.item.MessageItem
  * @since 23.04.2022
  */
 @Composable
-fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepoNew) {
+fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepo) {
     Box(modifier = modifier) {
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()

@@ -9,7 +9,7 @@ import kotlin.random.Random
  * @since 29.04.2022
  */
 @Serializable
-data class MessageNew(
+data class Message(
     val id: Long = Random.nextLong(),
     val text: String = "Unknown",
     val isMy: Boolean = Random.nextBoolean(),

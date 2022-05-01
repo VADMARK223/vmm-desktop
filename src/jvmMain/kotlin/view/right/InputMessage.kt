@@ -21,7 +21,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
-import repository.MessagesRepoNew
+import repository.MessagesRepo
 
 /**
  * @author Markitanov Vadim
@@ -30,7 +30,7 @@ import repository.MessagesRepoNew
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InputMessage(
-    messagesRepo: MessagesRepoNew,
+    messagesRepo: MessagesRepo,
     conversationsRepo: ConversationsRepo,
     mainOutput: MutableState<TextFieldValue>
 ) {
@@ -92,7 +92,7 @@ fun InputMessage(
 
 private fun sendMessage(
     mainOutput: MutableState<TextFieldValue>,
-    messagesRepo: MessagesRepoNew,
+    messagesRepo: MessagesRepo,
     conversationsRepo: ConversationsRepo
 ) {
     if (mainOutput.value.text.isNotEmpty()) {
