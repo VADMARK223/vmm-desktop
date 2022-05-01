@@ -12,8 +12,8 @@ import kotlin.random.Random
 data class Message(
     val id: Long = Random.nextLong(),
     val text: String = "Unknown",
-    val isMy: Boolean = Random.nextBoolean(),
-    val edited: Boolean = true,
+    val isMy: Boolean = true,
+    val edited: Boolean = false,
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
     val conversationId: Long = Random.nextLong()
 )
