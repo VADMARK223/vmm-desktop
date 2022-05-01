@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import db.Conversation
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.launch
 import service.HttpService
 
@@ -44,6 +45,18 @@ class ConversationsRepoImpl : ConversationsRepo {
         HttpService.coroutineScope.launch {
             HttpService.client.delete("${HttpService.host}/conversations/${conversation.id}")
             conversations.remove(conversation)
+        }
+    }
+
+    override fun create() {
+        println("Create conversation.")
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.put("${HttpService.host}/conversations")
+            if (response.status == HttpStatusCode.OK) {
+                val newConversation = response.body<Conversation>()
+                println("New conversation: $newConversation")
+                conversations.add(newConversation)
+            }
         }
     }
 }

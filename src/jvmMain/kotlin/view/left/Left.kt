@@ -19,7 +19,7 @@ fun Left(
     repo: ConversationsRepo
 ) {
     Column(modifier = Modifier.width(450.dp)) {
-        Top(contactState)
+        Top(contactState, repo)
         Conversations(
             repo = repo
         )

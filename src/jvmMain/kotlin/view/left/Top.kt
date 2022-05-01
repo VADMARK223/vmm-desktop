@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import repository.ConversationsRepo
 import view.common.ContactState
 
 /**
@@ -26,7 +27,7 @@ import view.common.ContactState
  * @since 23.04.2022
  */
 @Composable
-fun Top(contactState: MutableState<ContactState>) {
+fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -73,6 +74,12 @@ fun Top(contactState: MutableState<ContactState>) {
                     modifier = vadmarkModifier,
                     contentScale = ContentScale.FillWidth
                 )
+            }
+            DropdownMenuItem(onClick = {
+                repo.create()
+                expanded.value = false
+            }) {
+                Text(text = "New Group")
             }
             DropdownMenuItem(onClick = {
                 contactState.value = ContactState.CREATE
