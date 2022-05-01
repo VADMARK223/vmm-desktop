@@ -4,6 +4,7 @@ import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,13 +23,12 @@ import repository.ConversationsRepo
  * @since 29.04.2022
  */
 @Composable
-fun Conversations(modifier: Modifier, onConversationClick: (Conversation) -> Unit, repo: ConversationsRepo) {
-    Box(modifier = modifier) {
+fun Conversations(onConversationClick: (Conversation) -> Unit, repo: ConversationsRepo) {
+    Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
 
         LazyColumn(
             state = usersLazyListState,
-            modifier = modifier
         ) {
             items(items = repo.all()) { conversation ->
                 ConversationItem(

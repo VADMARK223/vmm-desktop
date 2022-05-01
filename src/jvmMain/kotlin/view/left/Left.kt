@@ -16,7 +16,6 @@ import view.common.ContactState
  */
 @Composable
 fun Left(
-    modifier: Modifier,
     onConversationClick: (Conversation) -> Unit,
     contactState: MutableState<ContactState>,
     repo: ConversationsRepo
@@ -24,7 +23,6 @@ fun Left(
     Column(modifier = Modifier.width(450.dp)) {
         Top(contactState)
         Conversations(
-            modifier = modifier,
             onConversationClick = onConversationClick,
             repo = repo
         )

@@ -33,7 +33,7 @@ fun App() {
     HttpService.coroutineScope = rememberCoroutineScope()
 
     val conversationsRepo = ConversationsRepoImpl()
-    val messagesRepo: MessagesRepo = MessagesRepoImpl()
+    val messagesRepo = MessagesRepoImpl()
 
     MaterialTheme(colors = darkThemeColors) {
         val contactState = remember { mutableStateOf(ContactState.HIDE) }
@@ -56,9 +56,6 @@ fun App() {
         } else {*/
             Row {
                 Left(
-                    modifier = Modifier
-                        .background(Color(14, 22, 33))
-                        .fillMaxHeight(),
                     onConversationClick = { conversation ->
                         messagesRepo.messagesByConversationId(conversation.id)
                     },
