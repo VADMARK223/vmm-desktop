@@ -4,9 +4,10 @@ import androidx.compose.runtime.mutableStateListOf
 import db.MessageNew
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import service.HttpService
-import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
@@ -46,8 +47,24 @@ class MessagesRepoNewImpl : MessagesRepoNew {
         }
     }
 
-    override fun addMessage(text: String) {
-        println("Add message: $text")
-        messages.add(MessageNew(Random.nextLong(), text = text))
+    override fun addMessage(text: String, conversationId: Long?) {
+        val messageDto = MessageDto(text = text, conversationId = conversationId)
+        println("Add message: $messageDto")
+
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.post("${HttpService.host}/messages") {
+                contentType(ContentType.Application.Json)
+                setBody(messageDto)
+            }
+            println("Response: $response")
+            if (response.status == HttpStatusCode.OK) {
+                val newMessage = response.body<MessageNew>()
+                println("New message: $newMessage")
+                messages.add(newMessage)
+            }
+        }
     }
 }
+
+@Serializable
+data class MessageDto(val text: String, val conversationId: Long?)

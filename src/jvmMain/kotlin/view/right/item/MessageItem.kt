@@ -23,10 +23,8 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import db.MessageNew
-import io.ktor.client.*
 import kotlinx.datetime.toJavaLocalDateTime
 import repository.MessagesRepoNew
-import service.HttpService
 import java.awt.event.MouseEvent
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -78,7 +76,6 @@ fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>, r
                 style = MaterialTheme.typography.overline,
                 color = Color.Gray
             )
-
         }
 
         DropdownMenu(
@@ -92,11 +89,10 @@ fun MessageItem(message: MessageNew, mainOutput: MutableState<TextFieldValue>, r
                     when (it) {
                         MessageAction.EDIT -> {
                             mainOutput.value = TextFieldValue(message.text)
-//                            transaction { message.edited = true }
+//                            repo.etidMessage(message)
                         }
                         MessageAction.REMOVE -> {
                             repo.delete(message)
-//                            HttpService.removeMessage(message)
                         }
                     }
 

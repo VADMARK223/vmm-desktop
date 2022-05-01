@@ -13,10 +13,10 @@ object HttpService {
     lateinit var coroutineScope: CoroutineScope
 
     val client = HttpClient(CIO) {
-        /*install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.HEADERS
-        }*/
+//        install(Logging) {
+//            logger = Logger.DEFAULT
+//            level = LogLevel.HEADERS
+//        }
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true

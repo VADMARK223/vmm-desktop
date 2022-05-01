@@ -20,6 +20,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import repository.ConversationsRepo
 import repository.MessagesRepoNew
 
 /**
@@ -28,7 +29,11 @@ import repository.MessagesRepoNew
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputMessage(messagesRepo: MessagesRepoNew, mainOutput: MutableState<TextFieldValue>) {
+fun InputMessage(
+    messagesRepo: MessagesRepoNew,
+    conversationsRepo: ConversationsRepo,
+    mainOutput: MutableState<TextFieldValue>
+) {
     val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -37,8 +42,8 @@ fun InputMessage(messagesRepo: MessagesRepoNew, mainOutput: MutableState<TextFie
                 mainOutput.value = it
             },
             modifier = Modifier.fillMaxWidth().onKeyEvent {
-                if (it.key == Key.Enter) {
-                    sendMessage(mainOutput, messagesRepo)
+                if (it.key == Key.Enter || it.key == Key.NumPadEnter) {
+                    sendMessage(mainOutput, messagesRepo, conversationsRepo)
                 }
                 false
             },
@@ -73,7 +78,7 @@ fun InputMessage(messagesRepo: MessagesRepoNew, mainOutput: MutableState<TextFie
                     if (mainOutputEmpty.value) {
                         IconButton(
                             onClick = {
-                                sendMessage(mainOutput, messagesRepo)
+                                sendMessage(mainOutput, messagesRepo, conversationsRepo)
                             }
                         ) {
                             Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))
@@ -85,9 +90,14 @@ fun InputMessage(messagesRepo: MessagesRepoNew, mainOutput: MutableState<TextFie
     }
 }
 
-private fun sendMessage(mainOutput: MutableState<TextFieldValue>, messagesRepo: MessagesRepoNew) {
+private fun sendMessage(
+    mainOutput: MutableState<TextFieldValue>,
+    messagesRepo: MessagesRepoNew,
+    conversationsRepo: ConversationsRepo
+) {
     if (mainOutput.value.text.isNotEmpty()) {
-        messagesRepo.addMessage(mainOutput.value.text)
+        val conversationSelectedId = conversationsRepo.selected().value?.id
+        messagesRepo.addMessage(mainOutput.value.text, conversationSelectedId)
         mainOutput.value = TextFieldValue("")
     }
 }

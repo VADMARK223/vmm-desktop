@@ -10,5 +10,5 @@ interface MessagesRepoNew {
     fun all(): List<MessageNew>
     fun delete(message: MessageNew)
     fun messagesByConversationId(id: Long)
-    fun addMessage(text: String)
+    fun addMessage(text: String, conversationId: Long?)
 }
