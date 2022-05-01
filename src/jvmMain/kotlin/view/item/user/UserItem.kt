@@ -16,8 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import db.User
-import repository.UsersRepo
 import kotlin.random.Random
 
 /**
@@ -25,7 +23,7 @@ import kotlin.random.Random
  * @since 23.04.2022
  */
 @Composable
-fun UserItem(user: User, modifier: Modifier) {
+fun UserItem(/*user: User, */modifier: Modifier) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = UserAction.values()
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
@@ -44,7 +42,7 @@ fun UserItem(user: User, modifier: Modifier) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(size))
             ) {
-                val avaText = user.firstName.first().toString() + user.lastName.first().toString()
+                val avaText = "A"//user.firstName.first().toString() + user.lastName.first().toString()
                 Text(
                     text = avaText,
                     color = Color.White,
@@ -59,7 +57,7 @@ fun UserItem(user: User, modifier: Modifier) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = /*user.id.value.toString() + " " + */user.firstName + " " + user.lastName,
+                    text = "a", /*user.id.value.toString() + " " + user.firstName + " " + user.lastName,*/
                     style = MaterialTheme.typography.h6,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -90,7 +88,7 @@ fun UserItem(user: User, modifier: Modifier) {
                 DropdownMenuItem(onClick = {
                     when (it) {
                         UserAction.REMOVE -> {
-                            UsersRepo.remove(user)
+//                            UsersRepo.remove(user)
                         }
                     }
 

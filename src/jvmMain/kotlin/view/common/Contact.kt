@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import repository.UsersRepo
 import service.generateContactCredentials
 import kotlin.random.Random
 
@@ -58,7 +57,8 @@ fun Contact(contactState: MutableState<ContactState>) {
                     mutableStateOf(
                         TextFieldValue(
                             if (contactState.value == ContactState.EDIT)
-                                UsersRepo.selected.value?.firstName as String
+                                "Edit"
+                                //UsersRepo.selected.value?.firstName as String
                             else
                                 if (generateContactCredentials()) "First#" + Random.nextInt(10) else ""
                         )
@@ -85,7 +85,7 @@ fun Contact(contactState: MutableState<ContactState>) {
                     mutableStateOf(
                         TextFieldValue(
                             if (contactState.value == ContactState.EDIT)
-                                UsersRepo.selected.value?.lastName as String
+                                "Edit"//UsersRepo.selected.value?.lastName as String
                             else
                                 if (generateContactCredentials()) "Last#" + Random.nextInt(10) else ""
                         )
@@ -147,11 +147,11 @@ fun Contact(contactState: MutableState<ContactState>) {
                                 } else if (lastName.value.text.isEmpty()) {
                                     lastNameEmpty.value = true
                                 } else {
-                                    UsersRepo.addUser(firstName.value.text, lastName.value.text)
+//                                    UsersRepo.addUser(firstName.value.text, lastName.value.text)
                                     contactState.value = ContactState.HIDE
                                 }
                             } else if (contactState.value == ContactState.EDIT) {
-                                UsersRepo.update(firstName.value.text, lastName.value.text)
+//                                UsersRepo.update(firstName.value.text, lastName.value.text)
                                 contactState.value = ContactState.HIDE
                             }
                         },
