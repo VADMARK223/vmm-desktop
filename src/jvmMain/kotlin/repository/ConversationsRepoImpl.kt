@@ -39,4 +39,11 @@ class ConversationsRepoImpl : ConversationsRepo {
     override fun selected(): MutableState<Conversation?> {
         return selected
     }
+
+    override fun remove(conversation: Conversation) {
+        HttpService.coroutineScope.launch {
+            HttpService.client.delete("${HttpService.host}/conversations/${conversation.id}")
+            conversations.remove(conversation)
+        }
+    }
 }

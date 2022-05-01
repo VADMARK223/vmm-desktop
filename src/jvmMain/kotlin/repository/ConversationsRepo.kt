@@ -10,4 +10,5 @@ import db.Conversation
 interface ConversationsRepo {
     fun all(): List<Conversation>
     fun selected(): MutableState<Conversation?>
+    fun remove(conversation: Conversation)
 }

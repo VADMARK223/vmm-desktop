@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import repository.ConversationsRepo
+import view.left.item.ConversationItem
 
 /**
  * @author Markitanov Vadim
@@ -32,6 +33,7 @@ fun Conversations(repo: ConversationsRepo) {
             items(items = repo.all()) { conversation ->
                 ConversationItem(
                     conversation = conversation,
+                    repo = repo,
                     modifier = Modifier
                         .background(
                             if (repo.selected().value == conversation) Color(

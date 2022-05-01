@@ -1,29 +1,40 @@
-package view.left
+package view.left.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.awtEventOrNull
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import db.Conversation
+import repository.ConversationsRepo
+import java.awt.event.MouseEvent
 import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
  * @since 29.04.2022
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ConversationItem(conversation: Conversation, modifier: Modifier) {
+fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifier: Modifier) {
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
+    val expanded = remember { mutableStateOf(false) }
+    val menuItems = ConversationAction.values()
 
     Box(
         modifier = modifier,
@@ -54,13 +65,41 @@ fun ConversationItem(conversation: Conversation, modifier: Modifier) {
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().onPointerEvent(PointerEventType.Press) {
+                        when (it.awtEventOrNull?.button) {
+                            MouseEvent.BUTTON3 -> {
+                                expanded.value = true
+                            }
+                        }
+                    },
                     text = conversation.id.toString() + " " + conversation.name,
                     style = MaterialTheme.typography.h6,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.White
                 )
+            }
+
+            DropdownMenu(
+                expanded = expanded.value,
+                onDismissRequest = {
+                    expanded.value = false
+                }
+            ) {
+                menuItems.forEach {
+                    DropdownMenuItem(onClick = {
+                        when (it) {
+                            ConversationAction.DELETE -> {
+                                println("Delete conversation.")
+                                repo.remove(conversation)
+                            }
+                        }
+
+                        expanded.value = false
+                    }) {
+                        Text(text = it.text)
+                    }
+                }
             }
 
         }

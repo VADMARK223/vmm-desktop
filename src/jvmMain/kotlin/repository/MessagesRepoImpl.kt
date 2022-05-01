@@ -25,7 +25,6 @@ class MessagesRepoImpl : MessagesRepo {
             HttpService.client.delete("${HttpService.host}/messages/${message.id}")
             messages.remove(message)
         }
-        messages.remove(message)
     }
 
     override fun messagesByConversationId(id: Long) {
