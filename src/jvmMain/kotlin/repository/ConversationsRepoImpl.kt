@@ -23,12 +23,15 @@ class ConversationsRepoImpl : ConversationsRepo {
 
         conversations.clear()
         HttpService.coroutineScope.launch {
-            val responseConversations =
-                HttpService.client.get("${HttpService.host}/conversations").call.body<List<Conversation>>()
-            println("Response conversations size: " + responseConversations.size)
-            conversations.addAll(responseConversations)
-            if (!conversations.isEmpty()) {
-                selected.value = conversations.first()
+            val response = HttpService.client.get("${HttpService.host}/conversations")
+
+            if (response.status == HttpStatusCode.OK) {
+                val responseConversations = response.body<List<Conversation>>()
+                conversations.addAll(responseConversations)
+                selectedFirst()
+            } else {
+                val responseData = response.body<String>()
+                println(responseData)
             }
         }
     }
@@ -56,7 +59,14 @@ class ConversationsRepoImpl : ConversationsRepo {
                 val newConversation = response.body<Conversation>()
                 println("New conversation: $newConversation")
                 conversations.add(newConversation)
+                selectedFirst()
             }
+        }
+    }
+
+    private fun selectedFirst() {
+        if (!conversations.isEmpty()) {
+            selected.value = conversations.first()
         }
     }
 }

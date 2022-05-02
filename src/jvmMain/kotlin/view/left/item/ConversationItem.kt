@@ -21,8 +21,10 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import db.Conversation
+import kotlinx.datetime.toJavaLocalDateTime
 import repository.ConversationsRepo
 import java.awt.event.MouseEvent
+import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
 /**
@@ -63,9 +65,9 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                 )
             }
 
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(/*modifier = Modifier.fillMaxWidth()*/) {
                 Text(
-                    modifier = Modifier.fillMaxWidth().onPointerEvent(PointerEventType.Press) {
+                    modifier = Modifier./*fillMaxWidth().*/onPointerEvent(PointerEventType.Press) {
                         when (it.awtEventOrNull?.button) {
                             MouseEvent.BUTTON3 -> {
                                 expanded.value = true
@@ -79,6 +81,17 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                     color = Color.White
                 )
             }
+
+            Spacer(Modifier.weight(1F))
+
+            val formatter = DateTimeFormatter
+                .ofPattern("hh:mm:ss")
+            val updateTimeText = formatter.format(conversation.updateTime.toJavaLocalDateTime())
+
+            Text(
+                text = updateTimeText,
+                color = Color.White
+            )
 
             DropdownMenu(
                 expanded = expanded.value,

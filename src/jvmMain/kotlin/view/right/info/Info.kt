@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import db.Conversation
+import kotlinx.datetime.toJavaLocalDateTime
 import view.common.ContactState
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 /**
@@ -44,12 +44,15 @@ fun Info(conversation: Conversation?, contactState: MutableState<ContactState>) 
                 color = Color.White
             )
 
-            val pattern = "dd.MM.yyyy"
-            val formatter = DateTimeFormatter.ofPattern(pattern)
-                .withZone(ZoneId.systemDefault())
-            val createTime = "Creation time: "// + formatter.format(user?.activityTime)
+            var createTimeText = ""
+            if (conversation != null) {
+                val formatter = DateTimeFormatter
+                    .ofPattern("hh:mm:ss")
+                createTimeText = "Creation time: " + formatter.format(conversation.createTime.toJavaLocalDateTime())
+            }
+
             Text(
-                text = createTime,
+                text = createTimeText,
                 style = MaterialTheme.typography.overline,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

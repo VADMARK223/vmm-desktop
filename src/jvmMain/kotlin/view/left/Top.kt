@@ -64,6 +64,19 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo) {
                 expanded.value = false
             }
         ) {
+            DropdownMenuItem(onClick = {
+                repo.create()
+                expanded.value = false
+            }) {
+                Text(text = "New Conversation")
+            }
+            DropdownMenuItem(onClick = {
+                contactState.value = ContactState.CREATE
+                expanded.value = false
+            }) {
+                Text(text = "Add user")
+            }
+
             DropdownMenuItem (onClick = {
                 println("Click ava")
             }){
@@ -74,18 +87,6 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo) {
                     modifier = vadmarkModifier,
                     contentScale = ContentScale.FillWidth
                 )
-            }
-            DropdownMenuItem(onClick = {
-                repo.create()
-                expanded.value = false
-            }) {
-                Text(text = "New Group")
-            }
-            DropdownMenuItem(onClick = {
-                contactState.value = ContactState.CREATE
-                expanded.value = false
-            }) {
-                Text(text = "Add user")
             }
         }
     }

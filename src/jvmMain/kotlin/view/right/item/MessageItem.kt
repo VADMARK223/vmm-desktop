@@ -26,7 +26,6 @@ import db.Message
 import kotlinx.datetime.toJavaLocalDateTime
 import repository.MessagesRepo
 import java.awt.event.MouseEvent
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 /**
@@ -69,7 +68,7 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>, repo
             }
             val pattern = "hh:mm:ss"
             val formatter = DateTimeFormatter.ofPattern(pattern)
-                .withZone(ZoneId.systemDefault())
+//                .withZone(ZoneId.systemDefault())
             val messageCurrentTime = formatter.format(message.createTime.toJavaLocalDateTime())
             Text(
                 text = messageCurrentTime,
