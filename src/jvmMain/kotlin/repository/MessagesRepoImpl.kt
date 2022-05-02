@@ -41,7 +41,7 @@ class MessagesRepoImpl : MessagesRepo {
         println("Add message: $messageDto")
 
         HttpService.coroutineScope.launch {
-            val response = HttpService.client.post("${HttpService.host}/messages") {
+            val response = HttpService.client.put("${HttpService.host}/messages") {
                 contentType(ContentType.Application.Json)
                 setBody(messageDto)
             }
