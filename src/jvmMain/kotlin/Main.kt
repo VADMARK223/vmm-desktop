@@ -15,10 +15,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
-import io.ktor.http.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import repository.ConversationsRepoImpl
 import repository.MessagesRepoImpl
 import resources.darkThemeColors
@@ -29,7 +30,6 @@ import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
 import view.right.info.Info
-import java.util.*
 
 @Composable
 @Preview
@@ -37,13 +37,6 @@ fun App() {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     HttpService.coroutineScope = rememberCoroutineScope()
-
-//    runBlocking {
-    HttpService.coroutineScope.launch {
-//        test()
-    }
-
-//    }
 
     val conversationsRepo = ConversationsRepoImpl()
     val messagesRepo = MessagesRepoImpl()
@@ -102,30 +95,77 @@ fun App() {
     }
 }
 
-fun main() = application {
-    val icon = painterResource("favicon.ico")
-    val width = 1000.dp
-    val height = 700.dp
-    val state = rememberWindowState(
-        size = DpSize(width, height),
-        position = WindowPosition(2300.dp, 300.dp),
-        isMinimized = false
-    )
+fun main() {
+//    val client = HttpClient(CIO) {
+//        install(WebSockets)
+//    }
+//    runBlocking {
+//        client.webSocket(host = "localhost", port = 8888, path = "/chat") {
+//            while (true) {
+//                val othersMessage = incoming.receive() as? Frame.Text ?: continue
+//                println(othersMessage.readText())
+//                val myMessage = readLine()
+//                if (myMessage != null) {
+//                    send(myMessage)
+//                }
+//            }
+//            val messageOutputRoutine = launch { outputMessages() }
+//            val userInputRoutine = launch { inputMessages() }
+//            userInputRoutine.join() // Wait for completion; either "exit" or error
+//            messageOutputRoutine.cancelAndJoin()
+//        }
+//    }
+//    client.close()
 
-    Tray(
-        icon = icon,
-        menu = {
-            Item("Quit vmm", onClick = ::exitApplication)
+    application {
+        val icon = painterResource("favicon.ico")
+        val width = 1000.dp
+        val height = 700.dp
+        val state = rememberWindowState(
+            size = DpSize(width, height),
+            position = WindowPosition(2300.dp, 300.dp),
+            isMinimized = false
+        )
+
+        Tray(
+            icon = icon,
+            menu = {
+                Item("Quit vmm", onClick = ::exitApplication)
+            }
+        )
+
+        Window(
+            onCloseRequest = ::exitApplication,
+            state = state,
+            true,
+            "Vadmark`s messenger",
+            icon = icon
+        ) {
+            App()
         }
-    )
+    }
+}
 
-    Window(
-        onCloseRequest = ::exitApplication,
-        state = state,
-        true,
-        "Vadmark`s messenger",
-        icon = icon
-    ) {
-        App()
+suspend fun DefaultClientWebSocketSession.outputMessages() {
+    try {
+        for (message in incoming) {
+            message as? Frame.Text ?: continue
+            println(message.readText())
+        }
+    } catch (e: Exception) {
+        println("Error while receiving: " + e.localizedMessage)
+    }
+}
+
+suspend fun DefaultClientWebSocketSession.inputMessages() {
+    while (true) {
+        val message = readLine() ?: ""
+        if (message.equals("exit", true)) return
+        try {
+            send(message)
+        } catch (e: Exception) {
+            println("Error while sending: " + e.localizedMessage)
+            return
+        }
     }
 }

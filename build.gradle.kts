@@ -40,6 +40,7 @@ kotlin {
 
                 implementation("io.ktor:ktor-client-core:2.0.0")
                 implementation("io.ktor:ktor-client-cio:2.0.0")
+                implementation("io.ktor:ktor-client-websockets:2.0.0")
                 // Ktor plugins
                 implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
                 // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
