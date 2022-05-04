@@ -3,6 +3,7 @@ package service
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.websocket.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
@@ -13,6 +14,7 @@ object HttpService {
     lateinit var coroutineScope: CoroutineScope
 
     val client = HttpClient(CIO) {
+        install(WebSockets)
 //        install(Logging) {
 //            logger = Logger.DEFAULT
 //            level = LogLevel.HEADERS

@@ -15,25 +15,35 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.http.*
+import io.ktor.websocket.*
+import kotlinx.coroutines.launch
 import repository.ConversationsRepoImpl
 import repository.MessagesRepoImpl
 import resources.darkThemeColors
 import service.HttpService
-import service.databaseConnect
 import view.common.Contact
 import view.common.ContactState
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
 import view.right.info.Info
+import java.util.*
 
 @Composable
 @Preview
 fun App() {
-    databaseConnect()
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     HttpService.coroutineScope = rememberCoroutineScope()
+
+//    runBlocking {
+    HttpService.coroutineScope.launch {
+//        test()
+    }
+
+//    }
 
     val conversationsRepo = ConversationsRepoImpl()
     val messagesRepo = MessagesRepoImpl()
