@@ -19,6 +19,9 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import repository.ConversationsRepoImpl
 import repository.MessagesRepoImpl
@@ -95,27 +98,10 @@ fun App() {
     }
 }
 
-fun main() {
-//    val client = HttpClient(CIO) {
-//        install(WebSockets)
-//    }
-//    runBlocking {
-//        client.webSocket(host = "localhost", port = 8888, path = "/chat") {
-//            while (true) {
-//                val othersMessage = incoming.receive() as? Frame.Text ?: continue
-//                println(othersMessage.readText())
-//                val myMessage = readLine()
-//                if (myMessage != null) {
-//                    send(myMessage)
-//                }
-//            }
-//            val messageOutputRoutine = launch { outputMessages() }
-//            val userInputRoutine = launch { inputMessages() }
-//            userInputRoutine.join() // Wait for completion; either "exit" or error
-//            messageOutputRoutine.cancelAndJoin()
-//        }
-//    }
-//    client.close()
+suspend fun main() = coroutineScope {
+    launch {
+        initWebSocket()
+    }
 
     application {
         val icon = painterResource("favicon.ico")
@@ -144,6 +130,21 @@ fun main() {
             App()
         }
     }
+}
+
+suspend fun initWebSocket() {
+    val client = HttpClient(CIO) {
+        install(WebSockets)
+    }
+    runBlocking {
+        client.webSocket(host = "localhost", port = 8888, path = "/chat") {
+            val messageOutputRoutine = launch { outputMessages() }
+            val userInputRoutine = launch { inputMessages() }
+            userInputRoutine.join() // Wait for completion; either "exit" or error
+            messageOutputRoutine.cancelAndJoin()
+        }
+    }
+    client.close()
 }
 
 suspend fun DefaultClientWebSocketSession.outputMessages() {
