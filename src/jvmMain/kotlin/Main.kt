@@ -138,10 +138,11 @@ suspend fun initWebSocket() {
     }
     runBlocking {
         client.webSocket(host = "localhost", port = 8888, path = "/chat") {
+//            send("aaaaa")
             val messageOutputRoutine = launch { outputMessages() }
-            val userInputRoutine = launch { inputMessages() }
-            userInputRoutine.join() // Wait for completion; either "exit" or error
-            messageOutputRoutine.cancelAndJoin()
+//            val userInputRoutine = launch { inputMessages() }
+//            userInputRoutine.join() // Wait for completion; either "exit" or error
+//            messageOutputRoutine.cancelAndJoin()
         }
     }
     client.close()
