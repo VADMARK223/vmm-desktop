@@ -63,23 +63,12 @@ class ConversationsRepoImpl : ConversationsRepo {
     }
 
     override fun create() {
-        println("Try create conversation.")
         HttpService.coroutineScope.launch {
             val response = HttpService.client.put("${HttpService.host}/conversations")
-            println("Response put new conversation: $response")
             if (response.status == HttpStatusCode.OK) {
-                println("OK!!!")
-                try {
-                    val newConversationId = response.body<Long>()
-                    println("newConversationId: $newConversationId")
-                } catch (e:Exception) {
-                    println(e.localizedMessage)
-                }
-
-//                val newConversation = response.body<Conversation>()
-//                println("New conversation: $newConversation")
-//                conversations.add(newConversation)
-//                selectedFirst()
+                val newConversation = response.body<Conversation>()
+                conversations.add(newConversation)
+                selected.value = newConversation
             }
         }
     }
