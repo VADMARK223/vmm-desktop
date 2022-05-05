@@ -7,7 +7,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -24,6 +23,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import repository.ConversationsRepo
 import repository.ConversationsRepoImpl
 import repository.MessagesRepoImpl
 import resources.darkThemeColors
@@ -37,12 +37,9 @@ import view.right.info.Info
 
 @Composable
 @Preview
-fun App() {
+fun App(conversationsRepo: ConversationsRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
-    HttpService.coroutineScope = rememberCoroutineScope()
-
-    val conversationsRepo = ConversationsRepoImpl()
     val messagesRepo = MessagesRepoImpl()
 
     MaterialTheme(colors = darkThemeColors) {
@@ -100,8 +97,11 @@ fun App() {
 }
 
 suspend fun main() = coroutineScope {
+    HttpService.coroutineScope = this//rememberCoroutineScope()
+    val conversationsRepo = ConversationsRepoImpl()
+
     launch {
-        initWebSocket()
+        initWebSocket(conversationsRepo)
     }
 
     application {
@@ -128,12 +128,12 @@ suspend fun main() = coroutineScope {
             "Vadmark`s messenger",
             icon = icon
         ) {
-            App()
+            App(conversationsRepo)
         }
     }
 }
 
-suspend fun initWebSocket() {
+suspend fun initWebSocket(conversationsRepo: ConversationsRepo) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -145,7 +145,7 @@ suspend fun initWebSocket() {
                 this.parameter("userId", "000")
             }
         ) {
-            val messageOutputRoutine = launch { outputMessages() }
+            val messageOutputRoutine = launch { outputMessages(conversationsRepo) }
             val userInputRoutine = launch { inputMessages() }
             userInputRoutine.join() // Wait for completion; either "exit" or error
             messageOutputRoutine.cancelAndJoin()
@@ -154,11 +154,25 @@ suspend fun initWebSocket() {
     client.close()
 }
 
-suspend fun DefaultClientWebSocketSession.outputMessages() {
+suspend fun DefaultClientWebSocketSession.outputMessages(conversationsRepo: ConversationsRepo) {
     try {
         for (message in incoming) {
             message as? Frame.Text ?: continue
-            println(message.readText())
+            val incomingMessage = message.readText()
+            println(incomingMessage)
+            val incomingMessageArray: Array<String> = incomingMessage.split(":").toTypedArray()
+
+            if (incomingMessageArray.size == 3) {
+                val command: String = incomingMessageArray[1].trim()
+                println("command: '${command}'")
+                val id: Long = incomingMessageArray[2].trim().toLong()
+                println("id: '${id}'")
+                if (command == "REMOVE_CONVERSATION") {
+                    conversationsRepo.remove(id)
+                } else if (command == "ADD_CONVERSATION") {
+                    conversationsRepo.create()
+                }
+            }
         }
     } catch (e: Exception) {
         println("Error while receiving: " + e.localizedMessage)

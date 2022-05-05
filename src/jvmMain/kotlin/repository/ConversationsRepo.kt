@@ -11,5 +11,7 @@ interface ConversationsRepo {
     fun all(): List<Conversation>
     fun selected(): MutableState<Conversation?>
     fun remove(conversation: Conversation)
+    fun remove(conversationId: Long)
     fun create()
+    fun test()
 }

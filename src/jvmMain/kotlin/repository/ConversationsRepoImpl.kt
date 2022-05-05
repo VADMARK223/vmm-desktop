@@ -51,17 +51,42 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
-    override fun create() {
-        println("Create conversation.")
+    override fun remove(conversationId: Long) {
         HttpService.coroutineScope.launch {
-            val response = HttpService.client.put("${HttpService.host}/conversations")
-            if (response.status == HttpStatusCode.OK) {
-                val newConversation = response.body<Conversation>()
-                println("New conversation: $newConversation")
-                conversations.add(newConversation)
-                selectedFirst()
+            HttpService.client.delete("${HttpService.host}/conversations/${conversationId}")
+            for (conversation in conversations) {
+                if (conversation.id == conversationId) {
+                    conversations.remove(conversation)
+                }
             }
         }
+    }
+
+    override fun create() {
+        println("Try create conversation.")
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.put("${HttpService.host}/conversations")
+            println("Response put new conversation: $response")
+            if (response.status == HttpStatusCode.OK) {
+                println("OK!!!")
+                try {
+                    val newConversationId = response.body<Long>()
+                    println("newConversationId: $newConversationId")
+                } catch (e:Exception) {
+                    println(e.localizedMessage)
+                }
+
+//                val newConversation = response.body<Conversation>()
+//                println("New conversation: $newConversation")
+//                conversations.add(newConversation)
+//                selectedFirst()
+            }
+        }
+    }
+
+    override fun test() {
+        println("TEST")
+        remove(30)
     }
 
     private fun selectedFirst() {
