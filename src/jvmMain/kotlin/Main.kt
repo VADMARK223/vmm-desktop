@@ -18,6 +18,7 @@ import androidx.compose.ui.window.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.client.request.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
@@ -137,12 +138,17 @@ suspend fun initWebSocket() {
         install(WebSockets)
     }
     runBlocking {
-        client.webSocket(host = "localhost", port = 8888, path = "/chat") {
-//            send("aaaaa")
+        client.webSocket(
+            host = "localhost",
+            port = 8888, path = "/chat",
+            request = {
+                this.parameter("userId", "000")
+            }
+        ) {
             val messageOutputRoutine = launch { outputMessages() }
-//            val userInputRoutine = launch { inputMessages() }
-//            userInputRoutine.join() // Wait for completion; either "exit" or error
-//            messageOutputRoutine.cancelAndJoin()
+            val userInputRoutine = launch { inputMessages() }
+            userInputRoutine.join() // Wait for completion; either "exit" or error
+            messageOutputRoutine.cancelAndJoin()
         }
     }
     client.close()
