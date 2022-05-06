@@ -23,14 +23,20 @@ class ConversationsRepoImpl : ConversationsRepo {
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/conversations")
 
-            if (response.status == HttpStatusCode.OK) {
-                val responseConversations = response.body<List<Conversation>>()
-                conversations.addAll(responseConversations)
-                selectedFirst()
-            } else {
-                val responseData = response.body<String>()
-                println(responseData)
+            try {
+                if (response.status == HttpStatusCode.OK) {
+                    val responseConversations = response.body<List<Conversation>>()
+                    conversations.addAll(responseConversations)
+                    selectedFirst()
+                } else {
+                    val responseData = response.body<String>()
+                    println(responseData)
+                }
+            } catch (e:Exception){
+                println(e.localizedMessage)
             }
+
+
         }
     }
 

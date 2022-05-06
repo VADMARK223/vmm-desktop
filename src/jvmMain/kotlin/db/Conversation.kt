@@ -8,5 +8,6 @@ data class Conversation(
     val id: Long,
     var name: String,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
+    val ownerId: Long
 )

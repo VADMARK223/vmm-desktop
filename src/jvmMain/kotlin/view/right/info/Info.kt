@@ -58,6 +58,16 @@ fun Info(conversation: Conversation?, contactState: MutableState<ContactState>) 
                 overflow = TextOverflow.Ellipsis,
                 color = Color.Gray
             )
+
+            if (conversation != null) {
+                Text(
+                    text = "conversation.ownerId.toString()",
+                    style = MaterialTheme.typography.overline,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
+            }
         }
 
         IconButton(
