@@ -21,6 +21,7 @@ import io.ktor.client.request.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
+import model.ChangeType
 import model.ConversationNotification
 import repository.ConversationsRepo
 import repository.ConversationsRepoImpl
@@ -98,7 +99,7 @@ suspend fun main() = coroutineScope {
     val conversationsRepo = ConversationsRepoImpl()
 
     launch {
-        initUpdatesWebSocket()
+        initConversationsWebSocket(conversationsRepo)
 //        initConversationsWebSocket()
 //        initWebSocket(conversationsRepo)
     }
@@ -132,7 +133,7 @@ suspend fun main() = coroutineScope {
     }
 }
 
-suspend fun initUpdatesWebSocket() {
+suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -141,18 +142,21 @@ suspend fun initUpdatesWebSocket() {
         client.webSocket(
             host = "localhost",
             port = 8888,
-            path = "/updates"
+            path = "/conversations"
         ) {
             for (message in incoming) {
                 message as? Frame.Text ?: continue
                 val incomingMessage = message.readText()
-                println("Incoming message: $incomingMessage")
-/*
-                val value = withContext(Dispatchers.IO) {
+                println("Incoming conversations: $incomingMessage")
+
+                val conversationNotification = withContext(Dispatchers.IO) {
                     defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
                 }
+                println("Conversation notification: $conversationNotification")
 
-                println("Value: $value")*/
+                if (conversationNotification.type == ChangeType.DELETE) {
+                    conversationsRepo.remove(conversationNotification.id)
+                }
             }
         }
     }
@@ -160,7 +164,7 @@ suspend fun initUpdatesWebSocket() {
     client.close()
 }
 
-suspend fun initConversationsWebSocket() {
+/*suspend fun initConversationsWebSocket() {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -186,7 +190,7 @@ suspend fun initConversationsWebSocket() {
     }
 
     client.close()
-}
+}*/
 
 suspend fun initWebSocket(conversationsRepo: ConversationsRepo) {
     val client = HttpClient(CIO) {
