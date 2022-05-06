@@ -14,7 +14,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import db.Conversation
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -22,6 +21,7 @@ import io.ktor.client.request.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
+import model.ConversationNotification
 import repository.ConversationsRepo
 import repository.ConversationsRepoImpl
 import repository.MessagesRepoImpl
@@ -148,7 +148,7 @@ suspend fun initConversationsWebSocket() {
                 println("Incoming message: $incomingMessage")
 
                 val value = withContext(Dispatchers.IO) {
-                        defaultMapper.decodeFromString<Conversation>(incomingMessage)
+                    defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
                 }
 
                 println("Value: $value")
