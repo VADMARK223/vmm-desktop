@@ -19,8 +19,6 @@ class ConversationsRepoImpl : ConversationsRepo {
     private var conversations = mutableStateListOf<Conversation>()
 
     init {
-        println("Conversations repo init.")
-
         conversations.clear()
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/conversations")
@@ -74,7 +72,6 @@ class ConversationsRepoImpl : ConversationsRepo {
     }
 
     override fun test() {
-        println("TEST")
         remove(30)
     }
 

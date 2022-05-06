@@ -14,20 +14,20 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import db.Conversation
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.serialization.decodeFromString
 import repository.ConversationsRepo
 import repository.ConversationsRepoImpl
 import repository.MessagesRepoImpl
 import resources.darkThemeColors
 import service.HttpService
+import util.JsonMapper.defaultMapper
 import view.common.Contact
 import view.common.ContactState
 import view.left.Left
@@ -88,10 +88,7 @@ fun App(conversationsRepo: ConversationsRepo) {
         }
 
         if (conversationsRepo.selected().value != null) {
-            println("Conservation selected: ${conversationsRepo.selected().value?.id}")
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
-        } else {
-            println("Conservation not selected.")
         }
     }
 }
@@ -101,7 +98,8 @@ suspend fun main() = coroutineScope {
     val conversationsRepo = ConversationsRepoImpl()
 
     launch {
-        initWebSocket(conversationsRepo)
+        initConversationsWebSocket()
+//        initWebSocket(conversationsRepo)
     }
 
     application {
@@ -133,6 +131,34 @@ suspend fun main() = coroutineScope {
     }
 }
 
+suspend fun initConversationsWebSocket() {
+    val client = HttpClient(CIO) {
+        install(WebSockets)
+    }
+
+    runBlocking {
+        client.webSocket(
+            host = "localhost",
+            port = 8888,
+            path = "/conversations"
+        ) {
+            for (message in incoming) {
+                message as? Frame.Text ?: continue
+                val incomingMessage = message.readText()
+                println("Incoming message: $incomingMessage")
+
+                val value = withContext(Dispatchers.IO) {
+                        defaultMapper.decodeFromString<Conversation>(incomingMessage)
+                }
+
+                println("Value: $value")
+            }
+        }
+    }
+
+    client.close()
+}
+
 suspend fun initWebSocket(conversationsRepo: ConversationsRepo) {
     val client = HttpClient(CIO) {
         install(WebSockets)
@@ -140,7 +166,8 @@ suspend fun initWebSocket(conversationsRepo: ConversationsRepo) {
     runBlocking {
         client.webSocket(
             host = "localhost",
-            port = 8888, path = "/chat",
+            port = 8888,
+            path = "/chat",
             request = {
                 this.parameter("userId", "000")
             }

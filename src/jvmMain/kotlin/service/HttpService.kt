@@ -6,7 +6,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.serialization.json.Json
+import util.JsonMapper
 
 object HttpService {
     const val host: String = "http://localhost:8888"
@@ -20,10 +20,7 @@ object HttpService {
 //            level = LogLevel.HEADERS
 //        }
         install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                ignoreUnknownKeys = true
-            })
+            json(JsonMapper.defaultMapper)
         }
     }
 }
