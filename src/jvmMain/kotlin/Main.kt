@@ -98,7 +98,8 @@ suspend fun main() = coroutineScope {
     val conversationsRepo = ConversationsRepoImpl()
 
     launch {
-        initConversationsWebSocket()
+        initUpdatesWebSocket()
+//        initConversationsWebSocket()
 //        initWebSocket(conversationsRepo)
     }
 
@@ -129,6 +130,34 @@ suspend fun main() = coroutineScope {
             App(conversationsRepo)
         }
     }
+}
+
+suspend fun initUpdatesWebSocket() {
+    val client = HttpClient(CIO) {
+        install(WebSockets)
+    }
+
+    runBlocking {
+        client.webSocket(
+            host = "localhost",
+            port = 8888,
+            path = "/updates"
+        ) {
+            for (message in incoming) {
+                message as? Frame.Text ?: continue
+                val incomingMessage = message.readText()
+                println("Incoming message: $incomingMessage")
+/*
+                val value = withContext(Dispatchers.IO) {
+                    defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
+                }
+
+                println("Value: $value")*/
+            }
+        }
+    }
+
+    client.close()
 }
 
 suspend fun initConversationsWebSocket() {
