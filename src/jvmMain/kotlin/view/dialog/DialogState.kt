@@ -6,5 +6,7 @@ package view.dialog
  */
 enum class DialogState {
     HIDE,
-    NEW_CONVERSATION
+    NEW_CONVERSATION,
+    ADD_MEMBERS,
+    NEW_CONVERSATION_WITH_MEMBERS
 }

@@ -29,9 +29,8 @@ import service.HttpService
 import util.JsonMapper.defaultMapper
 import view.common.Contact
 import view.common.ContactState
-import view.dialog.Dialog
+import view.dialog.*
 import view.dialog.DialogState
-import view.dialog.NewConversation
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
@@ -100,8 +99,16 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
         } else {
             if (Dialog.state.value == DialogState.NEW_CONVERSATION) {
                 println("Show new conversation.")
-
                 NewConversation(conversationsRepo, usersRepo)
+            }
+
+            if (Dialog.state.value == DialogState.ADD_MEMBERS) {
+                println("Show add members.")
+                AddMembers(conversationsRepo, usersRepo)
+            }
+
+            if (Dialog.state.value == DialogState.NEW_CONVERSATION_WITH_MEMBERS) {
+                NewConversationWithMembers(conversationsRepo, usersRepo)
             }
         }
     }

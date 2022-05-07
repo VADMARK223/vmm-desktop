@@ -65,9 +65,9 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                 )
             }
 
-            Column(/*modifier = Modifier.fillMaxWidth()*/) {
+            Column {
                 Text(
-                    modifier = Modifier./*fillMaxWidth().*/onPointerEvent(PointerEventType.Press) {
+                    modifier = Modifier.onPointerEvent(PointerEventType.Press) {
                         when (it.awtEventOrNull?.button) {
                             MouseEvent.BUTTON3 -> {
                                 expanded.value = true

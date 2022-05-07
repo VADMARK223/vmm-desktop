@@ -70,6 +70,19 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
         ) {
             DropdownMenuItem(onClick = {
                 expanded.value = false
+                Dialog.state.value = DialogState.ADD_MEMBERS
+            }) {
+                Text(text = "Add members")
+            }
+
+            DropdownMenuItem(onClick = {
+                expanded.value = false
+                Dialog.state.value = DialogState.NEW_CONVERSATION_WITH_MEMBERS
+            }) {
+                Text(text = "New Conversation with users")
+            }
+            DropdownMenuItem(onClick = {
+                expanded.value = false
                 Dialog.state.value = DialogState.NEW_CONVERSATION
             }) {
                 Text(text = "New Conversation")
@@ -79,7 +92,7 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
                 expanded.value = false
 //                Dialog.visible.value = true
             }) {
-                Text(text = "New Conversation Old")
+                Text(text = "New Conversation for user 1")
             }
             DropdownMenuItem(onClick = {
                 contactState.value = ContactState.CREATE
