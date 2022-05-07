@@ -4,11 +4,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import db.Conversation
+import dto.ConversationDto
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
 import service.HttpService
+import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
@@ -71,8 +73,19 @@ class ConversationsRepoImpl : ConversationsRepo {
     }
 
     override fun create() {
+        create("Conversation #" + Random.nextInt(100), 1L)
+    }
+
+    override fun create(name:String, ownerId:Long?) {
         HttpService.coroutineScope.launch {
-            val response = HttpService.client.put("${HttpService.host}/conversations")
+            val conversationDto = ConversationDto(name, ownerId)
+            val response = HttpService.client.put("${HttpService.host}/conversations") {
+                contentType(ContentType.Application.Json)
+                setBody(conversationDto)
+            }
+
+            println("Create conversation response: $response")
+
             if (response.status == HttpStatusCode.OK) {
                 val newConversation = response.body<Conversation>()
                 conversations.add(newConversation)

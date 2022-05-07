@@ -100,7 +100,8 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
         } else {
             if (Dialog.state.value == DialogState.NEW_CONVERSATION) {
                 println("Show new conversation.")
-                NewConversation()
+
+                NewConversation(conversationsRepo, usersRepo)
             }
         }
     }
