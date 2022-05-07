@@ -43,7 +43,13 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
     ) {
         Row(
             modifier = Modifier
-                .padding(10.dp),
+                .padding(10.dp).onPointerEvent(PointerEventType.Press) {
+                when (it.awtEventOrNull?.button) {
+                    MouseEvent.BUTTON3 -> {
+                        expanded.value = true
+                    }
+                }
+            },
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -63,17 +69,39 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                         )
                         .padding(size / 2)
                 )
+
+                DropdownMenu(
+                    expanded = expanded.value,
+                    onDismissRequest = {
+                        expanded.value = false
+                    }
+                ) {
+                    menuItems.forEach {
+                        DropdownMenuItem(onClick = {
+                            when (it) {
+                                ConversationAction.DELETE -> {
+                                    println("Delete conversation.")
+                                    repo.remove(conversation)
+                                }
+                            }
+
+                            expanded.value = false
+                        }) {
+                            Text(text = it.text)
+                        }
+                    }
+                }
             }
 
             Column {
                 Text(
-                    modifier = Modifier.onPointerEvent(PointerEventType.Press) {
+                    /*modifier = Modifier.onPointerEvent(PointerEventType.Press) {
                         when (it.awtEventOrNull?.button) {
                             MouseEvent.BUTTON3 -> {
                                 expanded.value = true
                             }
                         }
-                    },
+                    },*/
                     text = conversation.id.toString() + " " + conversation.name,
                     style = MaterialTheme.typography.h6,
                     maxLines = 1,
@@ -93,27 +121,7 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                 color = Color.White
             )
 
-            DropdownMenu(
-                expanded = expanded.value,
-                onDismissRequest = {
-                    expanded.value = false
-                }
-            ) {
-                menuItems.forEach {
-                    DropdownMenuItem(onClick = {
-                        when (it) {
-                            ConversationAction.DELETE -> {
-                                println("Delete conversation.")
-                                repo.remove(conversation)
-                            }
-                        }
 
-                        expanded.value = false
-                    }) {
-                        Text(text = it.text)
-                    }
-                }
-            }
 
         }
     }
