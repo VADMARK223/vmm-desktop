@@ -22,8 +22,13 @@ class MessagesRepoImpl : MessagesRepo {
 
     override fun delete(message: Message) {
         HttpService.coroutineScope.launch {
-            HttpService.client.delete("${HttpService.host}/messages/${message.id}")
-            messages.remove(message)
+            val response = HttpService.client.delete("${HttpService.host}/messages/${message.id}")
+            if (response.status == HttpStatusCode.OK) {
+                val success = response.body<Boolean>()
+                if (success) {
+                    messages.remove(message)
+                }
+            }
         }
     }
 
