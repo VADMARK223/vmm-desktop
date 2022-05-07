@@ -29,6 +29,9 @@ import service.HttpService
 import util.JsonMapper.defaultMapper
 import view.common.Contact
 import view.common.ContactState
+import view.dialog.Dialog
+import view.dialog.DialogState
+import view.dialog.NewConversation
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
@@ -90,6 +93,15 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
 
         if (conversationsRepo.selected().value != null) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
+        }
+
+        if (Dialog.state.value == DialogState.HIDE) {
+            println("HIDE")
+        } else {
+            if (Dialog.state.value == DialogState.NEW_CONVERSATION) {
+                println("Show new conversation.")
+                NewConversation()
+            }
         }
     }
 }

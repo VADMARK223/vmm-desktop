@@ -32,7 +32,7 @@ class ConversationsRepoImpl : ConversationsRepo {
                     val responseData = response.body<String>()
                     println(responseData)
                 }
-            } catch (e:Exception){
+            } catch (e: Exception) {
                 println(e.localizedMessage)
             }
 
@@ -57,11 +57,15 @@ class ConversationsRepoImpl : ConversationsRepo {
 
     override fun remove(conversationId: Long) {
         HttpService.coroutineScope.launch {
-            HttpService.client.delete("${HttpService.host}/conversations/${conversationId}")
-            for (conversation in conversations) {
-                if (conversation.id == conversationId) {
-                    conversations.remove(conversation)
+            val response = HttpService.client.delete("${HttpService.host}/conversations/${conversationId}")
+            if (response.status == HttpStatusCode.OK) {
+                for (conversation in conversations) {
+                    if (conversation.id == conversationId) {
+                        conversations.remove(conversation)
+                    }
                 }
+
+                selectedFirst()
             }
         }
     }
@@ -84,6 +88,8 @@ class ConversationsRepoImpl : ConversationsRepo {
     private fun selectedFirst() {
         if (!conversations.isEmpty()) {
             selected.value = conversations.first()
+        } else {
+            selected.value = null
         }
     }
 }

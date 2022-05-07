@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
 import repository.UsersRepo
 import view.common.ContactState
+import view.dialog.Dialog
+import view.dialog.DialogState
 
 /**
  * @author Markitanov Vadim
@@ -67,10 +69,17 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
             }
         ) {
             DropdownMenuItem(onClick = {
-                repo.create()
                 expanded.value = false
+                Dialog.state.value = DialogState.NEW_CONVERSATION
             }) {
                 Text(text = "New Conversation")
+            }
+            DropdownMenuItem(onClick = {
+                repo.create()
+                expanded.value = false
+//                Dialog.visible.value = true
+            }) {
+                Text(text = "New Conversation Old")
             }
             DropdownMenuItem(onClick = {
                 contactState.value = ContactState.CREATE
@@ -79,9 +88,9 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
                 Text(text = "Add user")
             }
 
-            DropdownMenuItem (onClick = {
+            DropdownMenuItem(onClick = {
                 println("Click ava")
-            }){
+            }) {
                 val vadmarkModifier = Modifier.width(50.dp).clip(RoundedCornerShape(25.dp))
                 Image(
                     painter = painterResource("vadmark.jpg"),
