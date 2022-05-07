@@ -2,6 +2,7 @@ package view.left
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
+import repository.UsersRepo
 import view.common.ContactState
 
 /**
@@ -27,7 +29,7 @@ import view.common.ContactState
  * @since 23.04.2022
  */
 @Composable
-fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo) {
+fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -87,6 +89,8 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo) {
                     modifier = vadmarkModifier,
                     contentScale = ContentScale.FillWidth
                 )
+                Spacer(Modifier.width(5.dp))
+                Text("Id: ${usersRepo.current().value?.id}")
             }
         }
     }

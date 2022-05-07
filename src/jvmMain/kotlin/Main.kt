@@ -23,9 +23,7 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import model.ChangeType
 import model.ConversationNotification
-import repository.ConversationsRepo
-import repository.ConversationsRepoImpl
-import repository.MessagesRepoImpl
+import repository.*
 import resources.darkThemeColors
 import service.HttpService
 import util.JsonMapper.defaultMapper
@@ -38,7 +36,7 @@ import view.right.info.Info
 
 @Composable
 @Preview
-fun App(conversationsRepo: ConversationsRepo) {
+fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     val messagesRepo = MessagesRepoImpl()
@@ -65,7 +63,8 @@ fun App(conversationsRepo: ConversationsRepo) {
         Row {
             Left(
                 contactState = contactState,
-                repo = conversationsRepo
+                repo = conversationsRepo,
+                usersRepo = usersRepo
             )
             Column(
                 modifier = Modifier
@@ -97,6 +96,7 @@ fun App(conversationsRepo: ConversationsRepo) {
 suspend fun main() = coroutineScope {
     HttpService.coroutineScope = this//rememberCoroutineScope()
     val conversationsRepo = ConversationsRepoImpl()
+    val usersRepo = UsersRepoImpl()
 
     launch {
         initConversationsWebSocket(conversationsRepo)
@@ -128,7 +128,7 @@ suspend fun main() = coroutineScope {
             "Vadmark`s messenger",
             icon = icon
         ) {
-            App(conversationsRepo)
+            App(conversationsRepo, usersRepo)
         }
     }
 }

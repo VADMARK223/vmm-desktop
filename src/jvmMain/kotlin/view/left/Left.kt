@@ -7,6 +7,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
+import repository.UsersRepo
 import view.common.ContactState
 
 /**
@@ -16,10 +17,11 @@ import view.common.ContactState
 @Composable
 fun Left(
     contactState: MutableState<ContactState>,
-    repo: ConversationsRepo
+    repo: ConversationsRepo,
+    usersRepo: UsersRepo
 ) {
     Column(modifier = Modifier.width(450.dp)) {
-        Top(contactState, repo)
+        Top(contactState, repo, usersRepo)
         Conversations(
             repo = repo
         )

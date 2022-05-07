@@ -32,42 +32,31 @@ fun Info(conversation: Conversation?, contactState: MutableState<ContactState>) 
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(23, 33, 43))
-            .padding(12.dp)
+            .padding(4.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
-//                text = "${user?.firstName} ${user?.lastName}",
-                text = "${conversation?.name}",
+                text = conversation?.name ?: "",
                 style = MaterialTheme.typography.h6,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = Color.White
             )
 
-            var createTimeText = ""
+            var infoText = ""
             if (conversation != null) {
                 val formatter = DateTimeFormatter
                     .ofPattern("hh:mm:ss")
-                createTimeText = "Creation time: " + formatter.format(conversation.createTime.toJavaLocalDateTime())
+                infoText = "Creation time: ${formatter.format(conversation.createTime.toJavaLocalDateTime())} Owner: ${conversation.ownerId}"
             }
 
             Text(
-                text = createTimeText,
+                text = infoText,
                 style = MaterialTheme.typography.overline,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = Color.Gray
             )
-
-            if (conversation != null) {
-                Text(
-                    text = "conversation.ownerId.toString()",
-                    style = MaterialTheme.typography.overline,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray
-                )
-            }
         }
 
         IconButton(
