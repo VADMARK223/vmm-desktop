@@ -36,8 +36,8 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
-    override fun addMessage(text: String, conversationId: Long?) {
-        val messageDto = MessageDto(text = text, conversationId = conversationId)
+    override fun addMessage(text: String, conversationId: Long?, currentUserId: Long?) {
+        val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)
         println("Add message: $messageDto")
 
         HttpService.coroutineScope.launch {
@@ -56,4 +56,4 @@ class MessagesRepoImpl : MessagesRepo {
 }
 
 @Serializable
-data class MessageDto(val text: String, val conversationId: Long?)
+data class MessageDto(val text: String, val conversationId: Long?, val ownerId: Long?)

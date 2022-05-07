@@ -79,7 +79,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                     repo = messagesRepo,
                     usersRepo = usersRepo
                 )
-                InputMessage(messagesRepo, conversationsRepo, mainOutput)
+                InputMessage(messagesRepo, conversationsRepo, mainOutput, usersRepo)
             }
         }
 //        }
