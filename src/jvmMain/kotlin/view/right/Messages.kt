@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import repository.MessagesRepo
+import repository.UsersRepo
 import view.right.item.MessageItem
 
 /**
@@ -25,7 +26,7 @@ import view.right.item.MessageItem
  * @since 23.04.2022
  */
 @Composable
-fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepo) {
+fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepo, usersRepo: UsersRepo) {
     Box(modifier = modifier) {
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
@@ -41,13 +42,13 @@ fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo:
             itemsIndexed(items = repo.all().reversed()) { index, message ->
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = when (message.isMy) {
+                    horizontalArrangement = when (message.ownerId == usersRepo.current().value?.id) {
                         true -> Arrangement.End
                         else -> Arrangement.Start
                     }
                 ) {
                     item {
-                        MessageItem(message, mainOutput, repo)
+                        MessageItem(message, mainOutput, repo, usersRepo)
                     }
                 }
                 Spacer(modifier = Modifier.height(5.dp))

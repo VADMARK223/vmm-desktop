@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import db.Message
 import kotlinx.datetime.toJavaLocalDateTime
 import repository.MessagesRepo
+import repository.UsersRepo
 import java.awt.event.MouseEvent
 import java.time.format.DateTimeFormatter
 
@@ -34,13 +35,13 @@ import java.time.format.DateTimeFormatter
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepo) {
+fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepo, usersRepo: UsersRepo) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = MessageAction.values()
     Column(
         modifier = Modifier
             .background(
-                color = when (message.isMy) {
+                color = when (message.ownerId == usersRepo.current().value?.id) {
                     true -> Color(43, 82, 120)
                     else -> Color(24, 37, 51)
                 },

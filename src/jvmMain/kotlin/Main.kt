@@ -76,7 +76,8 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                         .weight(1f)
                         .background(color = Color(14, 22, 33)),
                     mainOutput,
-                    repo = messagesRepo
+                    repo = messagesRepo,
+                    usersRepo = usersRepo
                 )
                 InputMessage(messagesRepo, conversationsRepo, mainOutput)
             }
