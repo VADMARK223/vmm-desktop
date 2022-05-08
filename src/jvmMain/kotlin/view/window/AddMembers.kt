@@ -111,7 +111,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                 ) {
                     Button(
                         onClick = {
-                            Window.state.value = WindowState(WindowType.NEW_CONVERSATION_WITH_MEMBERS)
+                            Window.state.value = WindowState(WindowType.NEW_CONVERSATION)
                         },
                     ) {
                         Text("Cancel")

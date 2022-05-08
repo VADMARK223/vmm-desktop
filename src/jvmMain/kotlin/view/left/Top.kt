@@ -72,7 +72,7 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
 
             DropdownMenuItem(onClick = {
                 expanded.value = false
-                Window.state.value = WindowState(WindowType.NEW_CONVERSATION_WITH_MEMBERS)
+                Window.state.value = WindowState(WindowType.NEW_CONVERSATION)
             }) {
                 Text(text = "New Conversation")
             }

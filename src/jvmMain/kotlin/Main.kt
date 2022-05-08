@@ -95,7 +95,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
 
 
         when (Window.state.value.type) {
-            WindowType.NEW_CONVERSATION_WITH_MEMBERS -> NewConversation()
+            WindowType.NEW_CONVERSATION -> NewConversation()
             WindowType.ADD_MEMBERS -> {
                 val conversationName = Window.state.value.data as String
                 AddMembers(conversationsRepo, usersRepo, conversationName)
