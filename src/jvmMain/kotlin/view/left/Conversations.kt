@@ -36,11 +36,8 @@ fun Conversations(repo: ConversationsRepo) {
                     repo = repo,
                     modifier = Modifier
                         .background(
-                            if (repo.selected().value == conversation) Color(
-                                43,
-                                82,
-                                120
-                            ) else Color(23, 33, 43)
+                            if (repo.selected().value == conversation) Color(43, 82, 120)
+                            else Color(23, 33, 43)
                         )
                         .fillMaxWidth()
                         .selectable(conversation == repo.selected().value,

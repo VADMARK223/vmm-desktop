@@ -21,3 +21,6 @@ val darkThemeColors = darkColors(
     onSurface = Color(0x6C7883),
     onError = Color.Black
 )
+
+val selectedBackgroundColor = Color(43, 82, 120)
+val defaultBackgroundColor = Color(23, 33, 43)

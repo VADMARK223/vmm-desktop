@@ -98,12 +98,10 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             println("HIDE")
         } else {
             if (Dialog.state.value == DialogState.NEW_CONVERSATION) {
-                println("Show new conversation.")
                 NewConversation(conversationsRepo, usersRepo)
             }
 
             if (Dialog.state.value == DialogState.ADD_MEMBERS) {
-                println("Show add members.")
                 AddMembers(conversationsRepo, usersRepo)
             }
 

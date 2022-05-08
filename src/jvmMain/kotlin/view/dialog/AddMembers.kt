@@ -1,14 +1,19 @@
 package view.dialog
 
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,8 +23,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
+import resources.defaultBackgroundColor
+import resources.selectedBackgroundColor
+import view.item.user.UserItem
 
 /**
  * @author Markitanov Vadim
@@ -28,6 +37,7 @@ import repository.UsersRepo
 @Composable
 fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val interactionSource = remember { MutableInteractionSource() }
+    val selected = mutableStateOf<User?>(null)
 
     Box(
         modifier = Modifier
@@ -50,28 +60,54 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 .clip(RoundedCornerShape(5.dp))
                 .background(Color(23, 33, 43))
                 .padding(25.dp)
-
         ) {
-            Column {
+            val usersLazyListState = rememberLazyListState()
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+
+                Text(
+                    text = "Add Members",
+                    color = Color.White,
+                    style = MaterialTheme.typography.h6
+                )
+
                 val name = remember { mutableStateOf(TextFieldValue()) }
                 val nameEmpty = remember { mutableStateOf(false) }
 
-                Text("asdasd")
+                Box(modifier = Modifier.height(300.dp)) {
+                    LazyColumn(
+                        modifier = Modifier.width(350.dp),
+                        state = usersLazyListState
+                    ) {
+                        items(items = usersRepo.all()) { user ->
+                            UserItem(
+                                user = user,
+                                modifier = Modifier
+                                    .background(
+                                        if (selected.value == user) selectedBackgroundColor
+                                        else defaultBackgroundColor
+                                    )
+                                    .fillMaxWidth()
+                                    .selectable(user == selected.value,
+                                        onClick = {
+                                            println("CLICK")
+                                            if (selected.value != user) {
+                                                selected.value = user
+                                            }
+                                        }
+                                    )
+                            )
+                        }
+                    }
 
-                /*TextField(
-                    value = name.value,
-                    onValueChange = {
-                        name.value = it
-                    },
-                    label = {
-                        Text("Add members")
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color(23, 33, 43),
-                        textColor = Color.White
-                    ),
-                    isError = nameEmpty.value
-                )*/
+                    VerticalScrollbar(
+                        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                        adapter = rememberScrollbarAdapter(
+                            scrollState = usersLazyListState
+                        )
+                    )
+                }
+
+                usersRepo.requestAll()
 
                 Row(
                     modifier = Modifier.align(Alignment.End),
@@ -79,7 +115,6 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 ) {
                     Button(
                         onClick = {
-//                            Dialog.state.value = DialogState.HIDE
                             Dialog.state.value = DialogState.NEW_CONVERSATION_WITH_MEMBERS
                         },
                     ) {

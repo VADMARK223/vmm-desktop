@@ -9,4 +9,6 @@ import model.User
  */
 interface UsersRepo {
     fun current(): MutableState<User?>
+    fun all():List<User>
+    fun requestAll()
 }
