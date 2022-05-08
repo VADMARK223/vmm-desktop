@@ -30,6 +30,7 @@ import resources.defaultBackgroundColor
 import resources.selectedBackgroundColor
 import view.common.Search
 import view.item.user.UserItem
+import java.util.*
 
 /**
  * @author Markitanov Vadim
@@ -76,11 +77,29 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                 Search(searchState)
 
                 Box(modifier = Modifier.height(300.dp)) {
+                    val users = usersRepo.all()
+                    var filteredUsers: List<User>
                     LazyColumn(
-//                        modifier = Modifier.width(350.dp),
                         state = usersLazyListState
                     ) {
-                        items(items = usersRepo.all()) { user ->
+                        val searchedText = searchState.value.text
+                        println("S: $searchedText")
+                        filteredUsers = if (searchedText.isEmpty()) {
+                            users
+                        } else {
+                            val resultList = ArrayList<User>()
+                            val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
+                            for (user in users) {
+                                if (user.firstName.lowercase(Locale.getDefault()).contains(searchedTextLowercase) ||
+                                    user.lastName.lowercase(Locale.getDefault()).contains(searchedTextLowercase)
+                                ) {
+                                    resultList.add(user)
+                                }
+                            }
+                            resultList
+                        }
+
+                        items(items = filteredUsers) { user ->
                             UserItem(
                                 user = user,
                                 modifier = Modifier
