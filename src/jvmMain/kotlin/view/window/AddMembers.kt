@@ -118,8 +118,12 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                     }
                     Button(
                         onClick = {
-                            conversationsRepo.create(conversationName, usersRepo.current().value?.id)
-                            Window.hide()
+                            if (selected.value == null) {
+                                println("Need selected!")
+                            } else {
+                                conversationsRepo.create(conversationName, usersRepo.current().value?.id)
+                                Window.hide()
+                            }
                         },
                     ) {
                         Text("Next")

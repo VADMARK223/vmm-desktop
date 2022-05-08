@@ -29,12 +29,11 @@ import service.HttpService
 import util.JsonMapper.defaultMapper
 import view.common.Contact
 import view.common.ContactState
-import view.window.*
-import view.window.WindowType
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
 import view.right.info.Info
+import view.window.*
 
 @Composable
 @Preview
@@ -94,21 +93,14 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
         }
 
-        if (Window.state.value.type == WindowType.HIDE) {
-            println("HIDE")
-        } else {
-            if (Window.state.value.type == WindowType.NEW_CONVERSATION) {
-                NewConversation(conversationsRepo, usersRepo)
-            }
 
-            if (Window.state.value.type == WindowType.NEW_CONVERSATION_WITH_MEMBERS) {
-                NewConversationWithMembers()
-            }
-
-            if (Window.state.value.type == WindowType.ADD_MEMBERS) {
+        when (Window.state.value.type) {
+            WindowType.NEW_CONVERSATION_WITH_MEMBERS -> NewConversation()
+            WindowType.ADD_MEMBERS -> {
                 val conversationName = Window.state.value.data as String
                 AddMembers(conversationsRepo, usersRepo, conversationName)
             }
+            else -> {}
         }
     }
 }

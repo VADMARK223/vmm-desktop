@@ -84,13 +84,6 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
                 Text(text = "Add members")
             }
 
-
-            DropdownMenuItem(onClick = {
-                expanded.value = false
-                Window.state.value = WindowState(WindowType.NEW_CONVERSATION)
-            }) {
-                Text(text = "New Conversation (fast)")
-            }
             DropdownMenuItem(onClick = {
                 repo.create()
                 expanded.value = false

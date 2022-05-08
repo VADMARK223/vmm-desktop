@@ -18,15 +18,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import repository.ConversationsRepo
-import repository.UsersRepo
+import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
  * @since 07.05.2022
  */
 @Composable
-fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
+fun NewConversation() {
     val interactionSource = remember { MutableInteractionSource() }
 
     Box(
@@ -53,7 +52,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
 
         ) {
             Column {
-                val name = remember { mutableStateOf(TextFieldValue()) }
+                val name = remember { mutableStateOf(TextFieldValue("Conversation #" + Random.nextInt(1000))) }
                 val nameEmpty = remember { mutableStateOf(false) }
 
                 TextField(
@@ -87,8 +86,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
                             if (name.value.text.isEmpty()) {
                                 nameEmpty.value = true
                             } else {
-                                conversationsRepo.create(name.value.text, usersRepo.current().value?.id)
-                                Window.hide()
+                                Window.state.value = WindowState(WindowType.ADD_MEMBERS, name.value.text)
                             }
                         },
                     ) {
