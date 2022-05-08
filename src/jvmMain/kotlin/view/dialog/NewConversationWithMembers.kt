@@ -27,7 +27,7 @@ import kotlin.random.Random
  * @since 07.05.2022
  */
 @Composable
-fun NewConversationWithMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
+fun NewConversationWithMembers() {
     val interactionSource = remember { MutableInteractionSource() }
 
     Box(
@@ -38,7 +38,7 @@ fun NewConversationWithMembers(conversationsRepo: ConversationsRepo, usersRepo: 
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                Dialog.state.value = DialogState.HIDE
+                Dialog.hide()
             }
     ) {
         Box(
@@ -78,7 +78,7 @@ fun NewConversationWithMembers(conversationsRepo: ConversationsRepo, usersRepo: 
                 ) {
                     Button(
                         onClick = {
-                            Dialog.state.value = DialogState.HIDE
+                            Dialog.hide()
                         },
                     ) {
                         Text("Cancel")
@@ -88,9 +88,7 @@ fun NewConversationWithMembers(conversationsRepo: ConversationsRepo, usersRepo: 
                             if (name.value.text.isEmpty()) {
                                 nameEmpty.value = true
                             } else {
-//                                conversationsRepo.create(name.value.text, usersRepo.current().value?.id)
-//                                Dialog.state.value = DialogState.HIDE
-                                Dialog.state.value = DialogState.ADD_MEMBERS
+                                Dialog.state.value = DialogState(DialogType.ADD_MEMBERS, name.value.text)
                             }
                         },
                     ) {

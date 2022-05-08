@@ -37,7 +37,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                Dialog.state.value = DialogState.HIDE
+                Dialog.hide()
             }
     ) {
         Box(
@@ -77,7 +77,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
                 ) {
                     Button(
                         onClick = {
-                            Dialog.state.value = DialogState.HIDE
+                            Dialog.hide()
                         },
                     ) {
                         Text("Cancel")
@@ -88,7 +88,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
                                 nameEmpty.value = true
                             } else {
                                 conversationsRepo.create(name.value.text, usersRepo.current().value?.id)
-                                Dialog.state.value = DialogState.HIDE
+                                Dialog.hide()
                             }
                         },
                     ) {

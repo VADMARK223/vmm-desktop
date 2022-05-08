@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import model.User
 import repository.ConversationsRepo
@@ -35,7 +34,7 @@ import view.item.user.UserItem
  * @since 07.05.2022
  */
 @Composable
-fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
+fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conversationName: String) {
     val interactionSource = remember { MutableInteractionSource() }
     val selected = mutableStateOf<User?>(null)
 
@@ -47,7 +46,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                Dialog.state.value = DialogState.HIDE
+                Dialog.hide()
             }
     ) {
         Box(
@@ -69,9 +68,6 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                     color = Color.White,
                     style = MaterialTheme.typography.h6
                 )
-
-                val name = remember { mutableStateOf(TextFieldValue()) }
-                val nameEmpty = remember { mutableStateOf(false) }
 
                 Box(modifier = Modifier.height(300.dp)) {
                     LazyColumn(
@@ -115,19 +111,15 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 ) {
                     Button(
                         onClick = {
-                            Dialog.state.value = DialogState.NEW_CONVERSATION_WITH_MEMBERS
+                            Dialog.state.value = DialogState(DialogType.NEW_CONVERSATION_WITH_MEMBERS)
                         },
                     ) {
                         Text("Cancel")
                     }
                     Button(
                         onClick = {
-                            if (name.value.text.isEmpty()) {
-                                nameEmpty.value = true
-                            } else {
-                                conversationsRepo.create(name.value.text, usersRepo.current().value?.id)
-                                Dialog.state.value = DialogState.HIDE
-                            }
+                            conversationsRepo.create(conversationName, usersRepo.current().value?.id)
+                            Dialog.hide()
                         },
                     ) {
                         Text("Next")

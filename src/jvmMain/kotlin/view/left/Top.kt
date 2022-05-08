@@ -25,6 +25,7 @@ import repository.UsersRepo
 import view.common.ContactState
 import view.dialog.Dialog
 import view.dialog.DialogState
+import view.dialog.DialogType
 
 /**
  * @author Markitanov Vadim
@@ -70,20 +71,20 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
         ) {
             DropdownMenuItem(onClick = {
                 expanded.value = false
-                Dialog.state.value = DialogState.ADD_MEMBERS
+                Dialog.state.value = DialogState(DialogType.ADD_MEMBERS)
             }) {
                 Text(text = "Add members")
             }
 
             DropdownMenuItem(onClick = {
                 expanded.value = false
-                Dialog.state.value = DialogState.NEW_CONVERSATION_WITH_MEMBERS
+                Dialog.state.value = DialogState(DialogType.NEW_CONVERSATION_WITH_MEMBERS)
             }) {
                 Text(text = "New Conversation with users")
             }
             DropdownMenuItem(onClick = {
                 expanded.value = false
-                Dialog.state.value = DialogState.NEW_CONVERSATION
+                Dialog.state.value = DialogState(DialogType.NEW_CONVERSATION)
             }) {
                 Text(text = "New Conversation")
             }

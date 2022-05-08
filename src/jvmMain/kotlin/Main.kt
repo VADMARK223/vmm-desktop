@@ -30,7 +30,7 @@ import util.JsonMapper.defaultMapper
 import view.common.Contact
 import view.common.ContactState
 import view.dialog.*
-import view.dialog.DialogState
+import view.dialog.DialogType
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
@@ -94,19 +94,20 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
         }
 
-        if (Dialog.state.value == DialogState.HIDE) {
+        if (Dialog.state.value.type == DialogType.HIDE) {
             println("HIDE")
         } else {
-            if (Dialog.state.value == DialogState.NEW_CONVERSATION) {
+            if (Dialog.state.value.type == DialogType.NEW_CONVERSATION) {
                 NewConversation(conversationsRepo, usersRepo)
             }
 
-            if (Dialog.state.value == DialogState.ADD_MEMBERS) {
-                AddMembers(conversationsRepo, usersRepo)
+            if (Dialog.state.value.type == DialogType.NEW_CONVERSATION_WITH_MEMBERS) {
+                NewConversationWithMembers()
             }
 
-            if (Dialog.state.value == DialogState.NEW_CONVERSATION_WITH_MEMBERS) {
-                NewConversationWithMembers(conversationsRepo, usersRepo)
+            if (Dialog.state.value.type == DialogType.ADD_MEMBERS) {
+                val conversationName = Dialog.state.value.data as String
+                AddMembers(conversationsRepo, usersRepo, conversationName)
             }
         }
     }
