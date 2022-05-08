@@ -16,17 +16,7 @@ class UsersRepoImpl : UsersRepo {
 
     init {
         current.value = User(1, "Vadim", "Markitanov")
-    }
 
-    override fun current(): MutableState<User?> {
-        return current
-    }
-
-    override fun all(): List<User> {
-        return users
-    }
-
-    override fun requestAll() {
         users.clear()
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users")
@@ -35,5 +25,13 @@ class UsersRepoImpl : UsersRepo {
                 users.addAll(usersResponse)
             }
         }
+    }
+
+    override fun current(): MutableState<User?> {
+        return current
+    }
+
+    override fun all(): List<User> {
+        return users
     }
 }

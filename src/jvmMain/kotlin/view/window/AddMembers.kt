@@ -21,12 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
 import resources.defaultBackgroundColor
 import resources.selectedBackgroundColor
+import view.common.Search
 import view.item.user.UserItem
 
 /**
@@ -37,6 +39,7 @@ import view.item.user.UserItem
 fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conversationName: String) {
     val interactionSource = remember { MutableInteractionSource() }
     val selected = mutableStateOf<User?>(null)
+    val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
     Box(
         modifier = Modifier
@@ -51,6 +54,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
     ) {
         Box(
             modifier = Modifier
+                .width(400.dp)
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null
@@ -69,9 +73,11 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                     style = MaterialTheme.typography.h6
                 )
 
+                Search(searchState)
+
                 Box(modifier = Modifier.height(300.dp)) {
                     LazyColumn(
-                        modifier = Modifier.width(350.dp),
+//                        modifier = Modifier.width(350.dp),
                         state = usersLazyListState
                     ) {
                         items(items = usersRepo.all()) { user ->
@@ -103,7 +109,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                     )
                 }
 
-                usersRepo.requestAll()
+
 
                 Row(
                     modifier = Modifier.align(Alignment.End),
