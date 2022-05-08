@@ -1,4 +1,4 @@
-package view.dialog
+package view.window
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +38,7 @@ fun NewConversationWithMembers() {
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                Dialog.hide()
+                Window.hide()
             }
     ) {
         Box(
@@ -78,7 +78,7 @@ fun NewConversationWithMembers() {
                 ) {
                     Button(
                         onClick = {
-                            Dialog.hide()
+                            Window.hide()
                         },
                     ) {
                         Text("Cancel")
@@ -88,7 +88,7 @@ fun NewConversationWithMembers() {
                             if (name.value.text.isEmpty()) {
                                 nameEmpty.value = true
                             } else {
-                                Dialog.state.value = DialogState(DialogType.ADD_MEMBERS, name.value.text)
+                                Window.state.value = WindowState(WindowType.ADD_MEMBERS, name.value.text)
                             }
                         },
                     ) {

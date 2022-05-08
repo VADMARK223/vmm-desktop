@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
 import repository.UsersRepo
 import view.common.ContactState
-import view.dialog.Dialog
-import view.dialog.DialogState
-import view.dialog.DialogType
+import view.window.Window
+import view.window.WindowState
+import view.window.WindowType
 
 /**
  * @author Markitanov Vadim
@@ -69,29 +69,32 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
                 expanded.value = false
             }
         ) {
+
             DropdownMenuItem(onClick = {
                 expanded.value = false
-                Dialog.state.value = DialogState(DialogType.ADD_MEMBERS)
+                Window.state.value = WindowState(WindowType.NEW_CONVERSATION_WITH_MEMBERS)
             }) {
-                Text(text = "Add members")
+                Text(text = "New Conversation")
             }
 
             DropdownMenuItem(onClick = {
                 expanded.value = false
-                Dialog.state.value = DialogState(DialogType.NEW_CONVERSATION_WITH_MEMBERS)
+                Window.state.value = WindowState(WindowType.ADD_MEMBERS, "VADMARK")
             }) {
-                Text(text = "New Conversation with users")
+                Text(text = "Add members")
             }
+
+
             DropdownMenuItem(onClick = {
                 expanded.value = false
-                Dialog.state.value = DialogState(DialogType.NEW_CONVERSATION)
+                Window.state.value = WindowState(WindowType.NEW_CONVERSATION)
             }) {
-                Text(text = "New Conversation")
+                Text(text = "New Conversation (fast)")
             }
             DropdownMenuItem(onClick = {
                 repo.create()
                 expanded.value = false
-//                Dialog.visible.value = true
+//                Window.visible.value = true
             }) {
                 Text(text = "New Conversation for user 1")
             }

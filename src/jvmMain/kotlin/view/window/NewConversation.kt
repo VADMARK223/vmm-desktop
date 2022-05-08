@@ -1,4 +1,4 @@
-package view.dialog
+package view.window
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,7 +37,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                Dialog.hide()
+                Window.hide()
             }
     ) {
         Box(
@@ -77,7 +77,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
                 ) {
                     Button(
                         onClick = {
-                            Dialog.hide()
+                            Window.hide()
                         },
                     ) {
                         Text("Cancel")
@@ -88,7 +88,7 @@ fun NewConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) 
                                 nameEmpty.value = true
                             } else {
                                 conversationsRepo.create(name.value.text, usersRepo.current().value?.id)
-                                Dialog.hide()
+                                Window.hide()
                             }
                         },
                     ) {

@@ -1,4 +1,4 @@
-package view.dialog
+package view.window
 
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
@@ -46,7 +46,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                Dialog.hide()
+                Window.hide()
             }
     ) {
         Box(
@@ -111,7 +111,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                 ) {
                     Button(
                         onClick = {
-                            Dialog.state.value = DialogState(DialogType.NEW_CONVERSATION_WITH_MEMBERS)
+                            Window.state.value = WindowState(WindowType.NEW_CONVERSATION_WITH_MEMBERS)
                         },
                     ) {
                         Text("Cancel")
@@ -119,7 +119,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                     Button(
                         onClick = {
                             conversationsRepo.create(conversationName, usersRepo.current().value?.id)
-                            Dialog.hide()
+                            Window.hide()
                         },
                     ) {
                         Text("Next")

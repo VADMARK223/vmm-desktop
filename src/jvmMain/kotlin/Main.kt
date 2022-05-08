@@ -29,8 +29,8 @@ import service.HttpService
 import util.JsonMapper.defaultMapper
 import view.common.Contact
 import view.common.ContactState
-import view.dialog.*
-import view.dialog.DialogType
+import view.window.*
+import view.window.WindowType
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
@@ -94,19 +94,19 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
         }
 
-        if (Dialog.state.value.type == DialogType.HIDE) {
+        if (Window.state.value.type == WindowType.HIDE) {
             println("HIDE")
         } else {
-            if (Dialog.state.value.type == DialogType.NEW_CONVERSATION) {
+            if (Window.state.value.type == WindowType.NEW_CONVERSATION) {
                 NewConversation(conversationsRepo, usersRepo)
             }
 
-            if (Dialog.state.value.type == DialogType.NEW_CONVERSATION_WITH_MEMBERS) {
+            if (Window.state.value.type == WindowType.NEW_CONVERSATION_WITH_MEMBERS) {
                 NewConversationWithMembers()
             }
 
-            if (Dialog.state.value.type == DialogType.ADD_MEMBERS) {
-                val conversationName = Dialog.state.value.data as String
+            if (Window.state.value.type == WindowType.ADD_MEMBERS) {
+                val conversationName = Window.state.value.data as String
                 AddMembers(conversationsRepo, usersRepo, conversationName)
             }
         }
