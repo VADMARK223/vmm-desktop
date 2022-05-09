@@ -13,6 +13,6 @@ interface ConversationsRepo {
     fun remove(conversation: Conversation)
     fun remove(conversationId: Long)
     fun create()
-    fun create(name:String, ownerId:Long?)
+    fun create(name:String, ownerId:Long?, memberIds: List<Long>)
     fun test()
 }

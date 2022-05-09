@@ -10,7 +10,6 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
 import service.HttpService
-import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
@@ -73,12 +72,12 @@ class ConversationsRepoImpl : ConversationsRepo {
     }
 
     override fun create() {
-        create("Conversation #" + Random.nextInt(100), 1L)
+//        create("Conversation #" + Random.nextInt(100), 1L)
     }
 
-    override fun create(name:String, ownerId:Long?) {
+    override fun create(name:String, ownerId:Long?, memberIds: List<Long>) {
         HttpService.coroutineScope.launch {
-            val conversationDto = ConversationDto(name, ownerId)
+            val conversationDto = ConversationDto(name, ownerId, memberIds)
             val response = HttpService.client.put("${HttpService.host}/conversations") {
                 contentType(ContentType.Application.Json)
                 setBody(conversationDto)
@@ -86,11 +85,11 @@ class ConversationsRepoImpl : ConversationsRepo {
 
             println("Create conversation response: $response")
 
-            if (response.status == HttpStatusCode.OK) {
+            /*if (response.status == HttpStatusCode.OK) {
                 val newConversation = response.body<Conversation>()
                 conversations.add(newConversation)
                 selected.value = newConversation
-            }
+            }*/
         }
     }
 

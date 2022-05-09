@@ -83,7 +83,6 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                         state = usersLazyListState
                     ) {
                         val searchedText = searchState.value.text
-                        println("S: $searchedText")
                         filteredUsers = if (searchedText.isEmpty()) {
                             users
                         } else {
@@ -110,7 +109,6 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                                     .fillMaxWidth()
                                     .selectable(user == selected.value,
                                         onClick = {
-                                            println("CLICK")
                                             if (selected.value != user) {
                                                 selected.value = user
                                             }
@@ -128,8 +126,6 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                     )
                 }
 
-
-
                 Row(
                     modifier = Modifier.align(Alignment.End),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -146,7 +142,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                             if (selected.value == null) {
                                 println("Need selected!")
                             } else {
-                                conversationsRepo.create(conversationName, usersRepo.current().value?.id)
+                                conversationsRepo.create(conversationName, usersRepo.current().value?.id, listOf(selected.value?.id as Long))
                                 Window.hide()
                             }
                         },
