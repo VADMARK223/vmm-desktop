@@ -166,8 +166,16 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo) {
                 }
                 println("Conversation notification: $conversationNotification")
 
-                if (conversationNotification.type == ChangeType.DELETE) {
-                    conversationsRepo.remove(conversationNotification.id)
+
+                when (conversationNotification.type) {
+                    ChangeType.CREATE-> {
+                        println("Create")
+                        conversationsRepo.create(conversationNotification.entity)
+                    }
+                    ChangeType.DELETE-> conversationsRepo.remove(conversationNotification.id)
+                    else -> {
+                        println("Unknown type ${conversationNotification.type}.")
+                    }
                 }
             }
         }

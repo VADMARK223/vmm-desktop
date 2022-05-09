@@ -15,4 +15,5 @@ interface ConversationsRepo {
     fun create()
     fun create(name:String, ownerId:Long?, memberIds: List<Long>)
     fun test()
+    fun create(entity: Conversation?)
 }

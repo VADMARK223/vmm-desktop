@@ -93,6 +93,13 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
+    override fun create(entity: Conversation?) {
+        if (entity != null) {
+            conversations.add(entity)
+            selected.value = entity
+        }
+    }
+
     override fun test() {
         remove(30)
     }
