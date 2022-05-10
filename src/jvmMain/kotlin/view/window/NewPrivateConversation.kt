@@ -69,7 +69,7 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
                 Text(
-                    text = "Add Members",
+                    text = "Add Member",
                     color = Color.White,
                     style = MaterialTheme.typography.h6
                 )

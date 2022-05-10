@@ -85,13 +85,6 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
             }
 
             DropdownMenuItem(onClick = {
-                expanded.value = false
-                Window.state.value = WindowState(WindowType.ADD_MEMBERS, "VADMARK")
-            }) {
-                Text(text = "Add members")
-            }
-
-            DropdownMenuItem(onClick = {
                 contactState.value = ContactState.CREATE
                 expanded.value = false
             }) {
