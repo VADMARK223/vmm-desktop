@@ -22,7 +22,11 @@ class UsersRepoImpl : UsersRepo {
             val response = HttpService.client.get("${HttpService.host}/users")
             if (response.status == HttpStatusCode.OK) {
                 val usersResponse = response.body<List<User>>()
-                users.addAll(usersResponse)
+                for (user in usersResponse) {
+                    if (user.id != current.value?.id) {
+                        users.add(user)
+                    }
+                }
             }
         }
     }

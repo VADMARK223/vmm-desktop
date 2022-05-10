@@ -111,7 +111,7 @@ suspend fun main() = coroutineScope {
     val usersRepo = UsersRepoImpl()
 
     launch {
-        initConversationsWebSocket(conversationsRepo)
+        initConversationsWebSocket(conversationsRepo, usersRepo)
 //        initConversationsWebSocket()
 //        initWebSocket(conversationsRepo)
     }
@@ -145,7 +145,7 @@ suspend fun main() = coroutineScope {
     }
 }
 
-suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo) {
+suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -154,7 +154,10 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo) {
         client.webSocket(
             host = "localhost",
             port = 8888,
-            path = "/conversations"
+            path = "/conversations",
+            request = {
+                this.parameter("userId", usersRepo.current().value?.id)
+            }
         ) {
             for (message in incoming) {
                 message as? Frame.Text ?: continue
