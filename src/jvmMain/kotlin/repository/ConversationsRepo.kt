@@ -2,6 +2,7 @@ package repository
 
 import androidx.compose.runtime.MutableState
 import db.Conversation
+import model.User
 
 /**
  * @author Markitanov Vadim
@@ -12,6 +13,6 @@ interface ConversationsRepo {
     fun selected(): MutableState<Conversation?>
     fun remove(conversation: Conversation)
     fun remove(conversationId: Long)
-    fun create(name:String, ownerId:Long?, memberIds: List<Long>, isPrivate: Boolean)
+    fun create(name:String, ownerId:Long?, memberUsers: List<User>, isPrivate: Boolean)
     fun create(entity: Conversation?)
 }

@@ -79,7 +79,6 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                         DropdownMenuItem(onClick = {
                             when (it) {
                                 ConversationAction.DELETE -> {
-                                    println("Delete conversation.")
                                     repo.remove(conversation)
                                 }
                             }

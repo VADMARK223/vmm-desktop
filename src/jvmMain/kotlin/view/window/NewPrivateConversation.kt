@@ -143,7 +143,7 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                                 conversationsRepo.create(
                                     selected.value?.firstName + " " + selected.value?.lastName,
                                     usersRepo.current().value?.id,
-                                    listOf(selected.value?.id as Long),
+                                    listOf(selected.value as User),
                                     true
                                 )
                                 Window.hide()

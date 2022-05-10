@@ -47,7 +47,11 @@ fun Info(conversation: Conversation?, contactState: MutableState<ContactState>) 
             if (conversation != null) {
                 val formatter = DateTimeFormatter
                     .ofPattern("hh:mm:ss")
-                infoText = "Creation time: ${formatter.format(conversation.createTime.toJavaLocalDateTime())} Owner: ${conversation.ownerId}"
+                infoText =
+                    "Creation time: ${formatter.format(conversation.createTime.toJavaLocalDateTime())} Owner: ${conversation.ownerId}"
+                if (!conversation.isPrivate) {
+                    infoText += " Is chat"
+                }
             }
 
             Text(

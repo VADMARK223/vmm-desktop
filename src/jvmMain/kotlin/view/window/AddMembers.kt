@@ -15,6 +15,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,7 +40,7 @@ import java.util.*
 @Composable
 fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conversationName: String) {
     val interactionSource = remember { MutableInteractionSource() }
-    val selected = mutableStateOf<User?>(null)
+    val selectedList = mutableStateListOf<User>()
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
     Box(
@@ -103,15 +104,19 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                                 user = user,
                                 modifier = Modifier
                                     .background(
-                                        if (selected.value == user) selectedBackgroundColor
+                                        if (selectedList.contains(user)) selectedBackgroundColor
                                         else defaultBackgroundColor
                                     )
                                     .fillMaxWidth()
-                                    .selectable(user == selected.value,
+                                    .selectable(selected = selectedList.contains(user),
                                         onClick = {
-                                            if (selected.value != user) {
-                                                selected.value = user
+                                            if (!selectedList.contains(user)) {
+                                                selectedList.add(user)
+                                            } else {
+                                                selectedList.remove(user)
                                             }
+
+                                            println("selectedList : $selectedList")
                                         }
                                     )
                             )
@@ -139,11 +144,13 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                     }
                     Button(
                         onClick = {
-                            if (selected.value != null) {
+                            println("Need impl!")
+                            if (selectedList.isNotEmpty()) {
                                 conversationsRepo.create(
                                     conversationName,
                                     usersRepo.current().value?.id,
-                                    listOf(selected.value?.id as Long),
+                                    selectedList.toList(),
+//                                    listOf(selected.value?.id as Long),
                                     false
                                 )
                                 Window.hide()

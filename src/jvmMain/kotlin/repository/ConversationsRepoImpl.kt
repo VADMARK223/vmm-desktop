@@ -9,6 +9,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
+import model.User
 import service.HttpService
 
 /**
@@ -71,8 +72,12 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
-    override fun create(name:String, ownerId:Long?, memberIds: List<Long>, isPrivate:Boolean) {
+    override fun create(name:String, ownerId:Long?, memberUsers: List<User>, isPrivate:Boolean) {
         HttpService.coroutineScope.launch {
+            val memberIds = mutableListOf<Long>()
+            for (user in memberUsers) {
+                memberIds.add(user.id)
+            }
             val conversationDto = ConversationDto(name, ownerId, memberIds, isPrivate)
             val response = HttpService.client.put("${HttpService.host}/conversations") {
                 contentType(ContentType.Application.Json)
