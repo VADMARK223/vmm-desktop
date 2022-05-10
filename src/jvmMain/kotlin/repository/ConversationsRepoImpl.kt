@@ -71,13 +71,9 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
-    override fun create() {
-//        create("Conversation #" + Random.nextInt(100), 1L)
-    }
-
-    override fun create(name:String, ownerId:Long?, memberIds: List<Long>) {
+    override fun create(name:String, ownerId:Long?, memberIds: List<Long>, isPrivate:Boolean) {
         HttpService.coroutineScope.launch {
-            val conversationDto = ConversationDto(name, ownerId, memberIds)
+            val conversationDto = ConversationDto(name, ownerId, memberIds, isPrivate)
             val response = HttpService.client.put("${HttpService.host}/conversations") {
                 contentType(ContentType.Application.Json)
                 setBody(conversationDto)
@@ -98,10 +94,6 @@ class ConversationsRepoImpl : ConversationsRepo {
             conversations.add(entity)
             selected.value = entity
         }
-    }
-
-    override fun test() {
-        remove(30)
     }
 
     private fun selectedFirst() {

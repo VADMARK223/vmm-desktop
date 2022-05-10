@@ -12,8 +12,6 @@ interface ConversationsRepo {
     fun selected(): MutableState<Conversation?>
     fun remove(conversation: Conversation)
     fun remove(conversationId: Long)
-    fun create()
-    fun create(name:String, ownerId:Long?, memberIds: List<Long>)
-    fun test()
+    fun create(name:String, ownerId:Long?, memberIds: List<Long>, isPrivate: Boolean)
     fun create(entity: Conversation?)
 }

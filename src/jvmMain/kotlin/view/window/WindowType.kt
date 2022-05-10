@@ -7,5 +7,6 @@ package view.window
 enum class WindowType {
     HIDE,
     NEW_CONVERSATION,
+    NEW_PRIVATE_CONVERSATION,
     ADD_MEMBERS
 }

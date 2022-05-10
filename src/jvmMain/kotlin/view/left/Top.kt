@@ -79,18 +79,18 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
 
             DropdownMenuItem(onClick = {
                 expanded.value = false
+                Window.state.value = WindowState(WindowType.NEW_PRIVATE_CONVERSATION)
+            }) {
+                Text(text = "New Private Conversation")
+            }
+
+            DropdownMenuItem(onClick = {
+                expanded.value = false
                 Window.state.value = WindowState(WindowType.ADD_MEMBERS, "VADMARK")
             }) {
                 Text(text = "Add members")
             }
 
-            DropdownMenuItem(onClick = {
-                repo.create()
-                expanded.value = false
-//                Window.visible.value = true
-            }) {
-                Text(text = "New Conversation for user 1")
-            }
             DropdownMenuItem(onClick = {
                 contactState.value = ContactState.CREATE
                 expanded.value = false

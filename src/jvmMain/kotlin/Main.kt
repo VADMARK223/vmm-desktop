@@ -96,6 +96,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
 
         when (Window.state.value.type) {
             WindowType.NEW_CONVERSATION -> NewConversation()
+            WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation(conversationsRepo, usersRepo)
             WindowType.ADD_MEMBERS -> {
                 val conversationName = Window.state.value.data as String
                 AddMembers(conversationsRepo, usersRepo, conversationName)
@@ -252,9 +253,9 @@ suspend fun DefaultClientWebSocketSession.outputMessages(conversationsRepo: Conv
                 println("id: '${id}'")
                 if (command == "REMOVE_CONVERSATION") {
                     conversationsRepo.remove(id)
-                } else if (command == "ADD_CONVERSATION") {
+                } /*else if (command == "ADD_CONVERSATION") {
                     conversationsRepo.create()
-                }
+                }*/
             }
         }
     } catch (e: Exception) {

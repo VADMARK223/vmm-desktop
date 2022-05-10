@@ -3,10 +3,9 @@ package view.left.item
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,12 +43,12 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
         Row(
             modifier = Modifier
                 .padding(10.dp).onPointerEvent(PointerEventType.Press) {
-                when (it.awtEventOrNull?.button) {
-                    MouseEvent.BUTTON3 -> {
-                        expanded.value = true
+                    when (it.awtEventOrNull?.button) {
+                        MouseEvent.BUTTON3 -> {
+                            expanded.value = true
+                        }
                     }
-                }
-            },
+                },
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -93,21 +92,23 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                 }
             }
 
-            Column {
+            Row {
+                val itemText = "${conversation.id} ${conversation.name}"
                 Text(
-                    /*modifier = Modifier.onPointerEvent(PointerEventType.Press) {
-                        when (it.awtEventOrNull?.button) {
-                            MouseEvent.BUTTON3 -> {
-                                expanded.value = true
-                            }
-                        }
-                    },*/
-                    text = conversation.id.toString() + " " + conversation.name,
+                    text = itemText,
                     style = MaterialTheme.typography.h6,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.White
                 )
+
+                if (conversation.isPrivate) {
+                    Icon(
+                        Icons.Default.Lock,
+                        contentDescription = "",
+                        tint = Color.White
+                    )
+                }
             }
 
             Spacer(Modifier.weight(1F))
@@ -120,9 +121,6 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                 text = updateTimeText,
                 color = Color.White
             )
-
-
-
         }
     }
 }

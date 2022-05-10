@@ -9,5 +9,6 @@ data class Conversation(
     var name: String,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime,
-    val ownerId: Long
+    val ownerId: Long,
+    val isPrivate: Boolean
 )

@@ -34,10 +34,10 @@ import java.util.*
 
 /**
  * @author Markitanov Vadim
- * @since 07.05.2022
+ * @since 10.05.2022
  */
 @Composable
-fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conversationName: String) {
+fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val interactionSource = remember { MutableInteractionSource() }
     val selected = mutableStateOf<User?>(null)
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
@@ -132,7 +132,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                 ) {
                     Button(
                         onClick = {
-                            Window.state.value = WindowState(WindowType.NEW_CONVERSATION)
+                            Window.hide()
                         },
                     ) {
                         Text("Cancel")
@@ -141,10 +141,10 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                         onClick = {
                             if (selected.value != null) {
                                 conversationsRepo.create(
-                                    conversationName,
+                                    selected.value?.firstName + " " + selected.value?.lastName,
                                     usersRepo.current().value?.id,
                                     listOf(selected.value?.id as Long),
-                                    false
+                                    true
                                 )
                                 Window.hide()
                             }
