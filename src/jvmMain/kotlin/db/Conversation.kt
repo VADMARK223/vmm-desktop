@@ -10,5 +10,6 @@ data class Conversation(
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime,
     val ownerId: Long,
-    val isPrivate: Boolean
+    val isPrivate: Boolean,
+    val membersCount: Int
 )

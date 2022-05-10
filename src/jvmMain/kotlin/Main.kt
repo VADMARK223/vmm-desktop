@@ -170,10 +170,8 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, use
                 }
                 println("Conversation notification: $conversationNotification")
 
-
                 when (conversationNotification.type) {
                     ChangeType.CREATE-> {
-                        println("Create")
                         conversationsRepo.create(conversationNotification.entity)
                     }
                     ChangeType.DELETE-> conversationsRepo.remove(conversationNotification.id)

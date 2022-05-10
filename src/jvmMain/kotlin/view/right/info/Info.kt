@@ -50,7 +50,7 @@ fun Info(conversation: Conversation?, contactState: MutableState<ContactState>) 
                 infoText =
                     "Creation time: ${formatter.format(conversation.createTime.toJavaLocalDateTime())} Owner: ${conversation.ownerId}"
                 if (!conversation.isPrivate) {
-                    infoText += " Is chat"
+                    infoText += " Members: ${conversation.membersCount}"
                 }
             }
 
