@@ -15,8 +15,24 @@ class UsersRepoImpl : UsersRepo {
     private val users = mutableStateListOf<User>()
 
     init {
-//        current.value = User(1, "Vadim", "Markitanov")
+        requestDefaultCurrentUser(3L)
+    }
 
+    private fun requestDefaultCurrentUser(id: Long) {
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.get("${HttpService.host}/users/$id")
+            if (response.status == HttpStatusCode.OK) {
+                val usersResponseData = response.body<User>()
+                current.value = usersResponseData
+            }
+        }
+    }
+
+    override fun current(): MutableState<User?> {
+        return current
+    }
+
+    override fun all(): List<User> {
         users.clear()
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users")
@@ -29,13 +45,7 @@ class UsersRepoImpl : UsersRepo {
                 }
             }
         }
-    }
 
-    override fun current(): MutableState<User?> {
-        return current
-    }
-
-    override fun all(): List<User> {
         return users
     }
 }
