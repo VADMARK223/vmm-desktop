@@ -40,7 +40,7 @@ import java.util.*
 @Composable
 fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conversationName: String) {
     val interactionSource = remember { MutableInteractionSource() }
-    val selectedList = mutableStateListOf<User>()
+    val selectedList = remember { mutableStateListOf<User>() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
     Box(
@@ -67,6 +67,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                 .padding(25.dp)
         ) {
             val usersLazyListState = rememberLazyListState()
+            val createButtonEnabled = remember { mutableStateOf(false) }
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
                 Text(
@@ -104,8 +105,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                                 user = user,
                                 modifier = Modifier
                                     .background(
-                                        if (selectedList.contains(user)) selectedBackgroundColor
-                                        else defaultBackgroundColor
+                                        if (selectedList.contains(user)) selectedBackgroundColor else defaultBackgroundColor
                                     )
                                     .fillMaxWidth()
                                     .selectable(selected = selectedList.contains(user),
@@ -116,7 +116,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                                                 selectedList.remove(user)
                                             }
 
-                                            println("selectedList : $selectedList")
+                                            createButtonEnabled.value = selectedList.isNotEmpty()
                                         }
                                     )
                             )
@@ -142,22 +142,23 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                     ) {
                         Text("Cancel")
                     }
-                    Button(
-                        onClick = {
-                            println("Need impl!")
-                            if (selectedList.isNotEmpty()) {
-                                conversationsRepo.create(
-                                    conversationName,
-                                    usersRepo.current().value?.id,
-                                    selectedList.toList(),
-//                                    listOf(selected.value?.id as Long),
-                                    false
-                                )
-                                Window.hide()
-                            }
-                        },
-                    ) {
-                        Text("Next")
+                    if (createButtonEnabled.value) {
+                        Button(
+                            onClick = {
+                                if (selectedList.isNotEmpty()) {
+                                    conversationsRepo.create(
+                                        conversationName,
+                                        usersRepo.current().value?.id,
+                                        selectedList.toList(),
+                                        false
+                                    )
+                                    Window.hide()
+                                }
+                            },
+//                        enabled = createButtonEnabled.value
+                        ) {
+                            Text("Create")
+                        }
                     }
                 }
             }
