@@ -15,7 +15,7 @@ class UsersRepoImpl : UsersRepo {
     private val users = mutableStateListOf<User>()
 
     init {
-        current.value = User(1, "Vadim", "Markitanov")
+//        current.value = User(1, "Vadim", "Markitanov")
 
         users.clear()
         HttpService.coroutineScope.launch {

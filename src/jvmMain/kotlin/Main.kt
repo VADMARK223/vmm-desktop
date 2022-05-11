@@ -34,33 +34,18 @@ import view.right.InputMessage
 import view.right.Messages
 import view.right.info.Info
 import view.window.*
+import view.window.WindowState
 
 @Composable
 @Preview
 fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
-
+    val conversationWebSocketInit = remember { mutableStateOf(false) }
     val messagesRepo = MessagesRepoImpl()
 
     MaterialTheme(colors = darkThemeColors) {
         val contactState = remember { mutableStateOf(ContactState.HIDE) }
 
-        /*if (UsersRepo.selected.value == null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(14, 22, 33))
-            ) {
-                Button(
-                    modifier = Modifier.align(Alignment.Center),
-                    onClick = {
-                        contactState.value = ContactState.CREATE
-                    },
-                ) {
-                    Text("Create contact")
-                }
-            }
-        } else {*/
         Row {
             Left(
                 contactState = contactState,
@@ -83,7 +68,6 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 InputMessage(messagesRepo, conversationsRepo, mainOutput, usersRepo)
             }
         }
-//        }
 
         if (contactState.value != ContactState.HIDE) {
             Contact(contactState)
@@ -93,8 +77,19 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
         }
 
+        if (usersRepo.current().value == null) {
+            Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
+        } else {
+            if (!conversationWebSocketInit.value) {
+                HttpService.coroutineScope.launch {
+                    initConversationsWebSocket(conversationsRepo, usersRepo)
+                }
+                conversationWebSocketInit.value = true
+            }
+        }
 
         when (Window.state.value.type) {
+            WindowType.SELECT_CURRENT_USER -> SelectCurrentUser(usersRepo)
             WindowType.NEW_CONVERSATION -> NewConversation()
             WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation(conversationsRepo, usersRepo)
             WindowType.ADD_MEMBERS -> {
@@ -111,11 +106,9 @@ suspend fun main() = coroutineScope {
     val conversationsRepo = ConversationsRepoImpl()
     val usersRepo = UsersRepoImpl()
 
-    launch {
-        initConversationsWebSocket(conversationsRepo, usersRepo)
-//        initConversationsWebSocket()
-//        initWebSocket(conversationsRepo)
-    }
+//    launch {
+//        initConversationsWebSocket(conversationsRepo, usersRepo)
+//    }
 
     application {
         val icon = painterResource("favicon.ico")
@@ -170,10 +163,10 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, use
                 }
 
                 when (conversationNotification.type) {
-                    ChangeType.CREATE-> {
+                    ChangeType.CREATE -> {
                         conversationsRepo.addAndSelect(conversationNotification.entity)
                     }
-                    ChangeType.DELETE-> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
+                    ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
                     else -> {
                         println("Unknown type ${conversationNotification.type}.")
                     }
@@ -185,35 +178,7 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, use
     client.close()
 }
 
-/*suspend fun initConversationsWebSocket() {
-    val client = HttpClient(CIO) {
-        install(WebSockets)
-    }
-
-    runBlocking {
-        client.webSocket(
-            host = "localhost",
-            port = 8888,
-            path = "/conversations"
-        ) {
-            for (message in incoming) {
-                message as? Frame.Text ?: continue
-                val incomingMessage = message.readText()
-                println("Incoming message: $incomingMessage")
-
-                val value = withContext(Dispatchers.IO) {
-                    defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
-                }
-
-                println("Value: $value")
-            }
-        }
-    }
-
-    client.close()
-}*/
-
-suspend fun initWebSocket() {
+/*suspend fun initWebSocket() {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -267,3 +232,4 @@ suspend fun DefaultClientWebSocketSession.inputMessages() {
         }
     }
 }
+*/

@@ -1,10 +1,7 @@
 package view.left
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -32,7 +29,7 @@ import view.window.WindowType
  * @since 23.04.2022
  */
 @Composable
-fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, usersRepo: UsersRepo) {
+fun Top(contactState: MutableState<ContactState>, usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -102,7 +99,11 @@ fun Top(contactState: MutableState<ContactState>, repo: ConversationsRepo, users
                     contentScale = ContentScale.FillWidth
                 )
                 Spacer(Modifier.width(5.dp))
-                Text("Id: ${usersRepo.current().value?.id}")
+                Column {
+                    Text("Id: ${usersRepo.current().value?.id}")
+                    Text("First name: ${usersRepo.current().value?.firstName}")
+                    Text("Last name: ${usersRepo.current().value?.lastName}")
+                }
             }
         }
     }
