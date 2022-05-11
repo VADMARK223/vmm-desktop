@@ -163,18 +163,17 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, use
             for (message in incoming) {
                 message as? Frame.Text ?: continue
                 val incomingMessage = message.readText()
-                println("Incoming conversations: $incomingMessage")
+                println("Incoming from conversations: $incomingMessage")
 
                 val conversationNotification = withContext(Dispatchers.IO) {
                     defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
                 }
-                println("Conversation notification: $conversationNotification")
 
                 when (conversationNotification.type) {
                     ChangeType.CREATE-> {
-                        conversationsRepo.create(conversationNotification.entity)
+                        conversationsRepo.addAndSelect(conversationNotification.entity)
                     }
-                    ChangeType.DELETE-> conversationsRepo.remove(conversationNotification.id)
+                    ChangeType.DELETE-> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
                     else -> {
                         println("Unknown type ${conversationNotification.type}.")
                     }
@@ -214,7 +213,7 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, use
     client.close()
 }*/
 
-suspend fun initWebSocket(conversationsRepo: ConversationsRepo) {
+suspend fun initWebSocket() {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -227,7 +226,7 @@ suspend fun initWebSocket(conversationsRepo: ConversationsRepo) {
                 this.parameter("userId", "000")
             }
         ) {
-            val messageOutputRoutine = launch { outputMessages(conversationsRepo) }
+            val messageOutputRoutine = launch { outputMessages() }
             val userInputRoutine = launch { inputMessages() }
             userInputRoutine.join() // Wait for completion; either "exit" or error
             messageOutputRoutine.cancelAndJoin()
@@ -236,7 +235,7 @@ suspend fun initWebSocket(conversationsRepo: ConversationsRepo) {
     client.close()
 }
 
-suspend fun DefaultClientWebSocketSession.outputMessages(conversationsRepo: ConversationsRepo) {
+suspend fun DefaultClientWebSocketSession.outputMessages() {
     try {
         for (message in incoming) {
             message as? Frame.Text ?: continue
@@ -249,11 +248,6 @@ suspend fun DefaultClientWebSocketSession.outputMessages(conversationsRepo: Conv
                 println("command: '${command}'")
                 val id: Long = incomingMessageArray[2].trim().toLong()
                 println("id: '${id}'")
-                if (command == "REMOVE_CONVERSATION") {
-                    conversationsRepo.remove(id)
-                } /*else if (command == "ADD_CONVERSATION") {
-                    conversationsRepo.create()
-                }*/
             }
         }
     } catch (e: Exception) {

@@ -9,10 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -26,8 +24,6 @@ import androidx.compose.ui.unit.dp
 import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
-import resources.defaultBackgroundColor
-import resources.selectedBackgroundColor
 import view.common.Search
 import view.item.user.UserItem
 import java.util.*
@@ -39,7 +35,6 @@ import java.util.*
 @Composable
 fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val interactionSource = remember { MutableInteractionSource() }
-    val selected = mutableStateOf<User?>(null)
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
     Box(
@@ -67,12 +62,6 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
         ) {
             val usersLazyListState = rememberLazyListState()
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-
-                Text(
-                    text = "Add Member",
-                    color = Color.White,
-                    style = MaterialTheme.typography.h6
-                )
 
                 Search(searchState)
 
@@ -102,18 +91,16 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                             UserItem(
                                 user = user,
                                 modifier = Modifier
-                                    .background(
-                                        if (selected.value == user) selectedBackgroundColor
-                                        else defaultBackgroundColor
-                                    )
                                     .fillMaxWidth()
-                                    .selectable(user == selected.value,
-                                        onClick = {
-                                            if (selected.value != user) {
-                                                selected.value = user
-                                            }
-                                        }
-                                    )
+                                    .clickable {
+                                        conversationsRepo.put(
+                                            user.firstName + " " + user.lastName,
+                                            usersRepo.current().value?.id,
+                                            listOf(user),
+                                            true
+                                        )
+                                        Window.hide()
+                                    }
                             )
                         }
                     }
@@ -136,21 +123,6 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                         },
                     ) {
                         Text("Cancel")
-                    }
-                    Button(
-                        onClick = {
-                            if (selected.value != null) {
-                                conversationsRepo.create(
-                                    selected.value?.firstName + " " + selected.value?.lastName,
-                                    usersRepo.current().value?.id,
-                                    listOf(selected.value as User),
-                                    true
-                                )
-                                Window.hide()
-                            }
-                        },
-                    ) {
-                        Text("Next")
                     }
                 }
             }

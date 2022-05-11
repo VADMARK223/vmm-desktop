@@ -50,29 +50,7 @@ class ConversationsRepoImpl : ConversationsRepo {
         return selected
     }
 
-    override fun remove(conversation: Conversation) {
-        HttpService.coroutineScope.launch {
-            HttpService.client.delete("${HttpService.host}/conversations/${conversation.id}")
-            conversations.remove(conversation)
-        }
-    }
-
-    override fun remove(conversationId: Long) {
-        HttpService.coroutineScope.launch {
-            val response = HttpService.client.delete("${HttpService.host}/conversations/${conversationId}")
-            if (response.status == HttpStatusCode.OK) {
-                for (conversation in conversations) {
-                    if (conversation.id == conversationId) {
-                        conversations.remove(conversation)
-                    }
-                }
-
-                selectedFirst()
-            }
-        }
-    }
-
-    override fun create(name:String, ownerId:Long?, memberUsers: List<User>, isPrivate:Boolean) {
+    override fun put(name:String, ownerId:Long?, memberUsers: List<User>, isPrivate:Boolean) {
         HttpService.coroutineScope.launch {
             val memberIds = mutableListOf<Long>()
             for (user in memberUsers) {
@@ -94,12 +72,44 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
-    override fun create(entity: Conversation?) {
+    override fun addAndSelect(entity: Conversation?) {
         if (entity != null) {
             conversations.add(entity)
             selected.value = entity
         }
     }
+
+    override fun delete(conversation: Conversation) {
+        HttpService.coroutineScope.launch {
+            HttpService.client.delete("${HttpService.host}/conversations/${conversation.id}")
+//            conversations.remove(conversation)
+        }
+    }
+
+    override fun removeAndSelectFirst(conversationId: Long) {
+        for (conversation in conversations) {
+            if (conversation.id == conversationId) {
+                conversations.remove(conversation)
+            }
+        }
+
+        selectedFirst()
+    }
+
+    /*override fun remove(conversationId: Long) {
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.delete("${HttpService.host}/conversations/${conversationId}")
+            if (response.status == HttpStatusCode.OK) {
+                for (conversation in conversations) {
+                    if (conversation.id == conversationId) {
+                        conversations.remove(conversation)
+                    }
+                }
+
+                selectedFirst()
+            }
+        }
+    }*/
 
     private fun selectedFirst() {
         if (!conversations.isEmpty()) {

@@ -146,7 +146,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                         Button(
                             onClick = {
                                 if (selectedList.isNotEmpty()) {
-                                    conversationsRepo.create(
+                                    conversationsRepo.put(
                                         conversationName,
                                         usersRepo.current().value?.id,
                                         selectedList.toList(),

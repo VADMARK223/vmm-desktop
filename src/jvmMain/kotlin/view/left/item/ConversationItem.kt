@@ -79,7 +79,7 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                         DropdownMenuItem(onClick = {
                             when (it) {
                                 ConversationAction.DELETE -> {
-                                    repo.remove(conversation)
+                                    repo.delete(conversation)
                                 }
                             }
 

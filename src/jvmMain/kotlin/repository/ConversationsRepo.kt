@@ -11,8 +11,10 @@ import model.User
 interface ConversationsRepo {
     fun all(): List<Conversation>
     fun selected(): MutableState<Conversation?>
-    fun remove(conversation: Conversation)
-    fun remove(conversationId: Long)
-    fun create(name:String, ownerId:Long?, memberUsers: List<User>, isPrivate: Boolean)
-    fun create(entity: Conversation?)
+    fun put(name:String, ownerId:Long?, memberUsers: List<User>, isPrivate: Boolean)
+    fun addAndSelect(entity: Conversation?)
+
+    fun delete(conversation: Conversation)
+    fun removeAndSelectFirst(conversationId: Long)
+//    fun remove(conversationId: Long)
 }
