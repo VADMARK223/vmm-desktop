@@ -15,6 +15,8 @@ class UsersRepoImpl : UsersRepo {
     private val current = mutableStateOf<User?>(null)
     private val users = mutableStateListOf<User>()
 
+    private val userLoadListener = mutableStateListOf<() -> Unit>()
+
     init {
         if (requestDefaultUser()) {
             requestDefaultCurrentUser(1L)
@@ -22,12 +24,17 @@ class UsersRepoImpl : UsersRepo {
     }
 
     private fun requestDefaultCurrentUser(id: Long) {
+        println("Request default current user: $id.")
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users/$id")
             if (response.status == HttpStatusCode.OK) {
                 val usersResponseData = response.body<User>()
                 println("Set current user: $usersResponseData")
                 current.value = usersResponseData
+
+                userLoadListener.forEach {
+                    it.invoke()
+                }
             }
         }
     }
@@ -51,5 +58,9 @@ class UsersRepoImpl : UsersRepo {
         }
 
         return users
+    }
+
+    override fun addListener(listener: () -> Unit) {
+        userLoadListener.add(listener)
     }
 }

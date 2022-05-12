@@ -38,7 +38,6 @@ import view.window.WindowState
 @Preview
 fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
-    val conversationWebSocketInit = remember { mutableStateOf(false) }
     val messagesRepo = MessagesRepoImpl()
 
     MaterialTheme(colors = darkThemeColors) {
@@ -78,13 +77,6 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
         println("Current user: " + usersRepo.current().value)
         if (usersRepo.current().value == null) {
             Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
-        } else {
-            if (!conversationWebSocketInit.value) {
-                HttpService.coroutineScope.launch {
-                    initConversationsWebSocket(conversationsRepo, usersRepo)
-                }
-                conversationWebSocketInit.value = true
-            }
         }
 
         when (Window.state.value.type) {
@@ -101,13 +93,16 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
 }
 
 suspend fun main() = coroutineScope {
-    HttpService.coroutineScope = this//rememberCoroutineScope()
+    HttpService.coroutineScope = this
     val conversationsRepo = ConversationsRepoImpl()
     val usersRepo = UsersRepoImpl()
 
-//    launch {
-//        initConversationsWebSocket(conversationsRepo, usersRepo)
-//    }
+    usersRepo.addListener {
+        println("User loaded.")
+        launch {
+            initConversationsWebSocket(conversationsRepo, usersRepo)
+        }
+    }
 
     application {
         val icon = painterResource("favicon.ico")
