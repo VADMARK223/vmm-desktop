@@ -20,11 +20,15 @@ class ConversationsRepoImpl : ConversationsRepo {
     private val selected = mutableStateOf<Conversation?>(null)
     private var conversations = mutableStateListOf<Conversation>()
 
-    init {
+    override fun all(): List<Conversation> {
+        return conversations
+    }
+
+    override fun updateByUserId(userId: Long) {
+        println("Get conversations by user id: $userId")
         conversations.clear()
         HttpService.coroutineScope.launch {
-            val response = HttpService.client.get("${HttpService.host}/conversations")
-
+            val response = HttpService.client.get("${HttpService.host}/conversations/$userId")
             try {
                 if (response.status == HttpStatusCode.OK) {
                     val responseConversations = response.body<List<Conversation>>()
@@ -37,13 +41,7 @@ class ConversationsRepoImpl : ConversationsRepo {
             } catch (e: Exception) {
                 println(e.localizedMessage)
             }
-
-
         }
-    }
-
-    override fun all(): List<Conversation> {
-        return conversations
     }
 
     override fun selected(): MutableState<Conversation?> {

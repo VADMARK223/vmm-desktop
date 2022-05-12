@@ -99,6 +99,7 @@ suspend fun main() = coroutineScope {
 
     usersRepo.addListener { userId ->
         println("User loaded: $userId.")
+        conversationsRepo.updateByUserId(userId)
         launch {
             initConversationsWebSocket(conversationsRepo, userId)
         }
