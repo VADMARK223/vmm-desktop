@@ -32,20 +32,29 @@ fun UserItem(user: User, modifier: Modifier) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val size = 30.dp
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(size))
-            ) {
-                val avaText = user.firstName.first().toString() + user.lastName.first().toString()
-                Text(
-                    text = avaText,
-                    color = Color.White,
+            Box{
+                Box(
                     modifier = Modifier
-                        .background(
-                            color = bgColor.value
-                        )
-                        .padding(size / 2)
-                )
+                        .clip(RoundedCornerShape(size))
+                ) {
+                    val avaText = user.firstName.first().toString() + user.lastName.first().toString()
+                    Text(
+                        text = avaText,
+                        color = Color.White,
+                        modifier = Modifier
+                            .background(
+                                color = bgColor.value
+                            )
+                            .padding(size / 2)
+                    )
+                }
+
+                if (user.online) {
+                    Box(
+                        modifier = Modifier.size(15.dp).clip(RoundedCornerShape(100.dp)).align(Alignment.BottomEnd)
+                            .background(Color.Green)
+                    )
+                }
             }
 
             Column {

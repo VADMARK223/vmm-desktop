@@ -11,5 +11,6 @@ data class User(
     val id: Long,
     val firstName: String,
     val lastName: String,
-    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val online: Boolean = false
 )
