@@ -28,13 +28,9 @@ class UsersRepoImpl : UsersRepo {
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users/$id")
             if (response.status == HttpStatusCode.OK) {
-                val usersResponseData = response.body<User>()
-                println("Set current user: $usersResponseData")
-                current.value = usersResponseData
-
-                userLoadListener.forEach {
-                    it.invoke()
-                }
+                val userResponse = response.body<User>()
+                println("Set current user: $userResponse")
+                setCurrentUser(userResponse)
             }
         }
     }
@@ -62,5 +58,14 @@ class UsersRepoImpl : UsersRepo {
 
     override fun addListener(listener: () -> Unit) {
         userLoadListener.add(listener)
+    }
+
+    override fun setCurrentUser(user: User) {
+        println("Set current user: $user")
+
+        current.value = user
+        userLoadListener.forEach {
+            it.invoke()
+        }
     }
 }

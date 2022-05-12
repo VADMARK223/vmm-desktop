@@ -42,7 +42,7 @@ fun SelectCurrentUser(usersRepo: UsersRepo) {
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                Window.hide()
+
             }
     ) {
         Box(
@@ -90,6 +90,7 @@ fun SelectCurrentUser(usersRepo: UsersRepo) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
+                                        usersRepo.setCurrentUser(user)
                                         usersRepo.current().value = user
                                         Window.hide()
                                     }

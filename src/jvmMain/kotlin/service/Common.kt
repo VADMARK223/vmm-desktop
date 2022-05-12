@@ -9,5 +9,5 @@ fun generateContactCredentials(): Boolean {
 }
 
 fun requestDefaultUser(): Boolean {
-    return true
+    return false
 }
