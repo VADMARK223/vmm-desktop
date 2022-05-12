@@ -6,7 +6,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -16,7 +15,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import db.Conversation
 import kotlinx.datetime.toJavaLocalDateTime
-import view.common.ContactState
 import java.time.format.DateTimeFormatter
 
 /**
@@ -24,7 +22,7 @@ import java.time.format.DateTimeFormatter
  * @since 23.04.2022
  */
 @Composable
-fun Info(conversation: Conversation?, contactState: MutableState<ContactState>) {
+fun Info(conversation: Conversation?/*, contactState: MutableState<ContactState>*/) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = InfoAction.values()
 
@@ -90,7 +88,8 @@ fun Info(conversation: Conversation?, contactState: MutableState<ContactState>) 
                             }
 
                             InfoAction.EDIT_CONTACT -> {
-                                contactState.value = ContactState.EDIT
+                                println("Edit contact.")
+//                                contactState.value = ContactState.EDIT
                             }
                         }
 

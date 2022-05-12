@@ -7,3 +7,7 @@ package service
 fun generateContactCredentials(): Boolean {
     return true
 }
+
+fun requestDefaultUser(): Boolean {
+    return true
+}

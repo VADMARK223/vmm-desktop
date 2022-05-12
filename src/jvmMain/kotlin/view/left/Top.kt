@@ -7,7 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,9 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import repository.ConversationsRepo
 import repository.UsersRepo
-import view.common.ContactState
 import view.window.Window
 import view.window.WindowState
 import view.window.WindowType
@@ -29,7 +26,7 @@ import view.window.WindowType
  * @since 23.04.2022
  */
 @Composable
-fun Top(contactState: MutableState<ContactState>, usersRepo: UsersRepo) {
+fun Top(/*contactState: MutableState<ContactState>,*/ usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -82,7 +79,7 @@ fun Top(contactState: MutableState<ContactState>, usersRepo: UsersRepo) {
             }
 
             DropdownMenuItem(onClick = {
-                contactState.value = ContactState.CREATE
+//                contactState.value = ContactState.CREATE
                 expanded.value = false
             }) {
                 Text(text = "Add user")

@@ -9,13 +9,16 @@ import io.ktor.http.*
 import kotlinx.coroutines.launch
 import model.User
 import service.HttpService
+import service.requestDefaultUser
 
 class UsersRepoImpl : UsersRepo {
     private val current = mutableStateOf<User?>(null)
     private val users = mutableStateListOf<User>()
 
     init {
-        requestDefaultCurrentUser(3L)
+        if (requestDefaultUser()) {
+            requestDefaultCurrentUser(1L)
+        }
     }
 
     private fun requestDefaultCurrentUser(id: Long) {
@@ -23,6 +26,7 @@ class UsersRepoImpl : UsersRepo {
             val response = HttpService.client.get("${HttpService.host}/users/$id")
             if (response.status == HttpStatusCode.OK) {
                 val usersResponseData = response.body<User>()
+                println("Set current user: $usersResponseData")
                 current.value = usersResponseData
             }
         }

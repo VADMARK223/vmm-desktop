@@ -27,8 +27,6 @@ import repository.*
 import resources.darkThemeColors
 import service.HttpService
 import util.JsonMapper.defaultMapper
-import view.common.Contact
-import view.common.ContactState
 import view.left.Left
 import view.right.InputMessage
 import view.right.Messages
@@ -44,11 +42,11 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val messagesRepo = MessagesRepoImpl()
 
     MaterialTheme(colors = darkThemeColors) {
-        val contactState = remember { mutableStateOf(ContactState.HIDE) }
+//        val contactState = remember { mutableStateOf(ContactState.HIDE) }
 
         Row {
             Left(
-                contactState = contactState,
+//                contactState = contactState,
                 repo = conversationsRepo,
                 usersRepo = usersRepo
             )
@@ -56,7 +54,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                Info(conversation = conversationsRepo.selected().value, contactState = contactState)
+                Info(conversation = conversationsRepo.selected().value/*, contactState = contactState*/)
                 Messages(
                     Modifier
                         .weight(1f)
@@ -69,14 +67,15 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             }
         }
 
-        if (contactState.value != ContactState.HIDE) {
-            Contact(contactState)
-        }
+//        if (contactState.value != ContactState.HIDE) {
+//            Contact(contactState)
+//        }
 
         if (conversationsRepo.selected().value != null) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
         }
 
+        println("Current user: " + usersRepo.current().value)
         if (usersRepo.current().value == null) {
             Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
         } else {

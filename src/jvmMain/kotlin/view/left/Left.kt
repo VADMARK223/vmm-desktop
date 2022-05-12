@@ -16,12 +16,12 @@ import view.common.ContactState
  */
 @Composable
 fun Left(
-    contactState: MutableState<ContactState>,
+//    contactState: MutableState<ContactState>,
     repo: ConversationsRepo,
     usersRepo: UsersRepo
 ) {
     Column(modifier = Modifier.width(450.dp)) {
-        Top(contactState, usersRepo)
+        Top(/*contactState,*/ usersRepo)
         Conversations(
             repo = repo
         )
