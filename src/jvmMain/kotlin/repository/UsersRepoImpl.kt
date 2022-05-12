@@ -15,7 +15,7 @@ class UsersRepoImpl : UsersRepo {
     private val current = mutableStateOf<User?>(null)
     private val users = mutableStateListOf<User>()
 
-    private val userLoadListener = mutableStateListOf<() -> Unit>()
+    private val userLoadListener = mutableStateListOf<(Long) -> Unit>()
 
     init {
         if (requestDefaultUser()) {
@@ -56,7 +56,7 @@ class UsersRepoImpl : UsersRepo {
         return users
     }
 
-    override fun addListener(listener: () -> Unit) {
+    override fun addListener(listener: (userId:Long) -> Unit) {
         userLoadListener.add(listener)
     }
 
@@ -65,7 +65,7 @@ class UsersRepoImpl : UsersRepo {
 
         current.value = user
         userLoadListener.forEach {
-            it.invoke()
+            it.invoke(user.id)
         }
     }
 }
