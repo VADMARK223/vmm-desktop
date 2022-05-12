@@ -1,2 +1,3 @@
 ./gradlew :package
+
 ./gradlew :createDistributable
