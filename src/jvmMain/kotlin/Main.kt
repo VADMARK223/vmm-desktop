@@ -23,6 +23,7 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import model.ChangeType
 import model.ConversationNotification
+import model.UserNotification
 import repository.*
 import resources.darkThemeColors
 import service.HttpService
@@ -101,6 +102,10 @@ suspend fun main() = coroutineScope {
         println("User loaded: $userId.")
         conversationsRepo.updateByUserId(userId)
         launch {
+            initUsersWebSocket(usersRepo, userId)
+        }
+
+        launch {
             initConversationsWebSocket(conversationsRepo, userId)
         }
     }
@@ -132,6 +137,40 @@ suspend fun main() = coroutineScope {
             App(conversationsRepo, usersRepo)
         }
     }
+}
+
+suspend fun initUsersWebSocket(usersRepo: UsersRepo, userId: Long) {
+    val client = HttpClient(CIO) {
+        install(WebSockets)
+    }
+
+    runBlocking {
+        client.webSocket(
+            host = "localhost",
+            port = 8888,
+            path = "/users",
+            request = {
+                this.parameter("userId", userId)
+            }
+        ) {
+            for (message in incoming) {
+                message as? Frame.Text ?: continue
+                val incomingMessage = message.readText()
+                println("Incoming from users: $incomingMessage")
+
+                val userNotification = withContext(Dispatchers.IO) {
+                    defaultMapper.decodeFromString<UserNotification>(incomingMessage)
+                }
+
+                if (userNotification.type == ChangeType.UPDATE) {
+                    usersRepo.update(userNotification.entity)
+                }
+
+            }
+        }
+    }
+
+    client.close()
 }
 
 suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, userId: Long) {

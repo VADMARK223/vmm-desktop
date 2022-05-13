@@ -21,6 +21,9 @@ class UsersRepoImpl : UsersRepo {
         if (requestDefaultUser()) {
             requestDefaultCurrentUser(1L)
         }
+
+        // TODO: temp
+//        all()
     }
 
     private fun requestDefaultCurrentUser(id: Long) {
@@ -56,7 +59,7 @@ class UsersRepoImpl : UsersRepo {
         return users
     }
 
-    override fun addListener(listener: (userId:Long) -> Unit) {
+    override fun addListener(listener: (userId: Long) -> Unit) {
         userLoadListener.add(listener)
     }
 
@@ -66,6 +69,15 @@ class UsersRepoImpl : UsersRepo {
         current.value = user
         userLoadListener.forEach {
             it.invoke(user.id)
+        }
+    }
+
+    override fun update(entity: User?) {
+        for (user in users) {
+            if (user.id == entity?.id) {
+                users[users.indexOf(user)] = entity
+                break
+            }
         }
     }
 }

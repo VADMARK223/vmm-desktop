@@ -80,9 +80,10 @@ fun Top(/*contactState: MutableState<ContactState>,*/ usersRepo: UsersRepo) {
 
             DropdownMenuItem(onClick = {
 //                contactState.value = ContactState.CREATE
+                Window.state.value = WindowState(WindowType.NEW_PRIVATE_CONVERSATION)
                 expanded.value = false
             }) {
-                Text(text = "Add user")
+                Text(text = "User list")
             }
 
             DropdownMenuItem(onClick = {

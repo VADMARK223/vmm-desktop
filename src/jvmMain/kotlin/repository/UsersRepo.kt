@@ -12,4 +12,5 @@ interface UsersRepo {
     fun all():List<User>
     fun addListener(listener: (Long) -> Unit)
     fun setCurrentUser(user: User)
+    fun update(entity: User?)
 }
