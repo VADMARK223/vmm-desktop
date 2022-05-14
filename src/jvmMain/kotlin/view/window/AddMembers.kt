@@ -42,6 +42,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
     val interactionSource = remember { MutableInteractionSource() }
     val selectedList = remember { mutableStateListOf<User>() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
+    val allUsers = remember { usersRepo.all() }
 
     Box(
         modifier = Modifier
@@ -79,18 +80,17 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                 Search(searchState)
 
                 Box(modifier = Modifier.height(300.dp)) {
-                    val users = usersRepo.all()
                     var filteredUsers: List<User>
                     LazyColumn(
                         state = usersLazyListState
                     ) {
                         val searchedText = searchState.value.text
                         filteredUsers = if (searchedText.isEmpty()) {
-                            users
+                            allUsers
                         } else {
                             val resultList = ArrayList<User>()
                             val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
-                            for (user in users) {
+                            for (user in allUsers) {
                                 if (user.firstName.lowercase(Locale.getDefault()).contains(searchedTextLowercase) ||
                                     user.lastName.lowercase(Locale.getDefault()).contains(searchedTextLowercase)
                                 ) {
