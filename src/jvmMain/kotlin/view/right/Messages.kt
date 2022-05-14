@@ -17,8 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import repository.ConversationsRepo
 import repository.MessagesRepo
 import repository.UsersRepo
+import service.HttpService
 import view.right.item.MessageItem
 
 /**
@@ -26,7 +28,24 @@ import view.right.item.MessageItem
  * @since 23.04.2022
  */
 @Composable
-fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepo, usersRepo: UsersRepo) {
+fun Messages(
+    modifier: Modifier,
+    mainOutput: MutableState<TextFieldValue>,
+    messagesRepo: MessagesRepo,
+    usersRepo: UsersRepo,
+    conversationsRepo: ConversationsRepo
+) {
+    println("MESSAGES REDRAW")
+
+//    val conversation = mutableStateOf(conversationsRepo.selected().value)
+    val messages =  messagesRepo.all()
+
+   /* if (conversation.value != null) {
+        val conversationId = conversation.value?.id as Long
+        println("Conversation is not null. $conversationId")
+            messagesRepo.messagesByConversationId(conversationId)
+    }*/
+
     Box(modifier = modifier) {
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
@@ -38,8 +57,7 @@ fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo:
             state = lazyListState,
             reverseLayout = true,
         ) {
-//            itemsIndexed(items = HttpService.messagesList().reversed()) { index, message ->
-            itemsIndexed(items = repo.all().reversed()) { index, message ->
+            itemsIndexed(items = messages/*messagesRepo.all()*/.reversed()) { index, message ->
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = when (message.ownerId == usersRepo.current().value?.id) {
@@ -48,7 +66,7 @@ fun Messages(modifier: Modifier, mainOutput: MutableState<TextFieldValue>, repo:
                     }
                 ) {
                     item {
-                        MessageItem(message, mainOutput, repo, usersRepo)
+                        MessageItem(message, mainOutput, messagesRepo, usersRepo)
                     }
                 }
                 Spacer(modifier = Modifier.height(5.dp))

@@ -41,6 +41,19 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
+    /*override fun getMessagesByConversationId(id: Long): List<Message> {
+        println("Request messages by conversation: "  + id)
+        val result = mutableStateListOf<Message>()
+        HttpService.coroutineScope.launch {
+            val responseMessages =
+                HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<Message>>()
+            println("responseMessages: ${responseMessages.size}")
+            result.addAll(responseMessages)
+        }
+
+        return result
+    }*/
+
     override fun addMessage(text: String, conversationId: Long?, currentUserId: Long?) {
         val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)
         println("Add message: $messageDto")

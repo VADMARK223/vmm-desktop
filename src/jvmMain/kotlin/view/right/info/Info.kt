@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import db.Conversation
 import kotlinx.datetime.toJavaLocalDateTime
+import repository.ConversationsRepo
 import java.time.format.DateTimeFormatter
 
 /**
@@ -22,9 +22,11 @@ import java.time.format.DateTimeFormatter
  * @since 23.04.2022
  */
 @Composable
-fun Info(conversation: Conversation?/*, contactState: MutableState<ContactState>*/) {
+fun Info(conversationsRepo: ConversationsRepo) {
+    println("INFO REDRAW")
     val expanded = remember { mutableStateOf(false) }
     val menuItems = InfoAction.values()
+    val conversation =  mutableStateOf(conversationsRepo.selected().value)
 
     Box(
         modifier = Modifier
@@ -34,22 +36,20 @@ fun Info(conversation: Conversation?/*, contactState: MutableState<ContactState>
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
-                text = conversation?.name ?: "",
+                text = conversation.value?.name ?: "",
                 style = MaterialTheme.typography.h6,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = Color.White
             )
 
-            var infoText = ""
-            if (conversation != null) {
-                val formatter = DateTimeFormatter
-                    .ofPattern("hh:mm:ss")
-                infoText =
-                    "Creation time: ${formatter.format(conversation.createTime.toJavaLocalDateTime())} Owner: ${conversation.ownerId}"
-                if (!conversation.isPrivate) {
-                    infoText += " Members: ${conversation.membersCount}"
-                }
+            var infoText: String
+            val formatter = DateTimeFormatter
+                .ofPattern("hh:mm:ss")
+            infoText =
+                "Creation time: ${formatter.format(conversation.value?.createTime?.toJavaLocalDateTime())} Owner: ${conversation.value?.ownerId}"
+            if (!conversation.value?.isPrivate!!) {
+                infoText += " Members: ${conversation.value?.membersCount}"
             }
 
             Text(
@@ -89,7 +89,6 @@ fun Info(conversation: Conversation?/*, contactState: MutableState<ContactState>
 
                             InfoAction.EDIT_CONTACT -> {
                                 println("Edit contact.")
-//                                contactState.value = ContactState.EDIT
                             }
                         }
 

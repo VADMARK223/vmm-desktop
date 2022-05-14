@@ -42,11 +42,9 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val messagesRepo = MessagesRepoImpl()
 
     MaterialTheme(colors = darkThemeColors) {
-//        val contactState = remember { mutableStateOf(ContactState.HIDE) }
-
+        println("COMMON REDRAW")
         Row {
             Left(
-//                contactState = contactState,
                 repo = conversationsRepo,
                 usersRepo = usersRepo
             )
@@ -54,28 +52,28 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                Info(conversation = conversationsRepo.selected().value/*, contactState = contactState*/)
+                Info(conversationsRepo = conversationsRepo)
+
+
+
                 Messages(
                     Modifier
                         .weight(1f)
                         .background(color = Color(14, 22, 33)),
                     mainOutput,
-                    repo = messagesRepo,
-                    usersRepo = usersRepo
+                    messagesRepo,
+                    usersRepo,
+                    conversationsRepo
                 )
+
                 InputMessage(messagesRepo, conversationsRepo, mainOutput, usersRepo)
             }
         }
-
-//        if (contactState.value != ContactState.HIDE) {
-//            Contact(contactState)
-//        }
 
         if (conversationsRepo.selected().value != null) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
         }
 
-        println("Current user: " + usersRepo.current().value)
         if (usersRepo.current().value == null) {
             Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
         }
