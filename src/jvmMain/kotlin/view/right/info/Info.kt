@@ -27,7 +27,7 @@ fun Info(conversationsRepo: ConversationsRepo) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = InfoAction.values()
 
-    val conversation = mutableStateOf(conversationsRepo.selected().value)
+    val conversation = conversationsRepo.selected()
 
     if (conversation.value == null) {
         return
@@ -52,8 +52,10 @@ fun Info(conversationsRepo: ConversationsRepo) {
             val formatter = DateTimeFormatter
                 .ofPattern("hh:mm:ss")
             infoText =
-                "Creation time: ${formatter.format(conversation.value?.createTime?.toJavaLocalDateTime())} Owner: ${conversation.value?.ownerId}"
-            if (!conversation.value?.isPrivate!!) {
+                if (conversation.value == null) ""
+                else "Creation time: ${formatter.format(conversation.value?.createTime?.toJavaLocalDateTime())} Owner: ${conversation.value?.ownerId}"
+
+            if (conversation.value != null && conversation.value?.isPrivate == true) {
                 infoText += " Members: ${conversation.value?.membersCount}"
             }
 

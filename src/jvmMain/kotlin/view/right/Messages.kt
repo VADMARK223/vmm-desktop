@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import repository.ConversationsRepo
 import repository.MessagesRepo
 import repository.UsersRepo
-import service.HttpService
 import view.right.item.MessageItem
 
 /**
@@ -35,12 +34,11 @@ fun Messages(
     usersRepo: UsersRepo,
     conversationsRepo: ConversationsRepo
 ) {
-    val conversation = mutableStateOf(conversationsRepo.selected().value)
-    println("MESSAGES REDRAW: $conversation")
+    val conversation = conversationsRepo.selected()
+    println("MESSAGES REDRAW")
 
     if (conversation.value != null) {
         val conversationId = conversation.value?.id as Long
-        println("Conversation is not null. $conversationId")
         messagesRepo.messagesByConversationId(conversationId)
     }
 
