@@ -1,8 +1,6 @@
 package view.left.item
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -13,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.awtEventOrNull
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -24,9 +21,9 @@ import kotlinx.datetime.toJavaLocalDateTime
 import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
+import view.common.Avatar
 import java.awt.event.MouseEvent
 import java.time.format.DateTimeFormatter
-import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
@@ -40,7 +37,6 @@ fun ConversationItem(
     modifier: Modifier,
     usersRepo: UsersRepo
 ) {
-    val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
     val expanded = remember { mutableStateOf(false) }
     val menuItems = ConversationAction.values()
     val companion: User? = usersRepo.getById(conversation.companionId)
@@ -60,21 +56,11 @@ fun ConversationItem(
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val size = 30.dp
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(size))
-            ) {
-                val avaText = conversation.name.first().toString()
-                Text(
-                    text = avaText,
-                    color = Color.White,
-                    modifier = Modifier
-                        .background(
-                            color = bgColor.value
-                        )
-                        .padding(size / 2)
-                )
+            Box {
+                val avaText =
+                    if (companion != null) "${companion.firstName.first()}${companion.lastName.first()}" else conversation.name.first()
+                        .toString()
+                Avatar(avaText, true)
 
                 DropdownMenu(
                     expanded = expanded.value,
