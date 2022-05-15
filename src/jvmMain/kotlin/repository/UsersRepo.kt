@@ -9,8 +9,9 @@ import model.User
  */
 interface UsersRepo {
     fun current(): MutableState<User?>
-    fun all():List<User>
+    fun requestAll():List<User>
     fun addListener(listener: (Long) -> Unit)
     fun setCurrentUser(user: User)
     fun update(entity: User?)
+    fun getById(companionId: Long?): User?
 }

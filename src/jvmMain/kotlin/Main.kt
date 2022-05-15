@@ -47,7 +47,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
         println("COMMON REDRAW")
         Row {
             Left(
-                repo = conversationsRepo,
+                conversationsRepo = conversationsRepo,
                 usersRepo = usersRepo
             )
             Column(

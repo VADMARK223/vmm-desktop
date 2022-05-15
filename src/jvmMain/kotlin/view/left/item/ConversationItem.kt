@@ -21,7 +21,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import db.Conversation
 import kotlinx.datetime.toJavaLocalDateTime
+import model.User
 import repository.ConversationsRepo
+import repository.UsersRepo
 import java.awt.event.MouseEvent
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
@@ -32,10 +34,16 @@ import kotlin.random.Random
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifier: Modifier) {
+fun ConversationItem(
+    conversation: Conversation,
+    conversationsRepo: ConversationsRepo,
+    modifier: Modifier,
+    usersRepo: UsersRepo
+) {
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
     val expanded = remember { mutableStateOf(false) }
     val menuItems = ConversationAction.values()
+    val companion: User? = usersRepo.getById(conversation.companionId)
 
     Box(
         modifier = modifier,
@@ -57,7 +65,6 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                 modifier = Modifier
                     .clip(RoundedCornerShape(size))
             ) {
-//                val avaText = user.firstName.first().toString() + user.lastName.first().toString()
                 val avaText = conversation.name.first().toString()
                 Text(
                     text = avaText,
@@ -79,7 +86,7 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                         DropdownMenuItem(onClick = {
                             when (it) {
                                 ConversationAction.DELETE -> {
-                                    repo.delete(conversation)
+                                    conversationsRepo.delete(conversation)
                                 }
                             }
 
@@ -92,7 +99,8 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
             }
 
             Row {
-                val itemText = "${conversation.id} ${conversation.name}"
+                val itemText =
+                    if (companion != null) companion.firstName + " " + companion.lastName else conversation.name
                 Text(
                     text = itemText,
                     style = MaterialTheme.typography.h6,

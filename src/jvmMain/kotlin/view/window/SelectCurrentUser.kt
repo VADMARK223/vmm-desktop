@@ -63,7 +63,7 @@ fun SelectCurrentUser(usersRepo: UsersRepo) {
                 Search(searchState)
 
                 Box(modifier = Modifier.height(300.dp)) {
-                    val users = usersRepo.all()
+                    val users = usersRepo.requestAll()
                     var filteredUsers: List<User>
                     LazyColumn(
                         state = usersLazyListState

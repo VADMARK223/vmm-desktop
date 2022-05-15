@@ -3,12 +3,10 @@ package view.left
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
 import repository.UsersRepo
-import view.common.ContactState
 
 /**
  * @author Markitanov Vadim
@@ -16,14 +14,14 @@ import view.common.ContactState
  */
 @Composable
 fun Left(
-//    contactState: MutableState<ContactState>,
-    repo: ConversationsRepo,
+    conversationsRepo: ConversationsRepo,
     usersRepo: UsersRepo
 ) {
     Column(modifier = Modifier.width(450.dp)) {
-        Top(/*contactState,*/ usersRepo)
+        Top(usersRepo)
         Conversations(
-            repo = repo
+            conversationsRepo = conversationsRepo,
+            usersRepo = usersRepo
         )
     }
 }

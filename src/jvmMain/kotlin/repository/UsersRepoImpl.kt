@@ -21,9 +21,7 @@ class UsersRepoImpl : UsersRepo {
         if (requestDefaultUser()) {
             requestDefaultCurrentUser(1L)
         }
-
-        // TODO: temp
-//        all()
+        requestAll()
     }
 
     private fun requestDefaultCurrentUser(id: Long) {
@@ -42,7 +40,7 @@ class UsersRepoImpl : UsersRepo {
         return current
     }
 
-    override fun all(): List<User> {
+    override fun requestAll(): List<User> {
         users.clear()
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users")
@@ -79,5 +77,15 @@ class UsersRepoImpl : UsersRepo {
                 break
             }
         }
+    }
+
+    override fun getById(companionId: Long?): User? {
+        for (user in users) {
+            if(companionId == user.id) {
+                return user
+            }
+        }
+
+        return null
     }
 }

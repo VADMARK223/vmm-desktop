@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import repository.ConversationsRepo
+import repository.UsersRepo
 import view.left.item.ConversationItem
 
 /**
@@ -23,30 +24,43 @@ import view.left.item.ConversationItem
  * @since 29.04.2022
  */
 @Composable
-fun Conversations(repo: ConversationsRepo) {
+fun Conversations(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
 
         LazyColumn(
             state = usersLazyListState,
         ) {
-            items(items = repo.all()) { conversation ->
-                ConversationItem(
-                    conversation = conversation,
-                    repo = repo,
-                    modifier = Modifier
-                        .background(
-                            if (repo.selected().value == conversation) Color(43, 82, 120)
-                            else Color(23, 33, 43)
-                        )
-                        .fillMaxWidth()
-                        .selectable(conversation == repo.selected().value,
-                            onClick = {
-                                if (repo.selected().value != conversation) {
-                                    repo.selected().value = conversation
-                                }
-                            })
-                )
+            items(items = conversationsRepo.all()) { conversation ->
+                val modifier = Modifier
+                    .background(
+                        if (conversationsRepo.selected().value == conversation) Color(43, 82, 120)
+                        else Color(23, 33, 43)
+                    )
+                    .fillMaxWidth()
+                    .selectable(conversation == conversationsRepo.selected().value,
+                        onClick = {
+                            if (conversationsRepo.selected().value != conversation) {
+                                conversationsRepo.selected().value = conversation
+                            }
+                        })
+
+//                if (conversation.companionId == null) {
+                    ConversationItem(
+                        conversation = conversation,
+                        conversationsRepo = conversationsRepo,
+                        modifier = modifier,
+                        usersRepo = usersRepo
+                    )
+//                } else {
+//                    val companion: User? = usersRepo.getById(conversation.companionId)
+//                    CompanionItem(
+//                        conversation = conversation,
+//                        companion,
+//                        modifier = modifier,
+//                        repo = conversationsRepo
+//                    )
+//                }
             }
         }
 
