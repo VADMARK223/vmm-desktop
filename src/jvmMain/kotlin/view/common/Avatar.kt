@@ -2,7 +2,6 @@ package view.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -21,23 +20,21 @@ import kotlin.random.Random
  * @since 15.05.2022
  */
 @Composable
-fun Avatar(text:String, online:Boolean) {
+fun Avatar(text: String, online: Boolean) {
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
 
-    val size = 30.dp
+    val size = 50.dp
     Box{
         Box(
-            modifier = Modifier
+            Modifier
+                .size(size)
                 .clip(RoundedCornerShape(size))
+                .background(bgColor.value)
         ) {
             Text(
                 text = text,
                 color = Color.White,
-                modifier = Modifier
-                    .background(
-                        color = bgColor.value
-                    )
-                    .padding(size / 2)
+                modifier = Modifier.align(Alignment.Center)
             )
         }
 
@@ -48,14 +45,4 @@ fun Avatar(text:String, online:Boolean) {
             )
         }
     }
-
-//    Text(
-//        text = text,
-//        color = Color.White,
-//        modifier = Modifier
-//            .background(
-//                color = bgColor.value
-//            )
-//            .padding(size / 2)
-//    )
 }
