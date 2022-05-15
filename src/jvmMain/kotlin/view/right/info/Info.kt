@@ -14,7 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.toJavaLocalDateTime
+import model.User
 import repository.ConversationsRepo
+import repository.UsersRepo
 import java.time.format.DateTimeFormatter
 
 /**
@@ -22,12 +24,13 @@ import java.time.format.DateTimeFormatter
  * @since 23.04.2022
  */
 @Composable
-fun Info(conversationsRepo: ConversationsRepo) {
+fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     println("INFO REDRAW")
     val expanded = remember { mutableStateOf(false) }
     val menuItems = InfoAction.values()
 
     val conversation = conversationsRepo.selected()
+    val companion: User? = usersRepo.getById(conversation.value?.companionId)
 
     if (conversation.value == null) {
         return
@@ -40,8 +43,12 @@ fun Info(conversationsRepo: ConversationsRepo) {
             .padding(4.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            val name = if (companion != null) {
+                companion.firstName + " " + companion.lastName
+            } else conversation.value?.name ?: ""
+
             Text(
-                text = conversation.value?.name ?: "",
+                text = name,
                 style = MaterialTheme.typography.h6,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

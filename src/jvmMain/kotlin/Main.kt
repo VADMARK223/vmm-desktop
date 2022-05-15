@@ -54,7 +54,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                Info(conversationsRepo = conversationsRepo)
+                Info(conversationsRepo = conversationsRepo, usersRepo = usersRepo)
 
                 Messages(
                     Modifier
