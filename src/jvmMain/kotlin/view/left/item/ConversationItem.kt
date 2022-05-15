@@ -37,9 +37,11 @@ fun ConversationItem(
     modifier: Modifier,
     usersRepo: UsersRepo
 ) {
+    println("CONVERSATION ITEM REDRAW")
     val expanded = remember { mutableStateOf(false) }
-    val menuItems = ConversationAction.values()
-    val companion: User? = usersRepo.getById(conversation.companionId)
+    val companion: User? =  usersRepo.getById(conversation.companionId)
+    val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
+    val menuItems = if (companion != null) forChat else forConversation
 
     Box(
         modifier = modifier,
@@ -72,8 +74,16 @@ fun ConversationItem(
                     menuItems.forEach {
                         DropdownMenuItem(onClick = {
                             when (it) {
-                                ConversationAction.DELETE -> {
+                                ConversationAction.LEAVE_CHAT -> {
                                     conversationsRepo.delete(conversation)
+                                }
+
+                                ConversationAction.LEAVE_GROUP -> {
+                                    conversationsRepo.delete(conversation)
+                                }
+
+                                ConversationAction.CLEAR_HISTORY -> {
+                                    println("Clear history.")
                                 }
                             }
 
