@@ -35,16 +35,16 @@ fun Messages(
     usersRepo: UsersRepo,
     conversationsRepo: ConversationsRepo
 ) {
-    println("MESSAGES REDRAW")
+    val conversation = mutableStateOf(conversationsRepo.selected().value)
+    println("MESSAGES REDRAW: $conversation")
 
-//    val conversation = mutableStateOf(conversationsRepo.selected().value)
-    val messages =  messagesRepo.all()
-
-   /* if (conversation.value != null) {
+    if (conversation.value != null) {
         val conversationId = conversation.value?.id as Long
         println("Conversation is not null. $conversationId")
-            messagesRepo.messagesByConversationId(conversationId)
-    }*/
+        messagesRepo.messagesByConversationId(conversationId)
+    }
+
+    val messages =  messagesRepo.all()
 
     Box(modifier = modifier) {
         val lazyListState = rememberLazyListState()

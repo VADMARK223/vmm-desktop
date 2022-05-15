@@ -41,6 +41,8 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val messagesRepo = MessagesRepoImpl()
 
+//    println("conversationsRepo.selected().value: " + conversationsRepo.selected().value)
+
     MaterialTheme(colors = darkThemeColors) {
         println("COMMON REDRAW")
         Row {
@@ -53,8 +55,6 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                     .fillMaxSize()
             ) {
                 Info(conversationsRepo = conversationsRepo)
-
-
 
                 Messages(
                     Modifier
@@ -70,9 +70,9 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             }
         }
 
-        if (conversationsRepo.selected().value != null) {
+        /*if (conversationsRepo.selected().value != null) {
             messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
-        }
+        }*/
 
         if (usersRepo.current().value == null) {
             Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)

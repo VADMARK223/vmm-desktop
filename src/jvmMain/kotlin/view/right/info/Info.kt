@@ -26,7 +26,12 @@ fun Info(conversationsRepo: ConversationsRepo) {
     println("INFO REDRAW")
     val expanded = remember { mutableStateOf(false) }
     val menuItems = InfoAction.values()
-    val conversation =  mutableStateOf(conversationsRepo.selected().value)
+
+    val conversation = mutableStateOf(conversationsRepo.selected().value)
+
+    if (conversation.value == null) {
+        return
+    }
 
     Box(
         modifier = Modifier
