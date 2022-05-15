@@ -55,7 +55,7 @@ fun Info(conversationsRepo: ConversationsRepo) {
                 if (conversation.value == null) ""
                 else "Creation time: ${formatter.format(conversation.value?.createTime?.toJavaLocalDateTime())} Owner: ${conversation.value?.ownerId}"
 
-            if (conversation.value != null && conversation.value?.isPrivate == true) {
+            if (conversation.value != null && conversation.value?.isPrivate == false) {
                 infoText += " Members: ${conversation.value?.membersCount}"
             }
 

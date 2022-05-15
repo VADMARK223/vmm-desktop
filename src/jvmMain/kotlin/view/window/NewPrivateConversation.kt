@@ -97,7 +97,8 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                                             user.firstName + " " + user.lastName,
                                             usersRepo.current().value?.id,
                                             listOf(user),
-                                            true
+                                            true,
+                                            user.id
                                         )
                                         Window.hide()
                                     }
