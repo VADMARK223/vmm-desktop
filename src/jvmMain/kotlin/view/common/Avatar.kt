@@ -20,7 +20,7 @@ import kotlin.random.Random
  * @since 15.05.2022
  */
 @Composable
-fun Avatar(text: String, online: Boolean) {
+fun Avatar(text: String, online: Boolean?) {
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
 
     val size = 50.dp
@@ -38,7 +38,7 @@ fun Avatar(text: String, online: Boolean) {
             )
         }
 
-        if (online) {
+        if (online == true) {
             Box(
                 modifier = Modifier.size(15.dp).clip(RoundedCornerShape(100.dp)).align(Alignment.BottomEnd)
                     .background(Color.Green)

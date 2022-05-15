@@ -60,7 +60,8 @@ fun ConversationItem(
                 val avaText =
                     if (companion != null) "${companion.firstName.first()}${companion.lastName.first()}" else conversation.name.first()
                         .toString()
-                Avatar(avaText, true)
+
+                Avatar(avaText, mutableStateOf(companion?.online).value)
 
                 DropdownMenu(
                     expanded = expanded.value,
