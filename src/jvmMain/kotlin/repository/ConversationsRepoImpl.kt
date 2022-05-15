@@ -48,13 +48,13 @@ class ConversationsRepoImpl : ConversationsRepo {
         return selected
     }
 
-    override fun put(name:String, ownerId:Long?, memberUsers: List<User>, isPrivate:Boolean, companionId: Long?) {
+    override fun put(name:String, ownerId:Long?, memberUsers: List<User>, companionId: Long?) {
         HttpService.coroutineScope.launch {
             val memberIds = mutableListOf<Long>()
             for (user in memberUsers) {
                 memberIds.add(user.id)
             }
-            val conversationDto = ConversationDto(name, ownerId, memberIds, isPrivate, companionId)
+            val conversationDto = ConversationDto(name, ownerId, memberIds, companionId)
             val response = HttpService.client.put("${HttpService.host}/conversations") {
                 contentType(ContentType.Application.Json)
                 setBody(conversationDto)

@@ -5,6 +5,5 @@ data class ConversationDto(
     val name: String,
     val ownerId: Long?,
     val memberIds: List<Long>,
-    val isPrivate: Boolean,
     val companionId: Long?
 )

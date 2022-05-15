@@ -101,7 +101,7 @@ fun ConversationItem(conversation: Conversation, repo: ConversationsRepo, modifi
                     color = Color.White
                 )
 
-                if (conversation.isPrivate) {
+                if (conversation.companionId != null) {
                     Icon(
                         Icons.Default.Lock,
                         contentDescription = "",

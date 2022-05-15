@@ -150,7 +150,6 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                                         conversationName,
                                         usersRepo.current().value?.id,
                                         selectedList.toList(),
-                                        false,
                                         null
                                     )
                                     Window.hide()

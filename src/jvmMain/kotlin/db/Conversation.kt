@@ -13,7 +13,6 @@ data class Conversation(
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val updateTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val ownerId: Long,
-    val isPrivate: Boolean,
     val companionId: Long? = null,
     val membersCount: Int
 )
