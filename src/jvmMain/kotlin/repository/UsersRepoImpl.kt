@@ -30,7 +30,6 @@ class UsersRepoImpl : UsersRepo {
             val response = HttpService.client.get("${HttpService.host}/users/$id")
             if (response.status == HttpStatusCode.OK) {
                 val userResponse = response.body<User>()
-                println("Set current user: $userResponse")
                 setCurrentUser(userResponse)
             }
         }

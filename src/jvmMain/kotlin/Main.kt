@@ -72,6 +72,10 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
 
         if (usersRepo.current().value == null) {
             Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
+        } else {
+            if (Window.state.value == WindowState(WindowType.SELECT_CURRENT_USER)) {
+                Window.state.value = WindowState(WindowType.HIDE)
+            }
         }
 
         when (Window.state.value.type) {
