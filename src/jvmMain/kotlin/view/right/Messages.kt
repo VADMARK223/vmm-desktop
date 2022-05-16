@@ -37,10 +37,10 @@ fun Messages(
     val conversation = conversationsRepo.selected()
     println("MESSAGES REDRAW")
 
-//    if (conversation.value != null) {
-//        val conversationId = conversation.value?.id as Long
-//        messagesRepo.messagesByConversationId(conversationId)
-//    }
+    if (conversation.value != null) {
+        val conversationId = conversation.value?.id as Long
+        messagesRepo.messagesByConversationId(conversationId)
+    }
 
     val messages = messagesRepo.all()
 

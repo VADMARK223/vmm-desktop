@@ -16,7 +16,7 @@ import service.HttpService
 class MessagesRepoImpl : MessagesRepo {
     private val messages = mutableStateListOf<Message>()
 
-    init {
+    /*init {
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/messages")
             if (response.status == HttpStatusCode.OK) {
@@ -25,7 +25,7 @@ class MessagesRepoImpl : MessagesRepo {
                 messages.addAll(responseMessages)
             }
         }
-    }
+    }*/
 
     override fun all(): List<Message> {
         return messages
