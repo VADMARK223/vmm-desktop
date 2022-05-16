@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import repository.ConversationsRepo
+import repository.MessagesRepo
 import repository.UsersRepo
 import view.left.item.ConversationItem
 
@@ -24,7 +25,7 @@ import view.left.item.ConversationItem
  * @since 29.04.2022
  */
 @Composable
-fun Conversations(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
+fun Conversations(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo: MessagesRepo) {
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
 
@@ -47,10 +48,11 @@ fun Conversations(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
 
 //                if (conversation.companionId == null) {
                     ConversationItem(
+                        modifier = modifier,
                         conversation = conversation,
                         conversationsRepo = conversationsRepo,
-                        modifier = modifier,
-                        usersRepo = usersRepo
+                        usersRepo = usersRepo,
+                        messagesRepo = messagesRepo
                     )
 //                } else {
 //                    val companion: User? = usersRepo.getById(conversation.companionId)

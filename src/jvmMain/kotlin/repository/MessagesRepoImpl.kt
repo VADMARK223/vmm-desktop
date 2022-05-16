@@ -16,6 +16,17 @@ import service.HttpService
 class MessagesRepoImpl : MessagesRepo {
     private val messages = mutableStateListOf<Message>()
 
+    init {
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.get("${HttpService.host}/messages")
+            if (response.status == HttpStatusCode.OK) {
+                println("OK")
+                val responseMessages = response.body<List<Message>>()
+                messages.addAll(responseMessages)
+            }
+        }
+    }
+
     override fun all(): List<Message> {
         return messages
     }
@@ -70,6 +81,16 @@ class MessagesRepoImpl : MessagesRepo {
                 messages.add(newMessage)
             }
         }
+    }
+
+    override fun getById(messageId: Long?): Message? {
+        for (message in messages) {
+            if (messageId == message.id) {
+                return message
+            }
+        }
+
+        return null
     }
 }
 

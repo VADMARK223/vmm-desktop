@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
+import repository.MessagesRepo
 import repository.UsersRepo
 
 /**
@@ -15,13 +16,15 @@ import repository.UsersRepo
 @Composable
 fun Left(
     conversationsRepo: ConversationsRepo,
-    usersRepo: UsersRepo
+    usersRepo: UsersRepo,
+    messagesRepo: MessagesRepo
 ) {
     Column(modifier = Modifier.width(450.dp)) {
         Top(usersRepo)
         Conversations(
             conversationsRepo = conversationsRepo,
-            usersRepo = usersRepo
+            usersRepo = usersRepo,
+            messagesRepo = messagesRepo
         )
     }
 }

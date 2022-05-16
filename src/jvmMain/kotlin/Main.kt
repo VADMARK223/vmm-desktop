@@ -37,18 +37,16 @@ import view.window.WindowState
 
 @Composable
 @Preview
-fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
+fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo: MessagesRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
-    val messagesRepo = MessagesRepoImpl()
-
-//    println("conversationsRepo.selected().value: " + conversationsRepo.selected().value)
 
     MaterialTheme(colors = darkThemeColors) {
         println("COMMON REDRAW")
         Row {
             Left(
                 conversationsRepo = conversationsRepo,
-                usersRepo = usersRepo
+                usersRepo = usersRepo,
+                messagesRepo = messagesRepo
             )
             Column(
                 modifier = Modifier
@@ -95,6 +93,7 @@ suspend fun main() = coroutineScope {
     HttpService.coroutineScope = this
     val conversationsRepo = ConversationsRepoImpl()
     val usersRepo = UsersRepoImpl()
+    val messagesRepo = MessagesRepoImpl()
 
     usersRepo.addListener { userId ->
         println("User loaded: $userId.")
@@ -132,7 +131,7 @@ suspend fun main() = coroutineScope {
             "Vadmark`s messenger",
             icon = icon
         ) {
-            App(conversationsRepo, usersRepo)
+            App(conversationsRepo, usersRepo, messagesRepo)
         }
     }
 }

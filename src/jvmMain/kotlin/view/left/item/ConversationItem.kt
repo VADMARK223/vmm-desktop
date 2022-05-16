@@ -20,6 +20,7 @@ import db.Conversation
 import kotlinx.datetime.toJavaLocalDateTime
 import model.User
 import repository.ConversationsRepo
+import repository.MessagesRepo
 import repository.UsersRepo
 import view.common.Avatar
 import java.awt.event.MouseEvent
@@ -32,16 +33,19 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ConversationItem(
+    modifier: Modifier,
     conversation: Conversation,
     conversationsRepo: ConversationsRepo,
-    modifier: Modifier,
-    usersRepo: UsersRepo
+    usersRepo: UsersRepo,
+    messagesRepo: MessagesRepo
 ) {
     println("CONVERSATION ITEM REDRAW")
     val expanded = remember { mutableStateOf(false) }
-    val companion: User? =  usersRepo.getById(conversation.companionId)
+    val companion: User? = usersRepo.getById(conversation.companionId)
     val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
+    val message = messagesRepo.getById(conversation.messageId)
+    println("Message: $message")
 
     Box(
         modifier = modifier,
