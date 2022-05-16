@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
  */
 @Composable
 fun Search(state: MutableState<TextFieldValue>) {
+    println("SEARCH REDRAW")
     TextField(
         value = state.value,
         onValueChange = {

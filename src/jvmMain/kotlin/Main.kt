@@ -70,10 +70,6 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             }
         }
 
-        /*if (conversationsRepo.selected().value != null) {
-            messagesRepo.messagesByConversationId(conversationsRepo.selected().value?.id as Long)
-        }*/
-
         if (usersRepo.current().value == null) {
             Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
         }

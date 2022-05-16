@@ -41,19 +41,26 @@ class UsersRepoImpl : UsersRepo {
     }
 
     override fun requestAll(): List<User> {
+        println("Request all users.")
         users.clear()
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users")
             if (response.status == HttpStatusCode.OK) {
                 val usersResponse = response.body<List<User>>()
-                for (user in usersResponse) {
-                    if (user.id != current.value?.id) {
-                        users.add(user)
-                    }
-                }
+//                for (user in usersResponse) {
+//                    if (user.id != current.value?.id) {
+//                        users.add(user)
+//                    }
+//                }
+
+                users.addAll(usersResponse)
             }
         }
 
+        return users
+    }
+
+    override fun all(): List<User> {
         return users
     }
 

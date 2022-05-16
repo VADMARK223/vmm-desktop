@@ -31,8 +31,11 @@ import java.util.*
  */
 @Composable
 fun SelectCurrentUser(usersRepo: UsersRepo) {
+    println("SELECTED CURRENT USER REDRAW")
+
     val interactionSource = remember { MutableInteractionSource() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
+    val allUsers = remember { usersRepo.all() }
 
     Box(
         modifier = Modifier
@@ -63,18 +66,17 @@ fun SelectCurrentUser(usersRepo: UsersRepo) {
                 Search(searchState)
 
                 Box(modifier = Modifier.height(300.dp)) {
-                    val users = usersRepo.requestAll()
                     var filteredUsers: List<User>
                     LazyColumn(
                         state = usersLazyListState
                     ) {
                         val searchedText = searchState.value.text
                         filteredUsers = if (searchedText.isEmpty()) {
-                            users
+                            allUsers
                         } else {
                             val resultList = ArrayList<User>()
                             val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
-                            for (user in users) {
+                            for (user in allUsers) {
                                 if (user.firstName.lowercase(Locale.getDefault()).contains(searchedTextLowercase) ||
                                     user.lastName.lowercase(Locale.getDefault()).contains(searchedTextLowercase)
                                 ) {
