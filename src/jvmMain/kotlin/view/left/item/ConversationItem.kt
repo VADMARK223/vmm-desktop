@@ -39,13 +39,13 @@ fun ConversationItem(
     usersRepo: UsersRepo,
     messagesRepo: MessagesRepo
 ) {
-    println("CONVERSATION ITEM REDRAW")
+//    println("CONVERSATION ITEM REDRAW")
     val expanded = remember { mutableStateOf(false) }
     val companion: User? = usersRepo.getById(conversation.companionId)
     val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
     val message = messagesRepo.getById(conversation.messageId)
-    println("Message: $message")
+//    println("Message: $message")
 
     Box(
         modifier = modifier,
