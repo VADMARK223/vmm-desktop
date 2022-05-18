@@ -36,7 +36,7 @@ fun InputMessage(
     mainOutput: MutableState<TextFieldValue>,
     usersRepo: UsersRepo
 ) {
-    println("INPUT MESSAGE REDRAW")
+//    println("INPUT MESSAGE REDRAW")
     val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(

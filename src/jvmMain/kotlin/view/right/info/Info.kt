@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
-    println("INFO REDRAW")
+//    println("INFO REDRAW")
     val expanded = remember { mutableStateOf(false) }
     val menuItems = InfoAction.values()
 

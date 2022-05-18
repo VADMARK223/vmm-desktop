@@ -35,7 +35,7 @@ fun Messages(
     conversationsRepo: ConversationsRepo
 ) {
     val conversation = conversationsRepo.selected()
-    println("MESSAGES REDRAW")
+//    println("MESSAGES REDRAW")
 
     if (conversation.value != null) {
         val conversationId = conversation.value?.id as Long

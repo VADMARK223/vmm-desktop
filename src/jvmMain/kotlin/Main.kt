@@ -41,7 +41,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     MaterialTheme(colors = darkThemeColors) {
-        println("COMMON REDRAW")
+//        println("COMMON REDRAW")
         Row {
             Left(
                 conversationsRepo = conversationsRepo,

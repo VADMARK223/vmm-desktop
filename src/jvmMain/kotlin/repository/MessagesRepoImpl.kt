@@ -14,18 +14,8 @@ import service.HttpService
  * @since 30.04.2022
  */
 class MessagesRepoImpl : MessagesRepo {
+    private val conversationByMessages = mutableMapOf<Long, Collection<Message>>()
     private val messages = mutableStateListOf<Message>()
-
-    /*init {
-        HttpService.coroutineScope.launch {
-            val response = HttpService.client.get("${HttpService.host}/messages")
-            if (response.status == HttpStatusCode.OK) {
-                println("OK")
-                val responseMessages = response.body<List<Message>>()
-                messages.addAll(responseMessages)
-            }
-        }
-    }*/
 
     override fun all(): List<Message> {
         return messages
@@ -45,25 +35,18 @@ class MessagesRepoImpl : MessagesRepo {
 
     override fun messagesByConversationId(id: Long) {
         messages.clear()
-        HttpService.coroutineScope.launch {
-            val responseMessages =
-                HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<Message>>()
-            messages.addAll(responseMessages)
+
+        if (conversationByMessages.containsKey(id)) {
+            conversationByMessages[id]?.let { messages.addAll(it) }
+        } else {
+            HttpService.coroutineScope.launch {
+                val responseMessages =
+                    HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<Message>>()
+                messages.addAll(responseMessages)
+                conversationByMessages[id] = responseMessages
+            }
         }
     }
-
-    /*override fun getMessagesByConversationId(id: Long): List<Message> {
-        println("Request messages by conversation: "  + id)
-        val result = mutableStateListOf<Message>()
-        HttpService.coroutineScope.launch {
-            val responseMessages =
-                HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<Message>>()
-            println("responseMessages: ${responseMessages.size}")
-            result.addAll(responseMessages)
-        }
-
-        return result
-    }*/
 
     override fun addMessage(text: String, conversationId: Long?, currentUserId: Long?) {
         val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)

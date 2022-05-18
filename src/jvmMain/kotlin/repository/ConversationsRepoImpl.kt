@@ -32,7 +32,7 @@ class ConversationsRepoImpl : ConversationsRepo {
             try {
                 if (response.status == HttpStatusCode.OK) {
                     val responseConversations = response.body<List<Conversation>>()
-                    println("responseConversations:$responseConversations")
+//                    println("responseConversations: $responseConversations")
                     conversations.addAll(responseConversations)
                     selectedFirst()
                 } else {
