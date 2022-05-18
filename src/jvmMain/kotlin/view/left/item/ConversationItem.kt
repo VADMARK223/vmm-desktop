@@ -99,36 +99,48 @@ fun ConversationItem(
                 }
             }
 
-            Row {
-                val itemText =
-                    if (companion != null) companion.firstName + " " + companion.lastName else conversation.name
-                Text(
-                    text = itemText,
-                    style = MaterialTheme.typography.h6,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.White
-                )
+            Column {
+                Row {
+                    val itemText =
+                        if (companion != null) companion.firstName + " " + companion.lastName else conversation.name
+                    Text(
+                        text = itemText,
+                        style = MaterialTheme.typography.h6,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color.White
+                    )
 
-                if (conversation.companionId != null) {
-                    Icon(
-                        Icons.Default.Lock,
-                        contentDescription = "",
-                        tint = Color.White
+                    if (conversation.companionId != null) {
+                        Icon(
+                            Icons.Default.Lock,
+                            contentDescription = "",
+                            tint = Color.White
+                        )
+                    }
+
+                    Spacer(Modifier.weight(1F))
+
+                    val formatter = DateTimeFormatter
+                        .ofPattern("hh:mm:ss")
+                    val updateTimeText = formatter.format(conversation.updateTime.toJavaLocalDateTime())
+
+                    Text(
+                        text = updateTimeText,
+                        style = MaterialTheme.typography.overline,
+                        color = Color.Gray
                     )
                 }
+
+                Text(
+                    text = if (conversation.messageText !=null) "Last message: ${conversation.messageText}" else "",
+                    style = MaterialTheme.typography.overline,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Gray
+                )
             }
 
-            Spacer(Modifier.weight(1F))
-
-            val formatter = DateTimeFormatter
-                .ofPattern("hh:mm:ss")
-            val updateTimeText = formatter.format(conversation.updateTime.toJavaLocalDateTime())
-
-            Text(
-                text = updateTimeText,
-                color = Color.White
-            )
         }
     }
 }

@@ -15,5 +15,6 @@ data class Conversation(
     val ownerId: Long,
     val companionId: Long? = null,
     val messageId: Long? = null,
+    val messageText: String? = null,
     val membersCount: Int
 )
