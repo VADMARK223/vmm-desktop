@@ -5,6 +5,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
+import model.User
 
 @Serializable
 data class Conversation(
@@ -15,5 +16,6 @@ data class Conversation(
     val ownerId: Long,
     val companionId: Long? = null,
     val membersCount: Int,
-    val lastMessage: Message? = null
+    val lastMessage: Message? = null,
+    var companion: User? = null
 )

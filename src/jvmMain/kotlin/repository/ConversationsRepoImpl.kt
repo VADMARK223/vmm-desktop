@@ -49,7 +49,7 @@ class ConversationsRepoImpl : ConversationsRepo {
         return selected
     }
 
-    override fun put(name:String, ownerId:Long?, memberUsers: List<User>, companionId: Long?) {
+    override fun put(name: String, ownerId: Long?, memberUsers: List<User>, companionId: Long?) {
         HttpService.coroutineScope.launch {
             val memberIds = mutableListOf<Long>()
             for (user in memberUsers) {
@@ -93,6 +93,16 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
 
         selectedFirst()
+    }
+
+    override fun updateCompanion(entity: User?) {
+        for (conversation in conversations) {
+            if (conversation.companion != null) {
+                if (conversation.companion!!.id == entity?.id) {
+                    conversation.companion = entity
+                }
+            }
+        }
     }
 
     /*override fun remove(conversationId: Long) {

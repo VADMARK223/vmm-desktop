@@ -98,7 +98,7 @@ suspend fun main() = coroutineScope {
         println("User loaded: $userId.")
         conversationsRepo.updateByUserId(userId)
         launch {
-            initUsersWebSocket(usersRepo, userId)
+            initUsersWebSocket(usersRepo, conversationsRepo, userId)
         }
 
         launch {
@@ -135,7 +135,7 @@ suspend fun main() = coroutineScope {
     }
 }
 
-suspend fun initUsersWebSocket(usersRepo: UsersRepo, userId: Long) {
+suspend fun initUsersWebSocket(usersRepo: UsersRepo, conversationsRepo: ConversationsRepo, userId: Long) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -159,6 +159,7 @@ suspend fun initUsersWebSocket(usersRepo: UsersRepo, userId: Long) {
                 }
 
                 if (userNotification.type == ChangeType.UPDATE) {
+                    conversationsRepo.updateCompanion(userNotification.entity)
                     usersRepo.update(userNotification.entity)
                 }
 

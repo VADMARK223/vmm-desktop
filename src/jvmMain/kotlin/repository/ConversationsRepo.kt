@@ -17,5 +17,5 @@ interface ConversationsRepo {
 
     fun delete(conversation: Conversation)
     fun removeAndSelectFirst(conversationId: Long)
-//    fun remove(conversationId: Long)
+    fun updateCompanion(entity: User?)
 }
