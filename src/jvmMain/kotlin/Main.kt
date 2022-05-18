@@ -45,8 +45,7 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo
         Row {
             Left(
                 conversationsRepo = conversationsRepo,
-                usersRepo = usersRepo,
-                messagesRepo = messagesRepo
+                usersRepo = usersRepo
             )
             Column(
                 modifier = Modifier

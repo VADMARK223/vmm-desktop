@@ -16,15 +16,13 @@ import repository.UsersRepo
 @Composable
 fun Left(
     conversationsRepo: ConversationsRepo,
-    usersRepo: UsersRepo,
-    messagesRepo: MessagesRepo
+    usersRepo: UsersRepo
 ) {
     Column(modifier = Modifier.width(450.dp)) {
         Top(usersRepo)
         Conversations(
             conversationsRepo = conversationsRepo,
-            usersRepo = usersRepo,
-            messagesRepo = messagesRepo
+            usersRepo = usersRepo
         )
     }
 }

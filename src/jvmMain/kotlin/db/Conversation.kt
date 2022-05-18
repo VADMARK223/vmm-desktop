@@ -14,7 +14,6 @@ data class Conversation(
     val updateTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val ownerId: Long,
     val companionId: Long? = null,
-    val messageId: Long? = null,
-    val messageText: String? = null,
-    val membersCount: Int
+    val membersCount: Int,
+    val lastMessage: Message? = null
 )
