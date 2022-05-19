@@ -199,10 +199,10 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, mes
                     }
                     ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
                     ChangeType.ADD_MESSAGE -> {
-                        println("Need add message: ${conversationNotification.data}")
+                        println("Need add message: ${conversationNotification.messageText}")
 
-                        conversationsRepo.addMessage(conversationNotification.data)
-                        messagesRepo.addMessageNew(conversationNotification.data)
+                        conversationsRepo.addMessage(conversationNotification.messageText)
+                        messagesRepo.addMessageNew(conversationNotification.messageText)
                     }
                     else -> {
                         println("Unknown type ${conversationNotification.type}.")

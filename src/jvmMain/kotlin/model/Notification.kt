@@ -1,6 +1,7 @@
 package model
 
 import db.Conversation
+import db.Message
 
 /**
  * @author Markitanov Vadim
@@ -9,7 +10,13 @@ import db.Conversation
 enum class ChangeType { CREATE, UPDATE, DELETE, ADD_MESSAGE }
 
 @kotlinx.serialization.Serializable
-data class Notification<T>(val type: ChangeType, val id: Long, val entity: T, val data: String)
+data class Notification<T>(
+    val type: ChangeType,
+    val id: Long,
+    val entity: T,
+    val messageText: String
+//    val message: Message
+)
 
 typealias ConversationNotification = Notification<Conversation?>
 typealias UserNotification = Notification<User?>
