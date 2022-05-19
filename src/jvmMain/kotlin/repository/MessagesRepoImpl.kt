@@ -57,12 +57,12 @@ class MessagesRepoImpl : MessagesRepo {
                 contentType(ContentType.Application.Json)
                 setBody(messageDto)
             }
-            println("Response: $response")
+            /*println("Response: $response")
             if (response.status == HttpStatusCode.OK) {
                 val newMessage = response.body<Message>()
                 println("New message: $newMessage")
                 messages.add(newMessage)
-            }
+            }*/
         }
     }
 
@@ -74,6 +74,12 @@ class MessagesRepoImpl : MessagesRepo {
         }
 
         return null
+    }
+
+    override fun addMessageNew(data: String) {
+        println("ADD222")
+//        println("ADD MESSAGE: $data")
+        messages.add(Message(1, data, 1L))
     }
 }
 

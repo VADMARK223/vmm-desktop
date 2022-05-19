@@ -102,7 +102,7 @@ suspend fun main() = coroutineScope {
         }
 
         launch {
-            initConversationsWebSocket(conversationsRepo, userId)
+            initConversationsWebSocket(conversationsRepo, messagesRepo, userId)
         }
     }
 
@@ -170,7 +170,7 @@ suspend fun initUsersWebSocket(usersRepo: UsersRepo, conversationsRepo: Conversa
     client.close()
 }
 
-suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, userId: Long) {
+suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, messagesRepo: MessagesRepo, userId: Long) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -198,6 +198,12 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, use
                         conversationsRepo.addAndSelect(conversationNotification.entity)
                     }
                     ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
+                    ChangeType.ADD_MESSAGE -> {
+                        println("Need add message: ${conversationNotification.data}")
+
+                        conversationsRepo.addMessage(conversationNotification.data)
+                        messagesRepo.addMessageNew(conversationNotification.data)
+                    }
                     else -> {
                         println("Unknown type ${conversationNotification.type}.")
                     }

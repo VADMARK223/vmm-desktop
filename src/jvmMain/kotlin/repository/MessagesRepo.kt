@@ -13,4 +13,5 @@ interface MessagesRepo {
 //    fun getMessagesByConversationId(id: Long): List<Message>
     fun addMessage(text: String, conversationId: Long?, currentUserId: Long?)
     fun getById(messageId: Long?): Message?
+    fun addMessageNew(data: String)
 }

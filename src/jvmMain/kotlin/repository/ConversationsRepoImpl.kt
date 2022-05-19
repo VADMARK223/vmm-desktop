@@ -105,6 +105,10 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
+    override fun addMessage(data: String) {
+        println("ADD1")
+    }
+
     /*override fun remove(conversationId: Long) {
         HttpService.coroutineScope.launch {
             val response = HttpService.client.delete("${HttpService.host}/conversations/${conversationId}")
