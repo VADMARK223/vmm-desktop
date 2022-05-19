@@ -41,7 +41,7 @@ fun ConversationItem(
 //    println("CONVERSATION ITEM REDRAW")
     val expanded = remember { mutableStateOf(false) }
     val companion: User? = usersRepo.getById(conversation.companionId)
-    val companionNew = conversation.companion
+//    val companionNew = conversation.companion
     val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
 
@@ -99,11 +99,11 @@ fun ConversationItem(
                 }
             }
 
-            val avaTextName1 =
+            /*val avaTextName1 =
                 if (companionNew != null) "${companionNew.firstName.first()}${companionNew.lastName.first()}" else conversation.name.first()
                     .toString()
 
-            Avatar(avaTextName1, mutableStateOf(companionNew?.online).value)
+            Avatar(avaTextName1, mutableStateOf(companionNew?.online).value)*/
 
             Column {
                 Row {
