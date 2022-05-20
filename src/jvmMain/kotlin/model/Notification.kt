@@ -14,8 +14,7 @@ data class Notification<T>(
     val type: ChangeType,
     val id: Long,
     val entity: T,
-    val messageText: String
-//    val message: Message
+    val message: Message? = null
 )
 
 typealias ConversationNotification = Notification<Conversation?>

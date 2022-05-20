@@ -189,24 +189,29 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, mes
                 val incomingMessage = message.readText()
                 println("Incoming from conversations: $incomingMessage")
 
-                val conversationNotification = withContext(Dispatchers.IO) {
-                    defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
+                try {
+                    val conversationNotification = defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
+
+//                val conversationNotification = withContext(Dispatchers.IO) {
+//                    defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
+//                }
+
+                    when (conversationNotification.type) {
+                        ChangeType.CREATE -> {
+                            conversationsRepo.addAndSelect(conversationNotification.entity)
+                        }
+                        ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
+                        ChangeType.ADD_MESSAGE -> {
+                            conversationsRepo.addMessage(conversationNotification.message)
+                            messagesRepo.addMessage(conversationNotification.message)
+                        }
+                        else -> {
+                            println("Unknown type ${conversationNotification.type}.")
+                        }
+                    }
                 }
-
-                when (conversationNotification.type) {
-                    ChangeType.CREATE -> {
-                        conversationsRepo.addAndSelect(conversationNotification.entity)
-                    }
-                    ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
-                    ChangeType.ADD_MESSAGE -> {
-                        println("Need add message: ${conversationNotification.messageText}")
-
-                        conversationsRepo.addMessage(conversationNotification.messageText)
-                        messagesRepo.addMessageNew(conversationNotification.messageText)
-                    }
-                    else -> {
-                        println("Unknown type ${conversationNotification.type}.")
-                    }
+                catch (e:Exception) {
+                    println("Error: " + e.localizedMessage)
                 }
             }
         }

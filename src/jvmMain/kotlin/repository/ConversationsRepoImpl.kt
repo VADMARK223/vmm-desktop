@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import db.Conversation
+import db.Message
 import dto.ConversationDto
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -105,8 +106,11 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
-    override fun addMessage(data: String) {
+    override fun addMessage(message: Message?) {
         println("ADD1")
+        if (message != null) {
+
+        }
     }
 
     /*override fun remove(conversationId: Long) {

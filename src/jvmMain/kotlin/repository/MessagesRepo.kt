@@ -11,7 +11,7 @@ interface MessagesRepo {
     fun delete(message: Message)
     fun messagesByConversationId(id: Long)
 //    fun getMessagesByConversationId(id: Long): List<Message>
-    fun addMessage(text: String, conversationId: Long?, currentUserId: Long?)
+    fun putMessage(text: String, conversationId: Long?, currentUserId: Long?)
     fun getById(messageId: Long?): Message?
-    fun addMessageNew(data: String)
+    fun addMessage(message: Message?)
 }

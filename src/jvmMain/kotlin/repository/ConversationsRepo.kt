@@ -2,6 +2,7 @@ package repository
 
 import androidx.compose.runtime.MutableState
 import db.Conversation
+import db.Message
 import model.User
 
 /**
@@ -18,5 +19,5 @@ interface ConversationsRepo {
     fun delete(conversation: Conversation)
     fun removeAndSelectFirst(conversationId: Long)
     fun updateCompanion(entity: User?)
-    fun addMessage(data: String)
+    fun addMessage(message: Message?)
 }

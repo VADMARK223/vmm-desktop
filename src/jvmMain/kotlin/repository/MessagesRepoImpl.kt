@@ -14,7 +14,7 @@ import service.HttpService
  * @since 30.04.2022
  */
 class MessagesRepoImpl : MessagesRepo {
-    private val conversationByMessages = mutableMapOf<Long, Collection<Message>>()
+    private val conversationByMessages = mutableMapOf<Long, MutableList<Message>>()
     private val messages = mutableStateListOf<Message>()
 
     override fun all(): List<Message> {
@@ -41,28 +41,22 @@ class MessagesRepoImpl : MessagesRepo {
         } else {
             HttpService.coroutineScope.launch {
                 val responseMessages =
-                    HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<List<Message>>()
+                    HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<MutableList<Message>>()
                 messages.addAll(responseMessages)
                 conversationByMessages[id] = responseMessages
             }
         }
     }
 
-    override fun addMessage(text: String, conversationId: Long?, currentUserId: Long?) {
+    override fun putMessage(text: String, conversationId: Long?, currentUserId: Long?) {
         val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)
-        println("Add message: $messageDto")
+        println("Put message: $messageDto")
 
         HttpService.coroutineScope.launch {
-            val response = HttpService.client.put("${HttpService.host}/messages") {
+            HttpService.client.put("${HttpService.host}/messages") {
                 contentType(ContentType.Application.Json)
                 setBody(messageDto)
             }
-            /*println("Response: $response")
-            if (response.status == HttpStatusCode.OK) {
-                val newMessage = response.body<Message>()
-                println("New message: $newMessage")
-                messages.add(newMessage)
-            }*/
         }
     }
 
@@ -76,10 +70,13 @@ class MessagesRepoImpl : MessagesRepo {
         return null
     }
 
-    override fun addMessageNew(data: String) {
-        println("ADD222")
-//        println("ADD MESSAGE: $data")
-        messages.add(Message(1, data, 1L))
+    override fun addMessage(message: Message?) {
+        if (message != null) {
+            if (conversationByMessages.containsKey(message.conversationId)) {
+                conversationByMessages[message.conversationId]?.add(message)
+            }
+            messages.add(message)
+        }
     }
 }
 
