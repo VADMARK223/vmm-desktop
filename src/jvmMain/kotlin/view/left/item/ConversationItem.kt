@@ -20,7 +20,6 @@ import db.Conversation
 import kotlinx.datetime.toJavaLocalDateTime
 import model.User
 import repository.ConversationsRepo
-import repository.MessagesRepo
 import repository.UsersRepo
 import view.common.Avatar
 import java.awt.event.MouseEvent
@@ -139,7 +138,7 @@ fun ConversationItem(
 
                 if (conversation.lastMessage != null) {
                     Text(
-                        text = "Last message (${conversation.lastMessage.id}): ${conversation.lastMessage.text}",
+                        text = "Last message (${conversation.lastMessage?.id}): ${conversation.lastMessage?.text}",
                         style = MaterialTheme.typography.overline,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

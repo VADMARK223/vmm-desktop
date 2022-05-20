@@ -16,6 +16,6 @@ data class Conversation(
     val ownerId: Long,
     val companionId: Long? = null,
     val membersCount: Int?=null,
-    val lastMessage: Message? = null,
+    var lastMessage: Message? = null,
     var companion: User? = null
 )
