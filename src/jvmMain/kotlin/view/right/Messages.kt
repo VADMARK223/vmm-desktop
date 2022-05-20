@@ -42,7 +42,7 @@ fun Messages(
         messagesRepo.messagesByConversationId(conversationId)
     }
 
-    val messages = messagesRepo.all()
+    val messages = messagesRepo.currentMessages()
 
     Box(modifier = modifier) {
         val lazyListState = rememberLazyListState()

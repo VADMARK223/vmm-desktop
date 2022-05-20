@@ -7,11 +7,11 @@ import db.Message
  * @since 30.04.2022
  */
 interface MessagesRepo {
-    fun all(): List<Message>
-    fun delete(message: Message)
+    fun currentMessages(): List<Message>
+    fun put(text: String, conversationId: Long?, currentUserId: Long?)
+    fun delete(id: Long)
     fun messagesByConversationId(id: Long)
-//    fun getMessagesByConversationId(id: Long): List<Message>
-    fun putMessage(text: String, conversationId: Long?, currentUserId: Long?)
     fun getById(messageId: Long?): Message?
     fun addMessage(message: Message?)
+    fun deleteMessage(message: Message?)
 }

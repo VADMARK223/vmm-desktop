@@ -17,19 +17,31 @@ class MessagesRepoImpl : MessagesRepo {
     private val conversationByMessages = mutableMapOf<Long, MutableList<Message>>()
     private val messages = mutableStateListOf<Message>()
 
-    override fun all(): List<Message> {
+    override fun currentMessages(): List<Message> {
         return messages
     }
 
-    override fun delete(message: Message) {
+    override fun put(text: String, conversationId: Long?, currentUserId: Long?) {
+        val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)
+        println("Put message: $messageDto")
+
         HttpService.coroutineScope.launch {
-            val response = HttpService.client.delete("${HttpService.host}/messages/${message.id}")
-            if (response.status == HttpStatusCode.OK) {
+            HttpService.client.put("${HttpService.host}/messages") {
+                contentType(ContentType.Application.Json)
+                setBody(messageDto)
+            }
+        }
+    }
+
+    override fun delete(id: Long) {
+        HttpService.coroutineScope.launch {
+            /*val response = */HttpService.client.delete("${HttpService.host}/messages/${id}")
+            /*if (response.status == HttpStatusCode.OK) {
                 val success = response.body<Boolean>()
                 if (success) {
                     messages.remove(message)
                 }
-            }
+            }*/
         }
     }
 
@@ -44,18 +56,6 @@ class MessagesRepoImpl : MessagesRepo {
                     HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<MutableList<Message>>()
                 messages.addAll(responseMessages)
                 conversationByMessages[id] = responseMessages
-            }
-        }
-    }
-
-    override fun putMessage(text: String, conversationId: Long?, currentUserId: Long?) {
-        val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)
-        println("Put message: $messageDto")
-
-        HttpService.coroutineScope.launch {
-            HttpService.client.put("${HttpService.host}/messages") {
-                contentType(ContentType.Application.Json)
-                setBody(messageDto)
             }
         }
     }
@@ -76,6 +76,15 @@ class MessagesRepoImpl : MessagesRepo {
                 conversationByMessages[message.conversationId]?.add(message)
             }
             messages.add(message)
+        }
+    }
+
+    override fun deleteMessage(message: Message?) {
+        if (message != null) {
+            if (conversationByMessages.containsKey(message.conversationId)) {
+                conversationByMessages[message.conversationId]?.remove(message)
+            }
+            messages.remove(message)
         }
     }
 }

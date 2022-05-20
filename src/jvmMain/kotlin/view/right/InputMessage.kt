@@ -102,7 +102,7 @@ private fun sendMessage(
     if (mainOutput.value.text.isNotEmpty()) {
         val conversationSelectedId = conversationsRepo.selected().value?.id
         val currentUserId = usersRepo.current().value?.id
-        messagesRepo.putMessage(mainOutput.value.text, conversationSelectedId, currentUserId)
+        messagesRepo.put(mainOutput.value.text, conversationSelectedId, currentUserId)
         mainOutput.value = TextFieldValue("")
     }
 }

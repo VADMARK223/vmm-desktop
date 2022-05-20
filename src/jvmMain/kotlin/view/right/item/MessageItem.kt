@@ -92,7 +92,7 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>, repo
 //                            repo.etidMessage(message)
                         }
                         MessageAction.REMOVE -> {
-                            repo.delete(message)
+                            repo.delete(message.id)
                         }
                     }
 

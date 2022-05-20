@@ -190,11 +190,11 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, mes
                 println("Incoming from conversations: $incomingMessage")
 
                 try {
-                    val conversationNotification = defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
+//                    val conversationNotification = defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
 
-//                val conversationNotification = withContext(Dispatchers.IO) {
-//                    defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
-//                }
+                    val conversationNotification = withContext(Dispatchers.IO) {
+                        defaultMapper.decodeFromString<ConversationNotification>(incomingMessage)
+                    }
 
                     when (conversationNotification.type) {
                         ChangeType.CREATE -> {
@@ -205,12 +205,14 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, mes
                             conversationsRepo.addMessage(conversationNotification.message)
                             messagesRepo.addMessage(conversationNotification.message)
                         }
+                        ChangeType.DELETE_MESSAGE -> {
+                            messagesRepo.deleteMessage(conversationNotification.message)
+                        }
                         else -> {
-                            println("Unknown type ${conversationNotification.type}.")
+                            println("Unknown notification type ${conversationNotification.type}.")
                         }
                     }
-                }
-                catch (e:Exception) {
+                } catch (e: Exception) {
                     println("Error: " + e.localizedMessage)
                 }
             }
