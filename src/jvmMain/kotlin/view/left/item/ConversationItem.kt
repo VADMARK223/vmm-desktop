@@ -41,7 +41,6 @@ fun ConversationItem(
 //    println("CONVERSATION ITEM REDRAW")
     val expanded = remember { mutableStateOf(false) }
     val companion: User? = usersRepo.getById(conversation.companionId)
-//    val companionNew = conversation.companion
     val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
 

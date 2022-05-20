@@ -17,6 +17,9 @@ import kotlinx.datetime.toJavaLocalDateTime
 import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
+import view.window.Window
+import view.window.WindowState
+import view.window.WindowType
 import java.time.format.DateTimeFormatter
 
 /**
@@ -27,10 +30,11 @@ import java.time.format.DateTimeFormatter
 fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
 //    println("INFO REDRAW")
     val expanded = remember { mutableStateOf(false) }
-    val menuItems = InfoAction.values()
-
     val conversation = conversationsRepo.selected()
     val companion: User? = usersRepo.getById(conversation.value?.companionId)
+
+    val (forConversation, forChat) = InfoAction.values().partition { it.isConversation }
+    val menuItems = if (companion != null) forChat else forConversation
 
     if (conversation.value == null) {
         return
@@ -98,12 +102,16 @@ fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                     DropdownMenuItem(onClick = {
                         when (it) {
                             InfoAction.VIEW_PROFILE -> {
-                                println("View pro")
+                                Window.setState(WindowType.VIEW_PROFILE)
                             }
 
-                            InfoAction.EDIT_CONTACT -> {
-                                println("Edit contact.")
+                            InfoAction.VIEW_GROUP_INFO -> {
+                                Window.setState(WindowType.VIEW_GROUP_INFO)
                             }
+
+                            /*InfoAction.EDIT_CONTACT -> {
+                                println("Edit contact.")
+                            }*/
                         }
 
                         expanded.value = false

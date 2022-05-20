@@ -83,6 +83,8 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo
                 val conversationName = Window.state.value.data as String
                 AddMembers(conversationsRepo, usersRepo, conversationName)
             }
+            WindowType.VIEW_PROFILE -> ViewProfile()
+            WindowType.VIEW_GROUP_INFO -> ViewGroupInfo()
             else -> {}
         }
     }
