@@ -110,14 +110,7 @@ class ConversationsRepoImpl : ConversationsRepo {
         if (message != null) {
             for (conversation in conversations) {
                 if (conversation.id == message.conversationId) {
-                    println("Find conversation!")
-                    conversations[conversations.indexOf(conversation)] =
-                        Conversation(
-                            conversation.id,
-                            name = if (conversation.companion == null) conversation.name else "${conversation.companion?.firstName} ${conversation.companion?.lastName}",
-                            ownerId = conversation.ownerId,
-                            lastMessage = message
-                        )
+                    conversations[conversations.indexOf(conversation)] = conversation.copy(lastMessage = message)
                 }
             }
         }
