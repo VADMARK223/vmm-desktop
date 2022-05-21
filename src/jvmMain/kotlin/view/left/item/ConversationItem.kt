@@ -65,8 +65,6 @@ fun ConversationItem(
 
                 Avatar(avaText, mutableStateOf(companion?.online).value)
 
-
-
                 DropdownMenu(
                     expanded = expanded.value,
                     onDismissRequest = {
@@ -96,12 +94,6 @@ fun ConversationItem(
                     }
                 }
             }
-
-            /*val avaTextName1 =
-                if (companionNew != null) "${companionNew.firstName.first()}${companionNew.lastName.first()}" else conversation.name.first()
-                    .toString()
-
-            Avatar(avaTextName1, mutableStateOf(companionNew?.online).value)*/
 
             Column {
                 Row {
@@ -137,8 +129,12 @@ fun ConversationItem(
                 }
 
                 if (conversation.lastMessage != null) {
+                    val lastMessageText =
+                        if (usersRepo.current().value?.id != conversation.lastMessage?.ownerId)
+                            conversation.lastMessage?.text ?: ""
+                        else "You: ${conversation.lastMessage?.text}"
                     Text(
-                        text = "Last message (${conversation.lastMessage?.id}): ${conversation.lastMessage?.text}",
+                        text = lastMessageText,
                         style = MaterialTheme.typography.overline,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
