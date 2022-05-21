@@ -1,14 +1,9 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
@@ -30,9 +25,7 @@ import resources.darkThemeColors
 import service.HttpService
 import util.JsonMapper.defaultMapper
 import view.left.Left
-import view.right.InputMessage
-import view.right.Messages
-import view.right.info.Info
+import view.right.Right
 import view.window.*
 import view.window.WindowState
 
@@ -48,24 +41,12 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo
                 conversationsRepo = conversationsRepo,
                 usersRepo = usersRepo
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                Info(conversationsRepo = conversationsRepo, usersRepo = usersRepo)
-
-                Messages(
-                    Modifier
-                        .weight(1f)
-                        .background(color = Color(14, 22, 33)),
-                    mainOutput,
-                    messagesRepo,
-                    usersRepo,
-                    conversationsRepo
-                )
-
-                InputMessage(messagesRepo, conversationsRepo, mainOutput, usersRepo)
-            }
+            Right(
+                conversationsRepo = conversationsRepo,
+                usersRepo = usersRepo,
+                messagesRepo = messagesRepo,
+                mainOutput = mainOutput
+            )
         }
 
         if (usersRepo.current().value == null) {
