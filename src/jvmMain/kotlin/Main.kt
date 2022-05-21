@@ -9,7 +9,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import model.Rectangle
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -19,6 +18,7 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import model.ChangeType
 import model.ConversationNotification
+import model.Rectangle
 import model.UserNotification
 import repository.*
 import resources.darkThemeColors
@@ -37,16 +37,8 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo
     MaterialTheme(colors = darkThemeColors) {
 //        println("COMMON REDRAW")
         Row {
-            Left(
-                conversationsRepo = conversationsRepo,
-                usersRepo = usersRepo
-            )
-            Right(
-                conversationsRepo = conversationsRepo,
-                usersRepo = usersRepo,
-                messagesRepo = messagesRepo,
-                mainOutput = mainOutput
-            )
+            Left(conversationsRepo, usersRepo)
+            Right(conversationsRepo, usersRepo, messagesRepo, mainOutput)
         }
 
         if (usersRepo.current().value == null) {
@@ -78,7 +70,7 @@ suspend fun main() = coroutineScope {
     val usersRepo = UsersRepoImpl()
     val messagesRepo = MessagesRepoImpl()
 
-    val r = Rectangle(2,3)
+    val r = Rectangle(2, 3)
     println(r.area)
 
     usersRepo.addListener { userId ->
@@ -188,7 +180,10 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, mes
                         ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
                         ChangeType.ADD_MESSAGE -> messagesRepo.addMessage(conversationNotification.message)
                         ChangeType.DELETE_MESSAGE -> messagesRepo.deleteMessage(conversationNotification.message)
-                        ChangeType.UPDATE_LAST_MESSAGE -> conversationsRepo.updateLastMessage(conversationNotification.id, conversationNotification.message)
+                        ChangeType.UPDATE_LAST_MESSAGE -> conversationsRepo.updateLastMessage(
+                            conversationNotification.id,
+                            conversationNotification.message
+                        )
 
                         else -> {
                             println("Unknown notification type ${conversationNotification.type}.")
