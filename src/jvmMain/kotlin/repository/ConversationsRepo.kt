@@ -19,5 +19,5 @@ interface ConversationsRepo {
     fun delete(conversation: Conversation)
     fun removeAndSelectFirst(conversationId: Long)
     fun updateCompanion(entity: User?)
-    fun addMessage(message: Message?)
+    fun updateLastMessage(conversationId: Long, message: Message?)
 }

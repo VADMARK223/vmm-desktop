@@ -106,12 +106,10 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
-    override fun addMessage(message: Message?) {
-        if (message != null) {
-            for (conversation in conversations) {
-                if (conversation.id == message.conversationId) {
-                    conversations[conversations.indexOf(conversation)] = conversation.copy(lastMessage = message)
-                }
+    override fun updateLastMessage(conversationId: Long, message: Message?) {
+        for (conversation in conversations) {
+            if (conversation.id == conversationId) {
+                conversations[conversations.indexOf(conversation)] = conversation.copy(lastMessage = message)
             }
         }
     }

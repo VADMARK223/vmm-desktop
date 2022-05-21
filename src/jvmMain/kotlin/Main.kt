@@ -199,17 +199,12 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, mes
                     }
 
                     when (conversationNotification.type) {
-                        ChangeType.CREATE -> {
-                            conversationsRepo.addAndSelect(conversationNotification.entity)
-                        }
+                        ChangeType.CREATE -> conversationsRepo.addAndSelect(conversationNotification.entity)
                         ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
-                        ChangeType.ADD_MESSAGE -> {
-                            conversationsRepo.addMessage(conversationNotification.message)
-                            messagesRepo.addMessage(conversationNotification.message)
-                        }
-                        ChangeType.DELETE_MESSAGE -> {
-                            messagesRepo.deleteMessage(conversationNotification.message)
-                        }
+                        ChangeType.ADD_MESSAGE -> messagesRepo.addMessage(conversationNotification.message)
+                        ChangeType.DELETE_MESSAGE -> messagesRepo.deleteMessage(conversationNotification.message)
+                        ChangeType.UPDATE_LAST_MESSAGE -> conversationsRepo.updateLastMessage(conversationNotification.id, conversationNotification.message)
+
                         else -> {
                             println("Unknown notification type ${conversationNotification.type}.")
                         }
