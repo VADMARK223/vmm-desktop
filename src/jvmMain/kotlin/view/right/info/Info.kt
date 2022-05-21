@@ -47,9 +47,7 @@ fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             .padding(4.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-            val name = if (companion != null) {
-                companion.firstName + " " + companion.lastName
-            } else conversation.value?.name ?: ""
+            val name = companion?.name ?: (conversation.value?.name ?: "")
 
             Text(
                 text = name,

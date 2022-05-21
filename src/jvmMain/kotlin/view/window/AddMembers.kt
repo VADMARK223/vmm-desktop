@@ -92,9 +92,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conve
                             val resultList = ArrayList<User>()
                             val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
                             for (user in allUsers) {
-                                if (user.firstName.lowercase(Locale.getDefault()).contains(searchedTextLowercase) ||
-                                    user.lastName.lowercase(Locale.getDefault()).contains(searchedTextLowercase)
-                                ) {
+                                if (user.name.lowercase(Locale.getDefault()).contains(searchedTextLowercase)) {
                                     resultList.add(user)
                                 }
                             }

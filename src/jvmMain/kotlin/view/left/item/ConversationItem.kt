@@ -16,8 +16,8 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import model.Conversation
 import kotlinx.datetime.toJavaLocalDateTime
+import model.Conversation
 import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
@@ -62,7 +62,6 @@ fun ConversationItem(
                 val avaText =
                     if (companion != null) "${companion.firstName.first()}${companion.lastName.first()}" else conversation.name.first()
                         .toString()
-
                 Avatar(avaText, mutableStateOf(companion?.online).value)
 
                 DropdownMenu(
@@ -98,7 +97,7 @@ fun ConversationItem(
             Column {
                 Row {
                     val itemText =
-                        if (companion != null) companion.firstName + " " + companion.lastName else conversation.name
+                        companion?.name ?: conversation.name
                     Text(
                         text = itemText,
                         style = MaterialTheme.typography.h6,

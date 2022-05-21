@@ -78,9 +78,7 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                             val resultList = ArrayList<User>()
                             val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
                             for (user in users) {
-                                if (user.firstName.lowercase(Locale.getDefault()).contains(searchedTextLowercase) ||
-                                    user.lastName.lowercase(Locale.getDefault()).contains(searchedTextLowercase)
-                                ) {
+                                if (user.name.lowercase(Locale.getDefault()).contains(searchedTextLowercase)) {
                                     resultList.add(user)
                                 }
                             }
@@ -94,7 +92,7 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                                     .fillMaxWidth()
                                     .clickable {
                                         conversationsRepo.put(
-                                            user.firstName + " " + user.lastName,
+                                            user.name,
                                             usersRepo.current().value?.id,
                                             listOf(user),
                                             user.id

@@ -13,4 +13,7 @@ data class User(
     val lastName: String,
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val online: Boolean = false
-)
+) {
+    val name: String
+        get() = "$firstName $lastName"
+}
