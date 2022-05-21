@@ -1,6 +1,6 @@
 package repository
 
-import db.Message
+import model.Message
 
 /**
  * @author Markitanov Vadim

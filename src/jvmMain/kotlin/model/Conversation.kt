@@ -1,11 +1,10 @@
-package db
+package model
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
-import model.User
 
 @Serializable
 data class Conversation(

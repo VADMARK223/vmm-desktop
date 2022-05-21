@@ -1,8 +1,8 @@
 package repository
 
 import androidx.compose.runtime.MutableState
-import db.Conversation
-import db.Message
+import model.Conversation
+import model.Message
 import model.User
 
 /**

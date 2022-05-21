@@ -22,7 +22,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import db.Message
+import model.Message
 import kotlinx.datetime.toJavaLocalDateTime
 import repository.MessagesRepo
 import repository.UsersRepo

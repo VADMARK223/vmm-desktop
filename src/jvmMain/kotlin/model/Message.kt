@@ -1,4 +1,4 @@
-package db
+package model
 
 import kotlinx.datetime.*
 import kotlinx.serialization.Serializable

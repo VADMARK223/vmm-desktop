@@ -1,7 +1,7 @@
 package repository
 
 import androidx.compose.runtime.mutableStateListOf
-import db.Message
+import model.Message
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*

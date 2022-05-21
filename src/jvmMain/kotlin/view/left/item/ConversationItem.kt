@@ -16,7 +16,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import db.Conversation
+import model.Conversation
 import kotlinx.datetime.toJavaLocalDateTime
 import model.User
 import repository.ConversationsRepo

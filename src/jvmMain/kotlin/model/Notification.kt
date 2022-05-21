@@ -1,8 +1,5 @@
 package model
 
-import db.Conversation
-import db.Message
-
 /**
  * @author Markitanov Vadim
  * @since 06.05.2022

@@ -3,8 +3,8 @@ package repository
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import db.Conversation
-import db.Message
+import model.Conversation
+import model.Message
 import dto.ConversationDto
 import io.ktor.client.call.*
 import io.ktor.client.request.*

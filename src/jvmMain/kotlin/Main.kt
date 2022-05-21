@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import model.Rectangle
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -95,6 +96,9 @@ suspend fun main() = coroutineScope {
     val conversationsRepo = ConversationsRepoImpl()
     val usersRepo = UsersRepoImpl()
     val messagesRepo = MessagesRepoImpl()
+
+    val r = Rectangle(2,3)
+    println(r.area)
 
     usersRepo.addListener { userId ->
         println("User loaded: $userId.")
