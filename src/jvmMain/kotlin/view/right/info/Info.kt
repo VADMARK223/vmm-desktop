@@ -18,7 +18,6 @@ import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
 import view.window.Window
-import view.window.WindowState
 import view.window.WindowType
 import java.time.format.DateTimeFormatter
 
@@ -47,10 +46,8 @@ fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
             .padding(4.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-            val name = companion?.name ?: (conversation.value?.name ?: "")
-
             Text(
-                text = name,
+                text = conversation.value?.visibleName ?: "",
                 style = MaterialTheme.typography.h6,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

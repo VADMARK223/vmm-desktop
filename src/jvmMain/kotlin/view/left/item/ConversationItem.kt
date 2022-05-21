@@ -96,10 +96,8 @@ fun ConversationItem(
 
             Column {
                 Row {
-                    val itemText =
-                        companion?.name ?: conversation.name
                     Text(
-                        text = itemText,
+                        text = conversation.visibleName,
                         style = MaterialTheme.typography.h6,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

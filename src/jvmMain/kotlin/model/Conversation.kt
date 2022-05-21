@@ -14,7 +14,15 @@ data class Conversation(
     val updateTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val ownerId: Long,
     val companionId: Long? = null,
-    val membersCount: Int?=null,
+    val membersCount: Int? = null,
     var lastMessage: Message? = null,
     var companion: User? = null
-)
+) {
+    val visibleName: String
+        get() =
+            if (this.companion == null) {
+                this.name
+            } else {
+                this.companion!!.name
+            }
+}
