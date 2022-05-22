@@ -1,6 +1,7 @@
 package view.left
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -17,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import repository.UsersRepo
+import view.common.Search
 import view.window.Window
 import view.window.WindowState
 import view.window.WindowType
@@ -26,36 +29,26 @@ import view.window.WindowType
  * @since 23.04.2022
  */
 @Composable
-fun Top(/*contactState: MutableState<ContactState>,*/ usersRepo: UsersRepo) {
+fun Top(usersRepo: UsersRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxWidth()) {
-        TextField(
-            value = mainOutput.value,
-            onValueChange = {
-                mainOutput.value = it
-            },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Search") },
-            maxLines = 1,
-            shape = RoundedCornerShape(0.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = Color(23, 33, 43),
-                textColor = Color.White
-            ),
-            leadingIcon = {
-                IconButton(
-                    onClick = {
-                        expanded.value = true
-                    }
-                ) {
-                    Icon(Icons.Filled.Menu, contentDescription = "Menu")
+    Box(Modifier.background(Color(23, 33, 43))) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = {
+                    expanded.value = true
                 }
+            ) {
+                Icon(
+                    Icons.Filled.Menu, contentDescription = "Menu", tint = Color(69, 80, 91)
+                )
             }
-        )
+
+            Search(mainOutput)
+        }
 
         DropdownMenu(
             expanded = expanded.value,
@@ -79,7 +72,6 @@ fun Top(/*contactState: MutableState<ContactState>,*/ usersRepo: UsersRepo) {
             }
 
             DropdownMenuItem(onClick = {
-//                contactState.value = ContactState.CREATE
                 Window.state.value = WindowState(WindowType.NEW_PRIVATE_CONVERSATION)
                 expanded.value = false
             }) {

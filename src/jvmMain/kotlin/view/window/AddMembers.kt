@@ -29,6 +29,7 @@ import repository.ConversationsRepo
 import repository.UsersRepo
 import resources.defaultBackgroundColor
 import resources.selectedBackgroundColor
+import service.printDraw
 import view.common.Search
 import view.item.user.UserItem
 import java.util.*
@@ -39,7 +40,7 @@ import java.util.*
  */
 @Composable
 fun AddMembers(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, conversationName: String) {
-    println("ADD MEMBERS REDRAW")
+    printDraw()
     val interactionSource = remember { MutableInteractionSource() }
     val selectedList = remember { mutableStateListOf<User>() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
