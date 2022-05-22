@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
-import repository.MessagesRepo
 import repository.UsersRepo
 
 /**

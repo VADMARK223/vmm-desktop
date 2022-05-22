@@ -42,7 +42,7 @@ class ConversationsRepoImpl : ConversationsRepo {
                 if (response.status == HttpStatusCode.OK) {
                     val responseConversations = response.body<List<Conversation>>()
                     conversations.addAll(responseConversations)
-//                    selectedFirst()
+                    selectedFirst()
                 } else {
                     val responseData = response.body<String>()
                     println(responseData)

@@ -36,10 +36,14 @@ fun Messages(
     conversationsRepo: ConversationsRepo
 ) {
     printDraw()
+
+    val scope = rememberCoroutineScope()
     val conversation = remember { conversationsRepo.selected() }
-    if (conversation.value != null) {
-        val conversationId = conversation.value?.id as Long
-        messagesRepo.messagesByConversationId(conversationId)
+
+    scope.launch {
+        if (conversation.value != null) {
+            messagesRepo.messagesByConversationId(conversation.value?.id as Long)
+        }
     }
 
     Box(modifier = modifier) {
