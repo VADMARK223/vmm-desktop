@@ -12,26 +12,52 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
+import model.Conversation
 import repository.ConversationsRepo
 import repository.UsersRepo
 import view.left.item.ConversationItem
+import java.util.*
 
 /**
  * @author Markitanov Vadim
  * @since 29.04.2022
  */
 @Composable
-fun Conversations(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
+fun Conversations(
+    conversationsRepo: ConversationsRepo,
+    usersRepo: UsersRepo,
+    searchState: MutableState<TextFieldValue>
+) {
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
-
+        var filteredConversations: List<Conversation>
         LazyColumn(
             state = usersLazyListState,
         ) {
-            items(items = conversationsRepo.all()) { conversation ->
+            val searchedText = searchState.value.text
+            println("searchedText: $searchedText")
+
+            filteredConversations = if (searchedText.isEmpty()) {
+                conversationsRepo.all()
+            } else {
+                val resultList = ArrayList<Conversation>()
+
+                val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
+                for (conversation in conversationsRepo.all()) {
+                    if (conversation.name.lowercase().contains(searchedTextLowercase)) {
+                        resultList.add(conversation)
+                    }
+                }
+
+                resultList
+            }
+
+            items(items = filteredConversations) { conversation ->
                 val modifier = Modifier
                     .background(
                         if (conversationsRepo.selected().value == conversation) Color(43, 82, 120)
@@ -46,12 +72,12 @@ fun Conversations(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
                         })
 
 //                if (conversation.companionId == null) {
-                    ConversationItem(
-                        modifier = modifier,
-                        conversation = conversation,
-                        conversationsRepo = conversationsRepo,
-                        usersRepo = usersRepo
-                    )
+                ConversationItem(
+                    modifier = modifier,
+                    conversation = conversation,
+                    conversationsRepo = conversationsRepo,
+                    usersRepo = usersRepo
+                )
 //                } else {
 //                    val companion: User? = usersRepo.getById(conversation.companionId)
 //                    CompanionItem(

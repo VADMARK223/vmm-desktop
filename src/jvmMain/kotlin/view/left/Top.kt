@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,8 +30,7 @@ import view.window.WindowType
  * @since 23.04.2022
  */
 @Composable
-fun Top(usersRepo: UsersRepo) {
-    val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
+fun Top(usersRepo: UsersRepo, searchState: MutableState<TextFieldValue>) {
     val expanded = remember { mutableStateOf(false) }
 
     Box(Modifier.background(Color(23, 33, 43))) {
@@ -47,7 +47,7 @@ fun Top(usersRepo: UsersRepo) {
                 )
             }
 
-            Search(mainOutput)
+            Search(searchState)
         }
 
         DropdownMenu(

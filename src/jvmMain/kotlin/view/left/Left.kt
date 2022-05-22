@@ -3,7 +3,10 @@ package view.left
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
 import repository.UsersRepo
@@ -20,10 +23,12 @@ fun Left(
 ) {
     printDraw()
     Column(modifier = Modifier.width(450.dp)) {
-        Top(usersRepo)
+        val searchState = remember { mutableStateOf(TextFieldValue("")) }
+        Top(usersRepo, searchState)
         Conversations(
-            conversationsRepo = conversationsRepo,
-            usersRepo = usersRepo
+            conversationsRepo,
+            usersRepo,
+            searchState
         )
     }
 }
