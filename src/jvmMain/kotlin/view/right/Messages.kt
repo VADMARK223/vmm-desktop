@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import repository.ConversationsRepo
 import repository.MessagesRepo
 import repository.UsersRepo
+import service.printDraw
 import view.right.item.MessageItem
 
 /**
@@ -34,15 +35,12 @@ fun Messages(
     usersRepo: UsersRepo,
     conversationsRepo: ConversationsRepo
 ) {
-    val conversation = conversationsRepo.selected()
-//    println("MESSAGES REDRAW")
-
+    printDraw()
+    val conversation = remember { conversationsRepo.selected() }
     if (conversation.value != null) {
         val conversationId = conversation.value?.id as Long
         messagesRepo.messagesByConversationId(conversationId)
     }
-
-    val messages = messagesRepo.currentMessages()
 
     Box(modifier = modifier) {
         val lazyListState = rememberLazyListState()
@@ -55,7 +53,7 @@ fun Messages(
             state = lazyListState,
             reverseLayout = true,
         ) {
-            itemsIndexed(items = messages/*messagesRepo.all()*/.reversed()) { index, message ->
+            itemsIndexed(items = messagesRepo.currentMessages().reversed()) { index, message ->
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = when (message.ownerId == usersRepo.current().value?.id) {

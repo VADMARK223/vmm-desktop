@@ -3,13 +3,13 @@ package repository
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import model.Conversation
-import model.Message
 import dto.ConversationDto
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
+import model.Conversation
+import model.Message
 import model.User
 import service.HttpService
 
@@ -20,6 +20,14 @@ import service.HttpService
 class ConversationsRepoImpl : ConversationsRepo {
     private val selected = mutableStateOf<Conversation?>(null)
     private var conversations = mutableStateListOf<Conversation>()
+
+    init {
+        if (selected.value == null) {
+            println("NULL")
+        } else {
+            println("NOT NULL")
+        }
+    }
 
     override fun all(): List<Conversation> {
         return conversations
@@ -33,9 +41,8 @@ class ConversationsRepoImpl : ConversationsRepo {
             try {
                 if (response.status == HttpStatusCode.OK) {
                     val responseConversations = response.body<List<Conversation>>()
-//                    println("responseConversations: $responseConversations")
                     conversations.addAll(responseConversations)
-                    selectedFirst()
+//                    selectedFirst()
                 } else {
                     val responseData = response.body<String>()
                     println(responseData)
@@ -113,21 +120,6 @@ class ConversationsRepoImpl : ConversationsRepo {
             }
         }
     }
-
-    /*override fun remove(conversationId: Long) {
-        HttpService.coroutineScope.launch {
-            val response = HttpService.client.delete("${HttpService.host}/conversations/${conversationId}")
-            if (response.status == HttpStatusCode.OK) {
-                for (conversation in conversations) {
-                    if (conversation.id == conversationId) {
-                        conversations.remove(conversation)
-                    }
-                }
-
-                selectedFirst()
-            }
-        }
-    }*/
 
     private fun selectedFirst() {
         if (!conversations.isEmpty()) {

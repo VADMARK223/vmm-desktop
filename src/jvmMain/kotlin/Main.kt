@@ -23,6 +23,7 @@ import model.UserNotification
 import repository.*
 import resources.darkThemeColors
 import service.HttpService
+import service.printDraw
 import util.JsonMapper.defaultMapper
 import view.left.Left
 import view.right.Right
@@ -33,9 +34,10 @@ import view.window.WindowState
 @Preview
 fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo: MessagesRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
+    printDraw()
 
     MaterialTheme(colors = darkThemeColors) {
-//        println("COMMON REDRAW")
+
         Row {
             Left(conversationsRepo, usersRepo)
             Right(conversationsRepo, usersRepo, messagesRepo, mainOutput)

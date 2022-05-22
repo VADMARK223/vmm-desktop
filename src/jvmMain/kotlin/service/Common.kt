@@ -11,3 +11,14 @@ fun generateContactCredentials(): Boolean {
 fun requestDefaultUser(): Boolean {
     return true
 }
+
+fun printDraw() {
+    if (needPrintDraw()) {
+        val funName = Thread.currentThread().stackTrace[2].methodName
+        println("${funName.uppercase()} DRAW.")
+    }
+}
+
+private fun needPrintDraw(): Boolean {
+    return true
+}
