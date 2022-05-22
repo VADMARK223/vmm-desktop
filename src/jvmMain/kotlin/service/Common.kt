@@ -20,5 +20,5 @@ fun printDraw() {
 }
 
 private fun needPrintDraw(): Boolean {
-    return true
+    return false
 }

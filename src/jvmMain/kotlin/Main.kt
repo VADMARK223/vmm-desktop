@@ -18,7 +18,6 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import model.ChangeType
 import model.ConversationNotification
-import model.Rectangle
 import model.UserNotification
 import repository.*
 import resources.darkThemeColors
@@ -71,9 +70,6 @@ suspend fun main() = coroutineScope {
     val conversationsRepo = ConversationsRepoImpl()
     val usersRepo = UsersRepoImpl()
     val messagesRepo = MessagesRepoImpl()
-
-    val r = Rectangle(2, 3)
-    println(r.area)
 
     usersRepo.addListener { userId ->
         println("User loaded: $userId.")

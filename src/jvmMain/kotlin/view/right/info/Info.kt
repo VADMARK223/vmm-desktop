@@ -17,6 +17,7 @@ import kotlinx.datetime.toJavaLocalDateTime
 import model.User
 import repository.ConversationsRepo
 import repository.UsersRepo
+import service.printDraw
 import view.window.Window
 import view.window.WindowType
 import java.time.format.DateTimeFormatter
@@ -27,7 +28,7 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
-//    println("INFO REDRAW")
+    printDraw()
     val expanded = remember { mutableStateOf(false) }
     val conversation = conversationsRepo.selected()
     val companion: User? = usersRepo.getById(conversation.value?.companionId)

@@ -21,14 +21,6 @@ class ConversationsRepoImpl : ConversationsRepo {
     private val selected = mutableStateOf<Conversation?>(null)
     private var conversations = mutableStateListOf<Conversation>()
 
-    init {
-        if (selected.value == null) {
-            println("NULL")
-        } else {
-            println("NOT NULL")
-        }
-    }
-
     override fun all(): List<Conversation> {
         return conversations
     }
@@ -63,19 +55,10 @@ class ConversationsRepoImpl : ConversationsRepo {
             for (user in memberUsers) {
                 memberIds.add(user.id)
             }
-            val conversationDto = ConversationDto(name, ownerId, memberIds, companionId)
-            val response = HttpService.client.put("${HttpService.host}/conversations") {
+            HttpService.client.put("${HttpService.host}/conversations") {
                 contentType(ContentType.Application.Json)
-                setBody(conversationDto)
+                setBody(ConversationDto(name, ownerId, memberIds, companionId))
             }
-
-            println("Create conversation response: $response")
-
-            /*if (response.status == HttpStatusCode.OK) {
-                val newConversation = response.body<Conversation>()
-                conversations.add(newConversation)
-                selected.value = newConversation
-            }*/
         }
     }
 
@@ -89,7 +72,6 @@ class ConversationsRepoImpl : ConversationsRepo {
     override fun delete(conversation: Conversation) {
         HttpService.coroutineScope.launch {
             HttpService.client.delete("${HttpService.host}/conversations/${conversation.id}")
-//            conversations.remove(conversation)
         }
     }
 

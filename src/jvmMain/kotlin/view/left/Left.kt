@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
 import repository.UsersRepo
+import service.printDraw
 
 /**
  * @author Markitanov Vadim
@@ -17,6 +18,7 @@ fun Left(
     conversationsRepo: ConversationsRepo,
     usersRepo: UsersRepo
 ) {
+    printDraw()
     Column(modifier = Modifier.width(450.dp)) {
         Top(usersRepo)
         Conversations(
