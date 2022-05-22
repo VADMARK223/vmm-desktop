@@ -48,7 +48,7 @@ fun Info(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
-                text = conversation.value?.visibleName ?: "",
+                text = conversation.value?.name ?: "",
                 style = MaterialTheme.typography.h6,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

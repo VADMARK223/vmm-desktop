@@ -40,8 +40,6 @@ fun Conversations(
             state = usersLazyListState,
         ) {
             val searchedText = searchState.value.text
-            println("searchedText: $searchedText")
-
             filteredConversations = if (searchedText.isEmpty()) {
                 conversationsRepo.all()
             } else {

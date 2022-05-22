@@ -17,7 +17,7 @@ data class Conversation(
     val membersCount: Int? = null,
     var lastMessage: Message? = null,
     var companion: User? = null
-) {
+) /*{
     val visibleName: String
         get() =
             if (this.companion == null) {
@@ -25,4 +25,4 @@ data class Conversation(
             } else {
                 this.companion!!.name
             }
-}
+}*/

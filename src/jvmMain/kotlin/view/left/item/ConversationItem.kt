@@ -97,7 +97,7 @@ fun ConversationItem(
             Column {
                 Row {
                     Text(
-                        text = conversation.visibleName,
+                        text = conversation.name,
                         style = MaterialTheme.typography.h6,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
