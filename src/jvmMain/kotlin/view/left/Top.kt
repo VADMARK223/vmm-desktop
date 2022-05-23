@@ -19,7 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import repository.UsersRepo
+import common.UsersRepo
+import service.printDraw
 import view.common.Search
 import view.window.Window
 import view.window.WindowState
@@ -30,7 +31,8 @@ import view.window.WindowType
  * @since 23.04.2022
  */
 @Composable
-fun Top(usersRepo: UsersRepo, searchState: MutableState<TextFieldValue>) {
+fun Top(searchState: MutableState<TextFieldValue>) {
+    printDraw()
     val expanded = remember { mutableStateOf(false) }
 
     Box(Modifier.background(Color(23, 33, 43))) {
@@ -90,9 +92,9 @@ fun Top(usersRepo: UsersRepo, searchState: MutableState<TextFieldValue>) {
                 )
                 Spacer(Modifier.width(5.dp))
                 Column {
-                    Text("Id: ${usersRepo.current().value?.id}")
-                    Text("First name: ${usersRepo.current().value?.firstName}")
-                    Text("Last name: ${usersRepo.current().value?.lastName}")
+                    Text("Id: ${UsersRepo.current().value?.id}")
+                    Text("First name: ${UsersRepo.current().value?.firstName}")
+                    Text("Last name: ${UsersRepo.current().value?.lastName}")
                 }
             }
         }

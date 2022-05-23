@@ -16,10 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import common.UsersRepo
 import kotlinx.coroutines.launch
 import repository.ConversationsRepo
 import repository.MessagesRepo
-import repository.UsersRepo
 import service.printDraw
 import view.right.item.MessageItem
 
@@ -32,7 +32,6 @@ fun Messages(
     modifier: Modifier,
     mainOutput: MutableState<TextFieldValue>,
     messagesRepo: MessagesRepo,
-    usersRepo: UsersRepo,
     conversationsRepo: ConversationsRepo
 ) {
     printDraw()
@@ -60,13 +59,13 @@ fun Messages(
             itemsIndexed(items = messagesRepo.currentMessages().reversed()) { index, message ->
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = when (message.ownerId == usersRepo.current().value?.id) {
+                    horizontalArrangement = when (message.ownerId == UsersRepo.current().value?.id) {
                         true -> Arrangement.End
                         else -> Arrangement.Start
                     }
                 ) {
                     item {
-                        MessageItem(message, mainOutput, messagesRepo, usersRepo)
+                        MessageItem(message, mainOutput, messagesRepo)
                     }
                 }
                 Spacer(modifier = Modifier.height(5.dp))

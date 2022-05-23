@@ -1,5 +1,7 @@
 package model
 
+import common.User
+
 /**
  * @author Markitanov Vadim
  * @since 06.05.2022

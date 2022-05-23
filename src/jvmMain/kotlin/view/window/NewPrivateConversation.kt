@@ -21,9 +21,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import model.User
+import common.User
+import common.UsersRepo
 import repository.ConversationsRepo
-import repository.UsersRepo
 import view.common.Search
 import view.item.user.UserItem
 import java.util.*
@@ -33,7 +33,7 @@ import java.util.*
  * @since 10.05.2022
  */
 @Composable
-fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo) {
+fun NewPrivateConversation(conversationsRepo: ConversationsRepo) {
     val interactionSource = remember { MutableInteractionSource() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -66,7 +66,7 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                 Search(searchState)
 
                 Box(modifier = Modifier.height(300.dp)) {
-                    val users = usersRepo.requestAll()
+                    val users = UsersRepo.requestAll()
                     var filteredUsers: List<User>
                     LazyColumn(
                         state = usersLazyListState
@@ -93,7 +93,7 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo, usersRepo: User
                                     .clickable {
                                         conversationsRepo.put(
                                             user.name,
-                                            usersRepo.current().value?.id,
+                                            UsersRepo.current().value?.id,
                                             listOf(user),
                                             user.id
                                         )

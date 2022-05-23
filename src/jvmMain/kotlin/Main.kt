@@ -9,6 +9,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import common.UsersRepo
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -31,18 +32,18 @@ import view.window.WindowState
 
 @Composable
 @Preview
-fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo: MessagesRepo) {
+fun App(conversationsRepo: ConversationsRepo, messagesRepo: MessagesRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     printDraw()
 
     MaterialTheme(colors = darkThemeColors) {
 
         Row {
-            Left(conversationsRepo, usersRepo)
-            Right(conversationsRepo, usersRepo, messagesRepo, mainOutput)
+            Left(conversationsRepo)
+            Right(conversationsRepo, messagesRepo, mainOutput)
         }
 
-        if (usersRepo.current().value == null) {
+        if (UsersRepo.current().value == null) {
             Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
         } else {
             if (Window.state.value == WindowState(WindowType.SELECT_CURRENT_USER)) {
@@ -51,12 +52,12 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo
         }
 
         when (Window.state.value.type) {
-            WindowType.SELECT_CURRENT_USER -> SelectCurrentUser(usersRepo)
+            WindowType.SELECT_CURRENT_USER -> SelectCurrentUser()
             WindowType.NEW_CONVERSATION -> NewConversation()
-            WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation(conversationsRepo, usersRepo)
+            WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation(conversationsRepo)
             WindowType.ADD_MEMBERS -> {
                 val conversationName = Window.state.value.data as String
-                AddMembers(conversationsRepo, usersRepo, conversationName)
+                AddMembers(conversationsRepo, conversationName)
             }
             WindowType.VIEW_PROFILE -> ViewProfile()
             WindowType.VIEW_GROUP_INFO -> ViewGroupInfo()
@@ -68,14 +69,13 @@ fun App(conversationsRepo: ConversationsRepo, usersRepo: UsersRepo, messagesRepo
 suspend fun main() = coroutineScope {
     HttpService.coroutineScope = this
     val conversationsRepo = ConversationsRepoImpl()
-    val usersRepo = UsersRepoImpl()
     val messagesRepo = MessagesRepoImpl()
 
-    usersRepo.addListener { userId ->
+    UsersRepo.addListener { userId ->
         println("User loaded: $userId.")
         conversationsRepo.updateByUserId(userId)
         launch {
-            initUsersWebSocket(usersRepo, conversationsRepo, userId)
+            initUsersWebSocket(conversationsRepo, userId)
         }
 
         launch {
@@ -107,12 +107,12 @@ suspend fun main() = coroutineScope {
             "Vadmark`s messenger",
             icon = icon
         ) {
-            App(conversationsRepo, usersRepo, messagesRepo)
+            App(conversationsRepo, messagesRepo)
         }
     }
 }
 
-suspend fun initUsersWebSocket(usersRepo: UsersRepo, conversationsRepo: ConversationsRepo, userId: Long) {
+suspend fun initUsersWebSocket(conversationsRepo: ConversationsRepo, userId: Long) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -137,7 +137,7 @@ suspend fun initUsersWebSocket(usersRepo: UsersRepo, conversationsRepo: Conversa
 
                 if (userNotification.type == ChangeType.UPDATE) {
                     conversationsRepo.updateCompanion(userNotification.entity)
-                    usersRepo.update(userNotification.entity)
+                    UsersRepo.update(userNotification.entity)
                 }
 
             }

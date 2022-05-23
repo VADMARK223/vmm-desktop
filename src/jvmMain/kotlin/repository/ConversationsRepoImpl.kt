@@ -3,6 +3,7 @@ package repository
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import common.User
 import dto.ConversationDto
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -10,7 +11,6 @@ import io.ktor.http.*
 import kotlinx.coroutines.launch
 import model.Conversation
 import model.Message
-import model.User
 import service.HttpService
 
 /**

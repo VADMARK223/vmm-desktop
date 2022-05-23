@@ -1,4 +1,4 @@
-package repository
+package common
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
@@ -7,11 +7,31 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
-import model.User
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.Serializable
 import service.HttpService
 import service.requestDefaultUser
 
-class UsersRepoImpl : UsersRepo {
+/**
+ * @author Markitanov Vadim
+ * @since 23.05.2022
+ */
+@Serializable
+data class User(
+    val id: Long,
+    val firstName: String,
+    val lastName: String,
+    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val online: Boolean = false
+) {
+    val name: String
+        get() = "$firstName $lastName"
+}
+
+object UsersRepo {
     private val current = mutableStateOf<User?>(null)
     private val users = mutableStateListOf<User>()
 
@@ -36,11 +56,11 @@ class UsersRepoImpl : UsersRepo {
         }
     }
 
-    override fun current(): MutableState<User?> {
+    fun current(): MutableState<User?> {
         return current
     }
 
-    override fun requestAll(): List<User> {
+    fun requestAll(): List<User> {
         users.clear()
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users")
@@ -52,13 +72,13 @@ class UsersRepoImpl : UsersRepo {
         return users
     }
 
-    override fun all(): List<User> = users
+    fun all(): List<User> = users
 
-    override fun addListener(listener: (userId: Long) -> Unit) {
+    fun addListener(listener: (userId: Long) -> Unit) {
         userLoadListener.add(listener)
     }
 
-    override fun setCurrentUser(user: User) {
+    fun setCurrentUser(user: User) {
         println("Set current user: $user")
 
         current.value = user
@@ -67,7 +87,7 @@ class UsersRepoImpl : UsersRepo {
         }
     }
 
-    override fun update(entity: User?) {
+    fun update(entity: User?) {
         for (user in users) {
             if (user.id == entity?.id) {
                 users[users.indexOf(user)] = entity
@@ -76,5 +96,5 @@ class UsersRepoImpl : UsersRepo {
         }
     }
 
-    override fun getById(id: Long?): User? = users.singleOrNull { id == it.id }
+    fun getById(id: Long?): User? = users.singleOrNull { id == it.id }
 }

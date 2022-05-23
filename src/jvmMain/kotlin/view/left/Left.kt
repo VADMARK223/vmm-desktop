@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import repository.ConversationsRepo
-import repository.UsersRepo
 import service.printDraw
 
 /**
@@ -18,16 +17,14 @@ import service.printDraw
  */
 @Composable
 fun Left(
-    conversationsRepo: ConversationsRepo,
-    usersRepo: UsersRepo
+    conversationsRepo: ConversationsRepo
 ) {
     printDraw()
     Column(modifier = Modifier.width(450.dp)) {
         val searchState = remember { mutableStateOf(TextFieldValue("")) }
-        Top(usersRepo, searchState)
+        Top(searchState)
         Conversations(
             conversationsRepo,
-            usersRepo,
             searchState
         )
     }

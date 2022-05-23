@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import repository.ConversationsRepo
 import repository.MessagesRepo
-import repository.UsersRepo
 import service.printDraw
 import view.right.info.Info
 
@@ -24,7 +23,6 @@ import view.right.info.Info
 @Composable
 fun Right(
     conversationsRepo: ConversationsRepo,
-    usersRepo: UsersRepo,
     messagesRepo: MessagesRepo,
     mainOutput: MutableState<TextFieldValue>
 ) {
@@ -34,7 +32,7 @@ fun Right(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Info(conversationsRepo = conversationsRepo, usersRepo = usersRepo)
+            Info(conversationsRepo = conversationsRepo)
 
             Messages(
                 Modifier
@@ -42,11 +40,10 @@ fun Right(
                     .background(color = Color(14, 22, 33)),
                 mainOutput,
                 messagesRepo,
-                usersRepo,
                 conversationsRepo
             )
 
-            InputMessage(messagesRepo, conversationsRepo, mainOutput, usersRepo)
+            InputMessage(messagesRepo, conversationsRepo, mainOutput)
         }
     } else {
         Box(Modifier.fillMaxSize().background(color = Color(14, 22, 33))) {

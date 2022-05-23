@@ -1,9 +1,9 @@
 package repository
 
 import androidx.compose.runtime.MutableState
+import common.User
 import model.Conversation
 import model.Message
-import model.User
 
 /**
  * @author Markitanov Vadim

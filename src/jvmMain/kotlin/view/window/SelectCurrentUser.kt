@@ -19,8 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import model.User
-import repository.UsersRepo
+import common.User
+import common.UsersRepo
 import view.common.Search
 import view.item.user.UserItem
 import java.util.*
@@ -30,12 +30,12 @@ import java.util.*
  * @since 11.05.2022
  */
 @Composable
-fun SelectCurrentUser(usersRepo: UsersRepo) {
+fun SelectCurrentUser() {
     println("SELECTED CURRENT USER REDRAW")
 
     val interactionSource = remember { MutableInteractionSource() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
-    val allUsers = remember { usersRepo.all() }
+    val allUsers = remember { UsersRepo.all() }
 
     Box(
         modifier = Modifier
@@ -90,8 +90,8 @@ fun SelectCurrentUser(usersRepo: UsersRepo) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        usersRepo.setCurrentUser(user)
-                                        usersRepo.current().value = user
+                                        UsersRepo.setCurrentUser(user)
+//                                        UsersRepo.current().value = user
                                         Window.hide()
                                     }
                             )

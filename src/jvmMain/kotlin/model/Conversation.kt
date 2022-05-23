@@ -1,5 +1,6 @@
 package model
 
+import common.User
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

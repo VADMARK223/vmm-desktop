@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import model.Conversation
 import repository.ConversationsRepo
-import repository.UsersRepo
 import view.left.item.ConversationItem
 import java.util.*
 
@@ -30,7 +29,6 @@ import java.util.*
 @Composable
 fun Conversations(
     conversationsRepo: ConversationsRepo,
-    usersRepo: UsersRepo,
     searchState: MutableState<TextFieldValue>
 ) {
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
@@ -73,8 +71,7 @@ fun Conversations(
                 ConversationItem(
                     modifier = modifier,
                     conversation = conversation,
-                    conversationsRepo = conversationsRepo,
-                    usersRepo = usersRepo
+                    conversationsRepo = conversationsRepo
                 )
 //                } else {
 //                    val companion: User? = usersRepo.getById(conversation.companionId)

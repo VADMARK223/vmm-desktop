@@ -16,11 +16,12 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import common.User
+import common.UsersRepo
 import kotlinx.datetime.toJavaLocalDateTime
 import model.Conversation
-import model.User
 import repository.ConversationsRepo
-import repository.UsersRepo
+import service.printDraw
 import view.common.Avatar
 import java.awt.event.MouseEvent
 import java.time.format.DateTimeFormatter
@@ -34,12 +35,11 @@ import java.time.format.DateTimeFormatter
 fun ConversationItem(
     modifier: Modifier,
     conversation: Conversation,
-    conversationsRepo: ConversationsRepo,
-    usersRepo: UsersRepo
+    conversationsRepo: ConversationsRepo
 ) {
-//    println("CONVERSATION ITEM REDRAW")
+    printDraw()
     val expanded = remember { mutableStateOf(false) }
-    val companion: User? = usersRepo.getById(conversation.companionId)
+    val companion: User? = UsersRepo.getById(conversation.companionId)
     val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
 
@@ -127,7 +127,7 @@ fun ConversationItem(
 
                 if (conversation.lastMessage != null) {
                     val lastMessageText =
-                        if (usersRepo.current().value?.id != conversation.lastMessage?.ownerId)
+                        if (UsersRepo.current().value?.id != conversation.lastMessage?.ownerId)
                             conversation.lastMessage?.text ?: ""
                         else "You: ${conversation.lastMessage?.text}"
                     Text(
