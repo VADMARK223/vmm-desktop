@@ -1,5 +1,6 @@
 package model
 
+import common.Conversation
 import common.User
 
 /**

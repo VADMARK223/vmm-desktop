@@ -21,9 +21,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import common.ConversationsRepo
 import common.User
 import common.UsersRepo
-import repository.ConversationsRepo
 import view.common.Search
 import view.item.user.UserItem
 import java.util.*
@@ -33,7 +33,7 @@ import java.util.*
  * @since 10.05.2022
  */
 @Composable
-fun NewPrivateConversation(conversationsRepo: ConversationsRepo) {
+fun NewPrivateConversation() {
     val interactionSource = remember { MutableInteractionSource() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -91,7 +91,7 @@ fun NewPrivateConversation(conversationsRepo: ConversationsRepo) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        conversationsRepo.put(
+                                        ConversationsRepo.put(
                                             user.name,
                                             UsersRepo.current().value?.id,
                                             listOf(user),

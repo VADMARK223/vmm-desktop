@@ -24,9 +24,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import common.ConversationsRepo
 import common.User
 import common.UsersRepo
-import repository.ConversationsRepo
 import resources.defaultBackgroundColor
 import resources.selectedBackgroundColor
 import service.printDraw
@@ -39,7 +39,7 @@ import java.util.*
  * @since 07.05.2022
  */
 @Composable
-fun AddMembers(conversationsRepo: ConversationsRepo, conversationName: String) {
+fun AddMembers(conversationName: String) {
     printDraw()
     val interactionSource = remember { MutableInteractionSource() }
     val selectedList = remember { mutableStateListOf<User>() }
@@ -146,7 +146,7 @@ fun AddMembers(conversationsRepo: ConversationsRepo, conversationName: String) {
                         Button(
                             onClick = {
                                 if (selectedList.isNotEmpty()) {
-                                    conversationsRepo.put(
+                                    ConversationsRepo.put(
                                         conversationName,
                                         UsersRepo.current().value?.id,
                                         selectedList.toList(),

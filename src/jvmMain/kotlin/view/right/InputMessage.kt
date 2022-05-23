@@ -20,9 +20,10 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import common.ConversationsRepo
 import common.UsersRepo
-import repository.ConversationsRepo
 import repository.MessagesRepo
+import service.printDraw
 
 /**
  * @author Markitanov Vadim
@@ -32,10 +33,9 @@ import repository.MessagesRepo
 @Composable
 fun InputMessage(
     messagesRepo: MessagesRepo,
-    conversationsRepo: ConversationsRepo,
     mainOutput: MutableState<TextFieldValue>
 ) {
-//    println("INPUT MESSAGE REDRAW")
+    printDraw()
     val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -45,7 +45,7 @@ fun InputMessage(
             },
             modifier = Modifier.fillMaxWidth().onKeyEvent {
                 if (it.key == Key.Enter || it.key == Key.NumPadEnter) {
-                    sendMessage(mainOutput, messagesRepo, conversationsRepo)
+                    sendMessage(mainOutput, messagesRepo)
                 }
                 false
             },
@@ -80,7 +80,7 @@ fun InputMessage(
                     if (mainOutputEmpty.value) {
                         IconButton(
                             onClick = {
-                                sendMessage(mainOutput, messagesRepo, conversationsRepo)
+                                sendMessage(mainOutput, messagesRepo)
                             }
                         ) {
                             Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))
@@ -94,11 +94,10 @@ fun InputMessage(
 
 private fun sendMessage(
     mainOutput: MutableState<TextFieldValue>,
-    messagesRepo: MessagesRepo,
-    conversationsRepo: ConversationsRepo
+    messagesRepo: MessagesRepo
 ) {
     if (mainOutput.value.text.isNotEmpty()) {
-        val conversationSelectedId = conversationsRepo.selected().value?.id
+        val conversationSelectedId = ConversationsRepo.selected().value?.id
         val currentUserId = UsersRepo.current().value?.id
         messagesRepo.put(mainOutput.value.text, conversationSelectedId, currentUserId)
         mainOutput.value = TextFieldValue("")

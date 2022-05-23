@@ -16,11 +16,11 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import common.Conversation
+import common.ConversationsRepo
 import common.User
 import common.UsersRepo
 import kotlinx.datetime.toJavaLocalDateTime
-import model.Conversation
-import repository.ConversationsRepo
 import service.printDraw
 import view.common.Avatar
 import java.awt.event.MouseEvent
@@ -34,8 +34,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ConversationItem(
     modifier: Modifier,
-    conversation: Conversation,
-    conversationsRepo: ConversationsRepo
+    conversation: Conversation
 ) {
     printDraw()
     val expanded = remember { mutableStateOf(false) }
@@ -74,11 +73,11 @@ fun ConversationItem(
                         DropdownMenuItem(onClick = {
                             when (it) {
                                 ConversationAction.LEAVE_CHAT -> {
-                                    conversationsRepo.delete(conversation)
+                                    ConversationsRepo.delete(conversation)
                                 }
 
                                 ConversationAction.LEAVE_GROUP -> {
-                                    conversationsRepo.delete(conversation)
+                                    ConversationsRepo.delete(conversation)
                                 }
 
                                 ConversationAction.CLEAR_HISTORY -> {

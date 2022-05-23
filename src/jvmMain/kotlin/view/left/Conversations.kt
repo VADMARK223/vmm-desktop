@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
-import model.Conversation
-import repository.ConversationsRepo
+import common.Conversation
+import common.ConversationsRepo
 import view.left.item.ConversationItem
 import java.util.*
 
@@ -27,10 +27,7 @@ import java.util.*
  * @since 29.04.2022
  */
 @Composable
-fun Conversations(
-    conversationsRepo: ConversationsRepo,
-    searchState: MutableState<TextFieldValue>
-) {
+fun Conversations(searchState: MutableState<TextFieldValue>) {
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
         var filteredConversations: List<Conversation>
@@ -39,12 +36,12 @@ fun Conversations(
         ) {
             val searchedText = searchState.value.text
             filteredConversations = if (searchedText.isEmpty()) {
-                conversationsRepo.all()
+                ConversationsRepo.all()
             } else {
                 val resultList = ArrayList<Conversation>()
 
                 val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
-                for (conversation in conversationsRepo.all()) {
+                for (conversation in ConversationsRepo.all()) {
                     if (conversation.name.lowercase().contains(searchedTextLowercase)) {
                         resultList.add(conversation)
                     }
@@ -56,22 +53,21 @@ fun Conversations(
             items(items = filteredConversations) { conversation ->
                 val modifier = Modifier
                     .background(
-                        if (conversationsRepo.selected().value == conversation) Color(43, 82, 120)
+                        if (ConversationsRepo.selected().value == conversation) Color(43, 82, 120)
                         else Color(23, 33, 43)
                     )
                     .fillMaxWidth()
-                    .selectable(conversation == conversationsRepo.selected().value,
+                    .selectable(conversation == ConversationsRepo.selected().value,
                         onClick = {
-                            if (conversationsRepo.selected().value != conversation) {
-                                conversationsRepo.selected().value = conversation
+                            if (ConversationsRepo.selected().value != conversation) {
+                                ConversationsRepo.selected().value = conversation
                             }
                         })
 
 //                if (conversation.companionId == null) {
                 ConversationItem(
                     modifier = modifier,
-                    conversation = conversation,
-                    conversationsRepo = conversationsRepo
+                    conversation = conversation
                 )
 //                } else {
 //                    val companion: User? = usersRepo.getById(conversation.companionId)

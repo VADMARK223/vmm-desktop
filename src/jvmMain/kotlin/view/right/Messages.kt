@@ -16,9 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import common.ConversationsRepo
 import common.UsersRepo
 import kotlinx.coroutines.launch
-import repository.ConversationsRepo
 import repository.MessagesRepo
 import service.printDraw
 import view.right.item.MessageItem
@@ -31,13 +31,12 @@ import view.right.item.MessageItem
 fun Messages(
     modifier: Modifier,
     mainOutput: MutableState<TextFieldValue>,
-    messagesRepo: MessagesRepo,
-    conversationsRepo: ConversationsRepo
+    messagesRepo: MessagesRepo
 ) {
     printDraw()
 
     val scope = rememberCoroutineScope()
-    val conversation = remember { conversationsRepo.selected() }
+    val conversation = remember { ConversationsRepo.selected() }
 
     scope.launch {
         if (conversation.value != null) {

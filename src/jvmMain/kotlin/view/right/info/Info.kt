@@ -13,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import common.ConversationsRepo
 import common.User
 import common.UsersRepo
 import kotlinx.datetime.toJavaLocalDateTime
-import repository.ConversationsRepo
 import service.printDraw
 import view.window.Window
 import view.window.WindowType
@@ -27,10 +27,10 @@ import java.time.format.DateTimeFormatter
  * @since 23.04.2022
  */
 @Composable
-fun Info(conversationsRepo: ConversationsRepo) {
+fun Info() {
     printDraw()
     val expanded = remember { mutableStateOf(false) }
-    val conversation = conversationsRepo.selected()
+    val conversation = ConversationsRepo.selected()
     val companion: User? = UsersRepo.getById(conversation.value?.companionId)
 
     val (forConversation, forChat) = InfoAction.values().partition { it.isConversation }

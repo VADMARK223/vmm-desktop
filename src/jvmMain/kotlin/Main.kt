@@ -9,6 +9,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import common.ConversationsRepo
 import common.UsersRepo
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -32,15 +33,15 @@ import view.window.WindowState
 
 @Composable
 @Preview
-fun App(conversationsRepo: ConversationsRepo, messagesRepo: MessagesRepo) {
+fun App(messagesRepo: MessagesRepo) {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     printDraw()
 
     MaterialTheme(colors = darkThemeColors) {
 
         Row {
-            Left(conversationsRepo)
-            Right(conversationsRepo, messagesRepo, mainOutput)
+            Left()
+            Right(messagesRepo, mainOutput)
         }
 
         if (UsersRepo.current().value == null) {
@@ -54,10 +55,10 @@ fun App(conversationsRepo: ConversationsRepo, messagesRepo: MessagesRepo) {
         when (Window.state.value.type) {
             WindowType.SELECT_CURRENT_USER -> SelectCurrentUser()
             WindowType.NEW_CONVERSATION -> NewConversation()
-            WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation(conversationsRepo)
+            WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation()
             WindowType.ADD_MEMBERS -> {
                 val conversationName = Window.state.value.data as String
-                AddMembers(conversationsRepo, conversationName)
+                AddMembers(conversationName)
             }
             WindowType.VIEW_PROFILE -> ViewProfile()
             WindowType.VIEW_GROUP_INFO -> ViewGroupInfo()
@@ -68,18 +69,17 @@ fun App(conversationsRepo: ConversationsRepo, messagesRepo: MessagesRepo) {
 
 suspend fun main() = coroutineScope {
     HttpService.coroutineScope = this
-    val conversationsRepo = ConversationsRepoImpl()
     val messagesRepo = MessagesRepoImpl()
 
     UsersRepo.addListener { userId ->
         println("User loaded: $userId.")
-        conversationsRepo.updateByUserId(userId)
+        ConversationsRepo.updateByUserId(userId)
         launch {
-            initUsersWebSocket(conversationsRepo, userId)
+            initUsersWebSocket(userId)
         }
 
         launch {
-            initConversationsWebSocket(conversationsRepo, messagesRepo, userId)
+            initConversationsWebSocket(messagesRepo, userId)
         }
     }
 
@@ -107,12 +107,12 @@ suspend fun main() = coroutineScope {
             "Vadmark`s messenger",
             icon = icon
         ) {
-            App(conversationsRepo, messagesRepo)
+            App(messagesRepo)
         }
     }
 }
 
-suspend fun initUsersWebSocket(conversationsRepo: ConversationsRepo, userId: Long) {
+suspend fun initUsersWebSocket(userId: Long) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -136,7 +136,7 @@ suspend fun initUsersWebSocket(conversationsRepo: ConversationsRepo, userId: Lon
                 }
 
                 if (userNotification.type == ChangeType.UPDATE) {
-                    conversationsRepo.updateCompanion(userNotification.entity)
+                    ConversationsRepo.updateCompanion(userNotification.entity)
                     UsersRepo.update(userNotification.entity)
                 }
 
@@ -147,7 +147,7 @@ suspend fun initUsersWebSocket(conversationsRepo: ConversationsRepo, userId: Lon
     client.close()
 }
 
-suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, messagesRepo: MessagesRepo, userId: Long) {
+suspend fun initConversationsWebSocket(messagesRepo: MessagesRepo, userId: Long) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -174,11 +174,11 @@ suspend fun initConversationsWebSocket(conversationsRepo: ConversationsRepo, mes
                     }
 
                     when (conversationNotification.type) {
-                        ChangeType.CREATE -> conversationsRepo.addAndSelect(conversationNotification.entity)
-                        ChangeType.DELETE -> conversationsRepo.removeAndSelectFirst(conversationNotification.id)
+                        ChangeType.CREATE -> ConversationsRepo.addAndSelect(conversationNotification.entity)
+                        ChangeType.DELETE -> ConversationsRepo.removeAndSelectFirst(conversationNotification.id)
                         ChangeType.ADD_MESSAGE -> messagesRepo.addMessage(conversationNotification.message)
                         ChangeType.DELETE_MESSAGE -> messagesRepo.deleteMessage(conversationNotification.message)
-                        ChangeType.UPDATE_LAST_MESSAGE -> conversationsRepo.updateLastMessage(
+                        ChangeType.UPDATE_LAST_MESSAGE -> ConversationsRepo.updateLastMessage(
                             conversationNotification.id,
                             conversationNotification.message
                         )
