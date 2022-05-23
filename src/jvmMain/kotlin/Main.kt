@@ -1,4 +1,3 @@
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -32,13 +31,11 @@ import view.window.*
 import view.window.WindowState
 
 @Composable
-@Preview
-fun App() {
+fun MainScreen() {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     printDraw()
 
     MaterialTheme(colors = darkThemeColors) {
-
         Row {
             Left()
             Right(mainOutput)
@@ -106,7 +103,7 @@ suspend fun main() = coroutineScope {
             "Vadmark`s messenger",
             icon = icon
         ) {
-            App()
+            MainScreen()
         }
     }
 }
@@ -195,59 +192,3 @@ suspend fun initConversationsWebSocket(userId: Long) {
 
     client.close()
 }
-
-/*suspend fun initWebSocket() {
-    val client = HttpClient(CIO) {
-        install(WebSockets)
-    }
-    runBlocking {
-        client.webSocket(
-            host = "localhost",
-            port = 8888,
-            path = "/chat",
-            request = {
-                this.parameter("userId", "000")
-            }
-        ) {
-            val messageOutputRoutine = launch { outputMessages() }
-            val userInputRoutine = launch { inputMessages() }
-            userInputRoutine.join() // Wait for completion; either "exit" or error
-            messageOutputRoutine.cancelAndJoin()
-        }
-    }
-    client.close()
-}
-
-suspend fun DefaultClientWebSocketSession.outputMessages() {
-    try {
-        for (message in incoming) {
-            message as? Frame.Text ?: continue
-            val incomingMessage = message.readText()
-            println(incomingMessage)
-            val incomingMessageArray: Array<String> = incomingMessage.split(":").toTypedArray()
-
-            if (incomingMessageArray.size == 3) {
-                val command: String = incomingMessageArray[1].trim()
-                println("command: '${command}'")
-                val id: Long = incomingMessageArray[2].trim().toLong()
-                println("id: '${id}'")
-            }
-        }
-    } catch (e: Exception) {
-        println("Error while receiving: " + e.localizedMessage)
-    }
-}
-
-suspend fun DefaultClientWebSocketSession.inputMessages() {
-    while (true) {
-        val message = readLine() ?: ""
-        if (message.equals("exit", true)) return
-        try {
-            send(message)
-        } catch (e: Exception) {
-            println("Error while sending: " + e.localizedMessage)
-            return
-        }
-    }
-}
-*/
