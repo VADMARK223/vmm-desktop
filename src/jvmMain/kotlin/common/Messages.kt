@@ -1,27 +1,41 @@
-package repository
+package common
 
 import androidx.compose.runtime.mutableStateListOf
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
-import model.Message
 import service.HttpService
+import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
- * @since 30.04.2022
+ * @since 23.05.2022
  */
-class MessagesRepoImpl : MessagesRepo {
+@Serializable
+data class Message(
+    val id: Long = Random.nextLong(),
+    val text: String = "Unknown",
+    val ownerId: Long,
+    val edited: Boolean = false,
+    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+    val conversationId: Long = Random.nextLong()
+)
+
+object MessagesRepo {
     private val conversationByMessages = mutableMapOf<Long, MutableList<Message>>()
     private val messages = mutableStateListOf<Message>()
 
-    override fun currentMessages(): List<Message> {
+    fun currentMessages(): List<Message> {
         return messages
     }
 
-    override fun put(text: String, conversationId: Long?, currentUserId: Long?) {
+    fun put(text: String, conversationId: Long?, currentUserId: Long?) {
         val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)
         println("Put message: $messageDto")
 
@@ -33,7 +47,7 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
-    override fun delete(id: Long) {
+    fun delete(id: Long) {
         HttpService.coroutineScope.launch {
             /*val response = */HttpService.client.delete("${HttpService.host}/messages/${id}")
             /*if (response.status == HttpStatusCode.OK) {
@@ -45,7 +59,7 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
-    override fun messagesByConversationId(id: Long) {
+    fun messagesByConversationId(id: Long) {
         messages.clear()
 
         if (conversationByMessages.containsKey(id)) {
@@ -60,9 +74,9 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
-    override fun getById(messageId: Long?): Message? = messages.singleOrNull { it.id == messageId }
+    fun getById(messageId: Long?): Message? = messages.singleOrNull { it.id == messageId }
 
-    override fun addMessage(message: Message?) {
+    fun addMessage(message: Message?) {
         if (message != null) {
             if (conversationByMessages.containsKey(message.conversationId)) {
                 conversationByMessages[message.conversationId]?.add(message)
@@ -71,7 +85,7 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
-    override fun deleteMessage(message: Message?) {
+    fun deleteMessage(message: Message?) {
         if (message != null) {
             if (conversationByMessages.containsKey(message.conversationId)) {
                 conversationByMessages[message.conversationId]?.remove(message)

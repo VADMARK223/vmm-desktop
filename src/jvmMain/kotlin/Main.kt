@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import common.ConversationsRepo
+import common.MessagesRepo
 import common.UsersRepo
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -21,7 +22,6 @@ import kotlinx.serialization.decodeFromString
 import model.ChangeType
 import model.ConversationNotification
 import model.UserNotification
-import repository.*
 import resources.darkThemeColors
 import service.HttpService
 import service.printDraw
@@ -33,7 +33,7 @@ import view.window.WindowState
 
 @Composable
 @Preview
-fun App(messagesRepo: MessagesRepo) {
+fun App() {
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     printDraw()
 
@@ -41,7 +41,7 @@ fun App(messagesRepo: MessagesRepo) {
 
         Row {
             Left()
-            Right(messagesRepo, mainOutput)
+            Right(mainOutput)
         }
 
         if (UsersRepo.current().value == null) {
@@ -69,7 +69,6 @@ fun App(messagesRepo: MessagesRepo) {
 
 suspend fun main() = coroutineScope {
     HttpService.coroutineScope = this
-    val messagesRepo = MessagesRepoImpl()
 
     UsersRepo.addListener { userId ->
         println("User loaded: $userId.")
@@ -79,7 +78,7 @@ suspend fun main() = coroutineScope {
         }
 
         launch {
-            initConversationsWebSocket(messagesRepo, userId)
+            initConversationsWebSocket(userId)
         }
     }
 
@@ -107,7 +106,7 @@ suspend fun main() = coroutineScope {
             "Vadmark`s messenger",
             icon = icon
         ) {
-            App(messagesRepo)
+            App()
         }
     }
 }
@@ -147,7 +146,7 @@ suspend fun initUsersWebSocket(userId: Long) {
     client.close()
 }
 
-suspend fun initConversationsWebSocket(messagesRepo: MessagesRepo, userId: Long) {
+suspend fun initConversationsWebSocket(userId: Long) {
     val client = HttpClient(CIO) {
         install(WebSockets)
     }
@@ -176,8 +175,8 @@ suspend fun initConversationsWebSocket(messagesRepo: MessagesRepo, userId: Long)
                     when (conversationNotification.type) {
                         ChangeType.CREATE -> ConversationsRepo.addAndSelect(conversationNotification.entity)
                         ChangeType.DELETE -> ConversationsRepo.removeAndSelectFirst(conversationNotification.id)
-                        ChangeType.ADD_MESSAGE -> messagesRepo.addMessage(conversationNotification.message)
-                        ChangeType.DELETE_MESSAGE -> messagesRepo.deleteMessage(conversationNotification.message)
+                        ChangeType.ADD_MESSAGE -> MessagesRepo.addMessage(conversationNotification.message)
+                        ChangeType.DELETE_MESSAGE -> MessagesRepo.deleteMessage(conversationNotification.message)
                         ChangeType.UPDATE_LAST_MESSAGE -> ConversationsRepo.updateLastMessage(
                             conversationNotification.id,
                             conversationNotification.message

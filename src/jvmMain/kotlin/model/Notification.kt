@@ -1,6 +1,7 @@
 package model
 
 import common.Conversation
+import common.Message
 import common.User
 
 /**

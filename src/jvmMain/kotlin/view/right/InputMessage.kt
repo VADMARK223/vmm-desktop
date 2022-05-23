@@ -21,8 +21,8 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
+import common.MessagesRepo
 import common.UsersRepo
-import repository.MessagesRepo
 import service.printDraw
 
 /**
@@ -31,10 +31,7 @@ import service.printDraw
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputMessage(
-    messagesRepo: MessagesRepo,
-    mainOutput: MutableState<TextFieldValue>
-) {
+fun InputMessage(mainOutput: MutableState<TextFieldValue>) {
     printDraw()
     val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -45,7 +42,7 @@ fun InputMessage(
             },
             modifier = Modifier.fillMaxWidth().onKeyEvent {
                 if (it.key == Key.Enter || it.key == Key.NumPadEnter) {
-                    sendMessage(mainOutput, messagesRepo)
+                    sendMessage(mainOutput)
                 }
                 false
             },
@@ -80,7 +77,7 @@ fun InputMessage(
                     if (mainOutputEmpty.value) {
                         IconButton(
                             onClick = {
-                                sendMessage(mainOutput, messagesRepo)
+                                sendMessage(mainOutput)
                             }
                         ) {
                             Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))
@@ -92,14 +89,11 @@ fun InputMessage(
     }
 }
 
-private fun sendMessage(
-    mainOutput: MutableState<TextFieldValue>,
-    messagesRepo: MessagesRepo
-) {
+private fun sendMessage(mainOutput: MutableState<TextFieldValue>) {
     if (mainOutput.value.text.isNotEmpty()) {
         val conversationSelectedId = ConversationsRepo.selected().value?.id
         val currentUserId = UsersRepo.current().value?.id
-        messagesRepo.put(mainOutput.value.text, conversationSelectedId, currentUserId)
+        MessagesRepo.put(mainOutput.value.text, conversationSelectedId, currentUserId)
         mainOutput.value = TextFieldValue("")
     }
 }

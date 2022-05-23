@@ -22,10 +22,10 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import common.Message
+import common.MessagesRepo
 import common.UsersRepo
-import model.Message
 import kotlinx.datetime.toJavaLocalDateTime
-import repository.MessagesRepo
 import java.awt.event.MouseEvent
 import java.time.format.DateTimeFormatter
 
@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>, repo: MessagesRepo) {
+fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = MessageAction.values()
     Column(
@@ -92,7 +92,7 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>, repo
 //                            repo.etidMessage(message)
                         }
                         MessageAction.REMOVE -> {
-                            repo.delete(message.id)
+                            MessagesRepo.delete(message.id)
                         }
                     }
 

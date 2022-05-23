@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import common.ConversationsRepo
-import repository.MessagesRepo
 import service.printDraw
 import view.right.info.Info
 
@@ -21,10 +20,7 @@ import view.right.info.Info
  * @since 21.05.2022
  */
 @Composable
-fun Right(
-    messagesRepo: MessagesRepo,
-    mainOutput: MutableState<TextFieldValue>
-) {
+fun Right(mainOutput: MutableState<TextFieldValue>) {
     printDraw()
     if (ConversationsRepo.selected().value != null) {
         Column(
@@ -37,11 +33,10 @@ fun Right(
                 Modifier
                     .weight(1f)
                     .background(color = Color(14, 22, 33)),
-                mainOutput,
-                messagesRepo
+                mainOutput
             )
 
-            InputMessage(messagesRepo, mainOutput)
+            InputMessage(mainOutput)
         }
     } else {
         Box(Modifier.fillMaxSize().background(color = Color(14, 22, 33))) {

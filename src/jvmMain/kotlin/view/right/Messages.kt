@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
+import common.MessagesRepo
 import common.UsersRepo
 import kotlinx.coroutines.launch
-import repository.MessagesRepo
 import service.printDraw
 import view.right.item.MessageItem
 
@@ -30,8 +30,7 @@ import view.right.item.MessageItem
 @Composable
 fun Messages(
     modifier: Modifier,
-    mainOutput: MutableState<TextFieldValue>,
-    messagesRepo: MessagesRepo
+    mainOutput: MutableState<TextFieldValue>
 ) {
     printDraw()
 
@@ -40,7 +39,7 @@ fun Messages(
 
     scope.launch {
         if (conversation.value != null) {
-            messagesRepo.messagesByConversationId(conversation.value?.id as Long)
+            MessagesRepo.messagesByConversationId(conversation.value?.id as Long)
         }
     }
 
@@ -55,7 +54,7 @@ fun Messages(
             state = lazyListState,
             reverseLayout = true,
         ) {
-            itemsIndexed(items = messagesRepo.currentMessages().reversed()) { index, message ->
+            itemsIndexed(items = MessagesRepo.currentMessages().reversed()) { index, message ->
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = when (message.ownerId == UsersRepo.current().value?.id) {
@@ -64,7 +63,7 @@ fun Messages(
                     }
                 ) {
                     item {
-                        MessageItem(message, mainOutput, messagesRepo)
+                        MessageItem(message, mainOutput)
                     }
                 }
                 Spacer(modifier = Modifier.height(5.dp))
