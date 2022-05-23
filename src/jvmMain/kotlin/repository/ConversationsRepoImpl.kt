@@ -21,9 +21,7 @@ class ConversationsRepoImpl : ConversationsRepo {
     private val selected = mutableStateOf<Conversation?>(null)
     private var conversations = mutableStateListOf<Conversation>()
 
-    override fun all(): List<Conversation> {
-        return conversations
-    }
+    override fun all(): List<Conversation> = conversations
 
     override fun updateByUserId(userId: Long) {
         println("Get conversations by user id: $userId")
@@ -45,9 +43,7 @@ class ConversationsRepoImpl : ConversationsRepo {
         }
     }
 
-    override fun selected(): MutableState<Conversation?> {
-        return selected
-    }
+    override fun selected(): MutableState<Conversation?> = selected
 
     override fun put(name: String, ownerId: Long?, memberUsers: List<User>, companionId: Long?) {
         HttpService.coroutineScope.launch {

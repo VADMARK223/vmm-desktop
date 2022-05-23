@@ -52,9 +52,7 @@ class UsersRepoImpl : UsersRepo {
         return users
     }
 
-    override fun all(): List<User> {
-        return users
-    }
+    override fun all(): List<User> = users
 
     override fun addListener(listener: (userId: Long) -> Unit) {
         userLoadListener.add(listener)
@@ -78,13 +76,5 @@ class UsersRepoImpl : UsersRepo {
         }
     }
 
-    override fun getById(companionId: Long?): User? {
-        for (user in users) {
-            if(companionId == user.id) {
-                return user
-            }
-        }
-
-        return null
-    }
+    override fun getById(id: Long?): User? = users.singleOrNull { id == it.id }
 }

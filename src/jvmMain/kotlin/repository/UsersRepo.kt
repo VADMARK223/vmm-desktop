@@ -14,5 +14,5 @@ interface UsersRepo {
     fun addListener(listener: (Long) -> Unit)
     fun setCurrentUser(user: User)
     fun update(entity: User?)
-    fun getById(companionId: Long?): User?
+    fun getById(id: Long?): User?
 }

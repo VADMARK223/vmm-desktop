@@ -1,12 +1,12 @@
 package repository
 
 import androidx.compose.runtime.mutableStateListOf
-import model.Message
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import model.Message
 import service.HttpService
 
 /**
@@ -60,15 +60,7 @@ class MessagesRepoImpl : MessagesRepo {
         }
     }
 
-    override fun getById(messageId: Long?): Message? {
-        for (message in messages) {
-            if (messageId == message.id) {
-                return message
-            }
-        }
-
-        return null
-    }
+    override fun getById(messageId: Long?): Message? = messages.singleOrNull { it.id == messageId }
 
     override fun addMessage(message: Message?) {
         if (message != null) {
