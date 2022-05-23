@@ -44,7 +44,7 @@ fun AddMembers(conversationName: String) {
     val interactionSource = remember { MutableInteractionSource() }
     val selectedList = remember { mutableStateListOf<User>() }
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
-    val allUsers = remember { UsersRepo.requestAll() }
+    val allUsers = remember { UsersRepo.requestAll(true) }
 
     Box(
         modifier = Modifier

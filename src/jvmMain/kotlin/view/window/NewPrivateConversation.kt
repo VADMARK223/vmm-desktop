@@ -66,7 +66,7 @@ fun NewPrivateConversation() {
                 Search(searchState)
 
                 Box(modifier = Modifier.height(300.dp)) {
-                    val users = UsersRepo.requestAll()
+                    val users = UsersRepo.requestAll(true)
                     var filteredUsers: List<User>
                     LazyColumn(
                         state = usersLazyListState

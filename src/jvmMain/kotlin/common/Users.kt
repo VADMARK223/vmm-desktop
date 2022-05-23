@@ -60,12 +60,21 @@ object UsersRepo {
         return current
     }
 
-    fun requestAll(): List<User> {
+    fun requestAll(withoutCurrentUser: Boolean = false): List<User> {
         users.clear()
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users")
             if (response.status == HttpStatusCode.OK) {
-                users.addAll(response.body<List<User>>())
+                val responseUsers = response.body<List<User>>()
+                if (withoutCurrentUser) {
+                    for (user in responseUsers) {
+                        if (user.id != current.value?.id) {
+                            users.add(user)
+                        }
+                    }
+                } else {
+                    users.addAll(responseUsers)
+                }
             }
         }
 
