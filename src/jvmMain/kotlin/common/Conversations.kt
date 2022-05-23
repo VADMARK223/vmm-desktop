@@ -3,7 +3,6 @@ package common
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import dto.ConversationDto
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -122,3 +121,11 @@ object ConversationsRepo {
         }
     }
 }
+
+@Serializable
+data class ConversationDto(
+    val name: String,
+    val ownerId: Long?,
+    val memberIds: List<Long>,
+    val companionId: Long?
+)
