@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import common.Conversation
 import common.ConversationsRepo
+import service.printDraw
 import view.left.item.ConversationItem
 import java.util.*
 
@@ -28,6 +29,8 @@ import java.util.*
  */
 @Composable
 fun Conversations(searchState: MutableState<TextFieldValue>) {
+    printDraw()
+
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
         var filteredConversations: List<Conversation>
@@ -64,20 +67,10 @@ fun Conversations(searchState: MutableState<TextFieldValue>) {
                             }
                         })
 
-//                if (conversation.companionId == null) {
                 ConversationItem(
                     modifier = modifier,
                     conversation = conversation
                 )
-//                } else {
-//                    val companion: User? = usersRepo.getById(conversation.companionId)
-//                    CompanionItem(
-//                        conversation = conversation,
-//                        companion,
-//                        modifier = modifier,
-//                        repo = conversationsRepo
-//                    )
-//                }
             }
         }
 

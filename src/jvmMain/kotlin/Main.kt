@@ -32,8 +32,8 @@ import view.window.WindowState
 
 @Composable
 fun MainScreen() {
-    val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
     printDraw()
+    val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
     MaterialTheme(colors = darkThemeColors) {
         Row {
@@ -67,18 +67,6 @@ fun MainScreen() {
 suspend fun main() = coroutineScope {
     HttpService.coroutineScope = this
 
-    UsersRepo.addListener { userId ->
-        println("User loaded: $userId.")
-        ConversationsRepo.updateByUserId(userId)
-        launch {
-            initUsersWebSocket(userId)
-        }
-
-        launch {
-            initConversationsWebSocket(userId)
-        }
-    }
-
     application {
         val icon = painterResource("favicon.ico")
         val width = 1000.dp
@@ -104,6 +92,18 @@ suspend fun main() = coroutineScope {
             icon = icon
         ) {
             MainScreen()
+        }
+
+        UsersRepo.addListener { userId ->
+            println("User loaded: $userId.")
+
+            launch {
+                initUsersWebSocket(userId)
+            }
+
+            launch {
+                initConversationsWebSocket(userId)
+            }
         }
     }
 }

@@ -8,8 +8,8 @@ fun generateContactCredentials(): Boolean {
     return true
 }
 
-fun requestDefaultUser(): Boolean {
-    return true
+fun requestDefaultUserId(): Long? {
+    return 1L
 }
 
 fun printDraw() {
@@ -20,5 +20,5 @@ fun printDraw() {
 }
 
 private fun needPrintDraw(): Boolean {
-    return false
+    return true
 }

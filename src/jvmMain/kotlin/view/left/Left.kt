@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import common.UsersRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import service.printDraw
 import view.common.Search
 import view.window.Window
 import view.window.WindowState
@@ -29,6 +30,7 @@ import view.window.WindowType
  */
 @Composable
 fun Left() {
+    printDraw()
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
     Box(modifier = Modifier.width(450.dp)) {

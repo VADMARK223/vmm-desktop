@@ -13,7 +13,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import service.HttpService
-import service.requestDefaultUser
+import service.requestDefaultUserId
 
 /**
  * @author Markitanov Vadim
@@ -38,13 +38,15 @@ object UsersRepo {
     private val userLoadListener = mutableStateListOf<(Long) -> Unit>()
 
     init {
-        if (requestDefaultUser()) {
-            requestDefaultCurrentUser(1L)
+//        @Suppress("SameParameterValue")
+        val defaultUserId = requestDefaultUserId()
+
+        if (defaultUserId != null) {
+            requestDefaultCurrentUser(defaultUserId)
         }
         requestAll()
     }
 
-    @Suppress("SameParameterValue")
     private fun requestDefaultCurrentUser(id: Long) {
         println("Request default current user: $id.")
         HttpService.coroutineScope.launch {
@@ -94,6 +96,8 @@ object UsersRepo {
         userLoadListener.forEach {
             it.invoke(user.id)
         }
+
+        ConversationsRepo.updateByUserId(user.id)
     }
 
     fun update(entity: User?) {

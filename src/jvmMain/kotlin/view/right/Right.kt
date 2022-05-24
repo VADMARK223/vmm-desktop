@@ -22,7 +22,9 @@ import view.right.info.Info
 @Composable
 fun Right(mainOutput: MutableState<TextFieldValue>) {
     printDraw()
-    if (ConversationsRepo.selected().value != null) {
+    val conversationSelected = ConversationsRepo.selected().value
+
+    if (conversationSelected != null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
