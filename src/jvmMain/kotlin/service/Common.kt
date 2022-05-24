@@ -12,13 +12,11 @@ fun requestDefaultUserId(): Long? {
     return 1L
 }
 
+private fun needPrintDraw(): Boolean = false
+
 fun printDraw() {
     if (needPrintDraw()) {
         val funName = Thread.currentThread().stackTrace[2].methodName
         println("${funName.uppercase()} DRAW.")
     }
-}
-
-private fun needPrintDraw(): Boolean {
-    return true
 }

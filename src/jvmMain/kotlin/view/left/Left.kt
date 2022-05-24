@@ -115,6 +115,15 @@ fun DrawerView(scope: CoroutineScope, scaffoldState: ScaffoldState) {
             Text("New Private Conversation", color = Color.White, modifier = Modifier.padding(12.dp))
         }
 
+        Box(Modifier.fillMaxWidth().clickable {
+            scope.launch {
+                scaffoldState.drawerState.close()
+            }
+            UsersRepo.current().value = null
+        }) {
+            Text("Sign out", color = Color.White, modifier = Modifier.padding(12.dp))
+        }
+
         Spacer(Modifier.weight(1f))
 
         Text("Version 0.0.1", color = Color.White, modifier = Modifier.padding(12.dp))
