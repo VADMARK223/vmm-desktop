@@ -1,5 +1,4 @@
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +27,11 @@ import service.printDraw
 import util.JsonMapper.defaultMapper
 import view.left.Left
 import view.right.Right
-import view.window.*
+import view.window.BaseWindow
+import view.window.Window
 import view.window.WindowState
+import view.window.WindowType
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen() {
     printDraw()
@@ -44,27 +44,14 @@ fun MainScreen() {
         }
 
         if (UsersRepo.current().value == null) {
-            Window.state.value = WindowState(WindowType.SELECT_CURRENT_USER)
+            Window.show(WindowType.SELECT_CURRENT_USER)
         } else {
             if (Window.state.value == WindowState(WindowType.SELECT_CURRENT_USER)) {
-                Window.state.value = WindowState(WindowType.HIDE)
+                Window.hide()
             }
         }
 
         BaseWindow()
-
-        /*when (Window.state.value.type) {
-            WindowType.SELECT_CURRENT_USER -> SelectCurrentUser()
-            WindowType.NEW_CONVERSATION -> NewConversation()
-            WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation()
-            WindowType.ADD_MEMBERS -> {
-                val conversationName = Window.state.value.data as String
-                AddMembers(conversationName)
-            }
-            WindowType.VIEW_PROFILE -> ViewProfile()
-            WindowType.VIEW_GROUP_INFO -> ViewGroupInfo()
-            else -> {}
-        }*/
     }
 }
 

@@ -111,7 +111,7 @@ fun AddMembers(conversationName: String) {
         ) {
             Button(
                 onClick = {
-                    Window.state.value = WindowState(WindowType.NEW_CONVERSATION)
+                    Window.show(WindowType.NEW_CONVERSATION)
                 },
             ) {
                 Text("Cancel")

@@ -58,7 +58,7 @@ fun NewConversation() {
                     if (name.value.text.isEmpty()) {
                         nameEmpty.value = true
                     } else {
-                        Window.state.value = WindowState(WindowType.ADD_MEMBERS, name.value.text)
+                        Window.show(WindowType.ADD_MEMBERS, name.value.text)
                     }
                 },
             ) {

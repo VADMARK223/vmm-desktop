@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import service.printDraw
 import view.common.Search
 import view.window.Window
-import view.window.WindowState
 import view.window.WindowType
 
 /**
@@ -101,7 +100,7 @@ fun DrawerView(scope: CoroutineScope, scaffoldState: ScaffoldState) {
             scope.launch {
                 scaffoldState.drawerState.close()
             }
-            Window.state.value = WindowState(WindowType.NEW_CONVERSATION)
+            Window.show(WindowType.NEW_CONVERSATION)
         }) {
             Text("New conversation", color = Color.White, modifier = Modifier.padding(12.dp))
         }
@@ -110,7 +109,7 @@ fun DrawerView(scope: CoroutineScope, scaffoldState: ScaffoldState) {
             scope.launch {
                 scaffoldState.drawerState.close()
             }
-            Window.state.value = WindowState(WindowType.NEW_PRIVATE_CONVERSATION)
+            Window.show(WindowType.NEW_PRIVATE_CONVERSATION)
         }) {
             Text("New Private Conversation", color = Color.White, modifier = Modifier.padding(12.dp))
         }

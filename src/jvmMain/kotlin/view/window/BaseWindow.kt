@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun BaseWindow() {
-
-    println("Window.state.value.type : " + Window.state.value.type)
     if (Window.state.value.type == WindowType.HIDE) {
         return
     }

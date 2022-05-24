@@ -9,6 +9,10 @@ object Window {
         state.value = WindowState(windowType)
     }
 
+    fun show(type: WindowType, data: Any? = null) {
+        state.value = WindowState(type, data)
+    }
+
     fun hide() {
         state.value = WindowState(WindowType.HIDE)
     }
