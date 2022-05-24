@@ -5,12 +5,10 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.*
 import kotlinx.serialization.Serializable
 import service.HttpService
+import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
 /**
@@ -67,9 +65,27 @@ object MessagesRepo {
             HttpService.coroutineScope.launch {
                 val responseMessages =
                     HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<MutableList<Message>>()
-                responseMessages.add(Message(text = "System"))
-                conversationByMessages[id] = responseMessages
-                messages.addAll(responseMessages)
+
+                val formatter = DateTimeFormatter.ofPattern("dd.MM")
+                val newMessages = mutableListOf<Message>()
+                for (message in responseMessages) {
+                    val currentIndex = responseMessages.indexOf(message)
+                    val prevMessage = responseMessages.elementAtOrNull(currentIndex - 1)
+                    if (prevMessage == null) {
+                        newMessages.add(Message(text = formatter.format(message.createTime.toJavaLocalDateTime())))
+                    } else {
+                        if (message.createTime.date.dayOfYear != prevMessage.createTime.date.dayOfYear) {
+                            newMessages.add(Message(text = formatter.format(message.createTime.toJavaLocalDateTime())))
+                        }
+                    }
+
+//                    val currentMessage = responseMessages.get(responseMessages.indexOf(message))
+
+                    newMessages.add(message)
+                }
+
+                conversationByMessages[id] = newMessages
+                messages.addAll(newMessages)
             }
         }
     }

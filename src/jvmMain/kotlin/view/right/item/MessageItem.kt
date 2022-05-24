@@ -69,7 +69,7 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
                         color = Color.Gray
                     )
                 }
-                val pattern = "hh:mm:ss"
+                val pattern = "dd.MM.yyyy hh:mm:ss"
                 val formatter = DateTimeFormatter.ofPattern(pattern)
                 val messageCurrentTime = formatter.format(message.createTime.toJavaLocalDateTime())
                 Text(
