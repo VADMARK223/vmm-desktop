@@ -19,13 +19,18 @@ import kotlin.random.Random
  */
 @Serializable
 data class Message(
-    val id: Long = Random.nextLong(),
+    val id: Long = -1,
     val text: String = "Unknown",
-    val ownerId: Long,
+    val ownerId: Long = -1,
     val edited: Boolean = false,
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
     val conversationId: Long = Random.nextLong()
-)
+) {
+    val isSystem: Boolean
+        get() {
+            return ownerId == -1L
+        }
+}
 
 object MessagesRepo {
     private val conversationByMessages = mutableMapOf<Long, MutableList<Message>>()
@@ -49,13 +54,7 @@ object MessagesRepo {
 
     fun delete(id: Long) {
         HttpService.coroutineScope.launch {
-            /*val response = */HttpService.client.delete("${HttpService.host}/messages/${id}")
-            /*if (response.status == HttpStatusCode.OK) {
-                val success = response.body<Boolean>()
-                if (success) {
-                    messages.remove(message)
-                }
-            }*/
+            HttpService.client.delete("${HttpService.host}/messages/${id}")
         }
     }
 
@@ -68,8 +67,9 @@ object MessagesRepo {
             HttpService.coroutineScope.launch {
                 val responseMessages =
                     HttpService.client.get("${HttpService.host}/messages/conversation/${id}").call.body<MutableList<Message>>()
-                messages.addAll(responseMessages)
+                responseMessages.add(Message(text = "System"))
                 conversationByMessages[id] = responseMessages
+                messages.addAll(responseMessages)
             }
         }
     }

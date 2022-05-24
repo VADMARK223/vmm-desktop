@@ -57,25 +57,27 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
             }
     ) {
         Text(text = message.text, color = Color.White)
-        Row(
-            horizontalArrangement = Arrangement.End
-        ) {
-            if (message.edited) {
+
+        if (!message.isSystem) {
+            Row(
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (message.edited) {
+                    Text(
+                        text = "edited",
+                        style = MaterialTheme.typography.overline,
+                        color = Color.Gray
+                    )
+                }
+                val pattern = "hh:mm:ss"
+                val formatter = DateTimeFormatter.ofPattern(pattern)
+                val messageCurrentTime = formatter.format(message.createTime.toJavaLocalDateTime())
                 Text(
-                    text = "edited",
+                    text = messageCurrentTime,
                     style = MaterialTheme.typography.overline,
                     color = Color.Gray
                 )
             }
-            val pattern = "hh:mm:ss"
-            val formatter = DateTimeFormatter.ofPattern(pattern)
-//                .withZone(ZoneId.systemDefault())
-            val messageCurrentTime = formatter.format(message.createTime.toJavaLocalDateTime())
-            Text(
-                text = messageCurrentTime,
-                style = MaterialTheme.typography.overline,
-                color = Color.Gray
-            )
         }
 
         DropdownMenu(
@@ -89,7 +91,6 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
                     when (it) {
                         MessageAction.EDIT -> {
                             mainOutput.value = TextFieldValue(message.text)
-//                            repo.etidMessage(message)
                         }
                         MessageAction.REMOVE -> {
                             MessagesRepo.delete(message.id)

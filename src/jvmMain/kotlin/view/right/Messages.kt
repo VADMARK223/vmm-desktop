@@ -57,7 +57,8 @@ fun Messages(
             itemsIndexed(items = MessagesRepo.currentMessages().reversed()) { index, message ->
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = when (message.ownerId == UsersRepo.current().value?.id) {
+
+                    horizontalArrangement = if (message.isSystem) Arrangement.Center else when (message.ownerId == UsersRepo.current().value?.id) {
                         true -> Arrangement.End
                         else -> Arrangement.Start
                     }
