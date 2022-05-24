@@ -32,18 +32,12 @@ kotlin {
                 implementation("org.apache.logging.log4j:log4j-api:" + extra["log4j.version"])
                 implementation("org.apache.logging.log4j:log4j-core:" + extra["log4j.version"])
                 implementation("org.apache.logging.log4j:log4j-slf4j-impl:" + extra["log4j.version"])
-//                implementation("org.postgresql:postgresql:" + extra["postgresql.version"])
-//                implementation("org.jetbrains.exposed:exposed-core:" + extra["jetbrains.exposed.version"])
-//                implementation("org.jetbrains.exposed:exposed-dao:" + extra["jetbrains.exposed.version"])
-//                implementation("org.jetbrains.exposed:exposed-jdbc:" + extra["jetbrains.exposed.version"])
-//                implementation("org.jetbrains.exposed:exposed-java-time:" + extra["jetbrains.exposed.version"])
 
                 implementation("io.ktor:ktor-client-core:2.0.0")
                 implementation("io.ktor:ktor-client-cio:2.0.0")
                 implementation("io.ktor:ktor-client-websockets:2.0.0")
                 // Ktor plugins
                 implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
-                // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
                 implementation("ch.qos.logback:logback-classic:1.3.0-alpha14")
                 implementation("io.ktor:ktor-client-logging:2.0.0")
 

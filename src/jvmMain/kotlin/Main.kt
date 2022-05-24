@@ -1,4 +1,5 @@
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +31,7 @@ import view.right.Right
 import view.window.*
 import view.window.WindowState
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen() {
     printDraw()
@@ -49,7 +51,9 @@ fun MainScreen() {
             }
         }
 
-        when (Window.state.value.type) {
+        BaseWindow()
+
+        /*when (Window.state.value.type) {
             WindowType.SELECT_CURRENT_USER -> SelectCurrentUser()
             WindowType.NEW_CONVERSATION -> NewConversation()
             WindowType.NEW_PRIVATE_CONVERSATION -> NewPrivateConversation()
@@ -60,7 +64,7 @@ fun MainScreen() {
             WindowType.VIEW_PROFILE -> ViewProfile()
             WindowType.VIEW_GROUP_INFO -> ViewGroupInfo()
             else -> {}
-        }
+        }*/
     }
 }
 
