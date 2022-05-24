@@ -9,7 +9,7 @@ fun generateContactCredentials(): Boolean {
 }
 
 fun requestDefaultUserId(): Long? {
-    return null
+    return 1L
 }
 
 private fun needPrintDraw(): Boolean = false

@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import common.ConversationsRepo
 import common.User
 import common.UsersRepo
 import view.common.Search
@@ -91,7 +92,7 @@ fun SelectCurrentUser() {
                                     .fillMaxWidth()
                                     .clickable {
                                         UsersRepo.setCurrentUser(user)
-//                                        UsersRepo.current().value = user
+                                        ConversationsRepo.updateByUserId(user.id)
                                         Window.hide()
                                     }
                             )

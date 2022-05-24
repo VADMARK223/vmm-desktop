@@ -97,6 +97,7 @@ suspend fun main() = coroutineScope {
         val currentUser = UsersRepo.current().value
         if (currentUser != null) {
             println("User loaded: $currentUser")
+            ConversationsRepo.updateByUserId(currentUser.id)
             launch {
                 initUsersWebSocket(currentUser.id)
             }

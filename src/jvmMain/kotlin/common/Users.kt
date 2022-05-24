@@ -36,7 +36,6 @@ object UsersRepo {
     private val users = mutableStateListOf<User>()
 
     init {
-//        @Suppress("SameParameterValue")
         val defaultUserId = requestDefaultUserId()
 
         if (defaultUserId != null) {
@@ -86,8 +85,6 @@ object UsersRepo {
     fun setCurrentUser(user: User) {
         println("Set current user: $user")
         current.value = user
-
-        ConversationsRepo.updateByUserId(user.id)
     }
 
     fun update(entity: User?) {
