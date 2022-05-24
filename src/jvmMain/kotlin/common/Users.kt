@@ -35,8 +35,6 @@ object UsersRepo {
     private val current = mutableStateOf<User?>(null)
     private val users = mutableStateListOf<User>()
 
-    private val userLoadListener = mutableStateListOf<(Long) -> Unit>()
-
     init {
 //        @Suppress("SameParameterValue")
         val defaultUserId = requestDefaultUserId()
@@ -85,17 +83,9 @@ object UsersRepo {
 
     fun all(): List<User> = users
 
-    fun addListener(listener: (userId: Long) -> Unit) {
-        userLoadListener.add(listener)
-    }
-
     fun setCurrentUser(user: User) {
         println("Set current user: $user")
-
         current.value = user
-        userLoadListener.forEach {
-            it.invoke(user.id)
-        }
 
         ConversationsRepo.updateByUserId(user.id)
     }

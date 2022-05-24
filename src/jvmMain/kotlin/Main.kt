@@ -94,15 +94,14 @@ suspend fun main() = coroutineScope {
             MainScreen()
         }
 
-        UsersRepo.addListener { userId ->
-            println("User loaded: $userId.")
-
+        val currentUser = UsersRepo.current().value
+        if (currentUser != null) {
+            println("User loaded: $currentUser")
             launch {
-                initUsersWebSocket(userId)
+                initUsersWebSocket(currentUser.id)
             }
-
             launch {
-                initConversationsWebSocket(userId)
+                initConversationsWebSocket(currentUser.id)
             }
         }
     }
