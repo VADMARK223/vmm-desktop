@@ -146,13 +146,13 @@ suspend fun main() = coroutineScope {
 
 @Composable
 fun FileDialogTemp(
-    parent: java.awt.Frame? = null,
     onCloseRequest: (result: String?) -> Unit
 ) {
 //    Text("File dialog.")
     AwtWindow(
         true,
         create = {
+            val parent : java.awt.Frame? = null
             object : FileDialog(parent, "Choose a file", LOAD) {
                 override fun setVisible(b: Boolean) {
                     println("B: $b")
