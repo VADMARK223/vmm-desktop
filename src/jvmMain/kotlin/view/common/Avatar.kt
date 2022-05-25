@@ -1,5 +1,6 @@
 package view.common
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -12,7 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.unit.dp
+import common.User
+import org.jetbrains.skia.Image
 import kotlin.random.Random
 
 /**
@@ -20,7 +24,7 @@ import kotlin.random.Random
  * @since 15.05.2022
  */
 @Composable
-fun Avatar(text: String, online: Boolean?) {
+fun Avatar(text: String, online: Boolean?, user: User? = null) {
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
 
     val size = 50.dp
@@ -31,11 +35,18 @@ fun Avatar(text: String, online: Boolean?) {
                 .clip(RoundedCornerShape(size))
                 .background(bgColor.value)
         ) {
-            Text(
-                text = text,
-                color = Color.White,
-                modifier = Modifier.align(Alignment.Center)
-            )
+            if (user?.image != null) {
+                Image(
+                    bitmap = Image.makeFromEncoded(user.image).toComposeImageBitmap(),
+                    contentDescription = "Loaded image"
+                )
+            } else {
+                Text(
+                    text = text,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
 
         if (online == true) {

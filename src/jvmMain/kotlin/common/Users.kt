@@ -25,7 +25,8 @@ data class User(
     val firstName: String,
     val lastName: String,
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-    val online: Boolean = false
+    val online: Boolean = false,
+    val image: ByteArray? = null
 ) {
     val name: String
         get() = "$firstName $lastName"
@@ -103,7 +104,7 @@ object UsersRepo {
         HttpService.coroutineScope.launch {
             val response = HttpService.client.post("${HttpService.host}/users") {
                 contentType(ContentType.Application.Json)
-                setBody(Image("Image from desktop.", imageBytes))
+                setBody(UserDto(1L, "Image from desktop.", imageBytes)) // TODO: Hardcode
             }
             println("Load image: $response")
             if (response.status == HttpStatusCode.OK) {
@@ -112,3 +113,10 @@ object UsersRepo {
         }
     }
 }
+
+@Serializable
+data class UserDto(
+    val id: Long,
+    val text: String,
+    val image: ByteArray
+)
