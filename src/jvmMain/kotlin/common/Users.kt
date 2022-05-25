@@ -19,19 +19,6 @@ import service.requestDefaultUserId
  * @author Markitanov Vadim
  * @since 23.05.2022
  */
-@Serializable
-data class User(
-    val id: Long,
-    val firstName: String,
-    val lastName: String,
-    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-    val online: Boolean = false,
-    val image: ByteArray? = null
-) {
-    val name: String
-        get() = "$firstName $lastName"
-}
-
 object UsersRepo {
     private val current = mutableStateOf<User?>(null)
     private val users = mutableStateListOf<User>()
@@ -111,6 +98,23 @@ object UsersRepo {
 
             }
         }
+    }
+}
+
+@Serializable
+data class User(
+    val id: Long,
+    val firstName: String,
+    val lastName: String,
+    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val online: Boolean = false,
+    val image: ByteArray? = null
+) {
+    val name: String
+        get() = "$firstName $lastName"
+
+    override fun toString(): String {
+        return "Id: " + this.id.toString()
     }
 }
 
