@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
@@ -20,6 +23,8 @@ import kotlinx.datetime.toJavaLocalDateTime
 import service.printDraw
 import view.window.Window
 import view.window.WindowType
+import java.awt.Cursor
+import java.awt.Cursor.HAND_CURSOR
 import java.time.format.DateTimeFormatter
 
 /**
@@ -76,7 +81,7 @@ fun Info() {
         }
 
         IconButton(
-            modifier = Modifier.align(Alignment.CenterEnd),
+            modifier = Modifier.align(Alignment.CenterEnd).pointerHoverIcon(PointerIcon(Cursor(HAND_CURSOR))),
             onClick = {
                 expanded.value = true
             }
@@ -87,6 +92,18 @@ fun Info() {
                 tint = Color.Gray
             )
         }
+        /*IconButton(
+            modifier = Modifier.align(Alignment.Center).pointerHoverIcon(PointerIcon(Cursor(HAND_CURSOR))),
+            onClick = {
+                println("APLOAD")
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Face,
+                contentDescription = null,
+                tint = Color.Gray
+            )
+        }*/
         Box(modifier = Modifier.align(Alignment.BottomEnd)) {
             DropdownMenu(
                 expanded = expanded.value,

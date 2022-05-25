@@ -11,6 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -22,6 +24,7 @@ import service.printDraw
 import view.common.Search
 import view.window.Window
 import view.window.WindowType
+import java.awt.Cursor
 
 /**
  * @author Markitanov Vadim
@@ -57,11 +60,13 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, searchState: Mut
             Search(searchState)
         },
         navigationIcon = {
-            IconButton(onClick = {
-                scope.launch {
-                    scaffoldState.drawerState.open()
-                }
-            }) {
+            IconButton(
+                modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
+                onClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                }) {
                 Icon(Icons.Filled.Menu, "Menu", tint = Color(69, 80, 91))
             }
         },
@@ -96,30 +101,42 @@ fun DrawerView(scope: CoroutineScope, scaffoldState: ScaffoldState) {
 
         Spacer(Modifier.height(12.dp))
 
-        Box(Modifier.fillMaxWidth().clickable {
-            scope.launch {
-                scaffoldState.drawerState.close()
-            }
-            Window.show(WindowType.NEW_CONVERSATION)
-        }) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR)))
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                    Window.show(WindowType.NEW_CONVERSATION)
+                }) {
             Text("New conversation", color = Color.White, modifier = Modifier.padding(12.dp))
         }
 
-        Box(Modifier.fillMaxWidth().clickable {
-            scope.launch {
-                scaffoldState.drawerState.close()
-            }
-            Window.show(WindowType.NEW_PRIVATE_CONVERSATION)
-        }) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR)))
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                    Window.show(WindowType.NEW_PRIVATE_CONVERSATION)
+                }) {
             Text("New Private Conversation", color = Color.White, modifier = Modifier.padding(12.dp))
         }
 
-        Box(Modifier.fillMaxWidth().clickable {
-            scope.launch {
-                scaffoldState.drawerState.close()
-            }
-            UsersRepo.current().value = null
-        }) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR)))
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                    UsersRepo.current().value = null
+                }) {
             Text("Sign out", color = Color.White, modifier = Modifier.padding(12.dp))
         }
 

@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
@@ -28,6 +30,7 @@ import resources.selectedBackgroundColor
 import service.printDraw
 import view.common.Search
 import view.item.user.UserItem
+import java.awt.Cursor
 import java.util.*
 
 /**
@@ -81,6 +84,7 @@ fun AddMembers(conversationName: String) {
                             .background(
                                 if (selectedList.contains(user)) selectedBackgroundColor else defaultBackgroundColor
                             )
+                            .pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR)))
                             .fillMaxWidth()
                             .selectable(selected = selectedList.contains(user),
                                 onClick = {
@@ -110,6 +114,7 @@ fun AddMembers(conversationName: String) {
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Button(
+                modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
                 onClick = {
                     Window.show(WindowType.NEW_CONVERSATION)
                 },

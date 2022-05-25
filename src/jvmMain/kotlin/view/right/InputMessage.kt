@@ -18,12 +18,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
 import common.MessagesRepo
 import common.UsersRepo
 import service.printDraw
+import java.awt.Cursor
 
 /**
  * @author Markitanov Vadim
@@ -57,6 +60,7 @@ fun InputMessage(mainOutput: MutableState<TextFieldValue>) {
             ),
             leadingIcon = {
                 IconButton(
+                    modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
                     onClick = {
                         println("Add file")
                     }
@@ -67,6 +71,7 @@ fun InputMessage(mainOutput: MutableState<TextFieldValue>) {
             trailingIcon = {
                 Row {
                     IconButton(
+                        modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
                         onClick = {
                             println("Add emoji")
                         }
@@ -76,6 +81,7 @@ fun InputMessage(mainOutput: MutableState<TextFieldValue>) {
 
                     if (mainOutputEmpty.value) {
                         IconButton(
+                            modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
                             onClick = {
                                 sendMessage(mainOutput)
                             }

@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.awtEventOrNull
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import common.Conversation
@@ -23,6 +25,7 @@ import common.UsersRepo
 import kotlinx.datetime.toJavaLocalDateTime
 import service.printDraw
 import view.common.Avatar
+import java.awt.Cursor
 import java.awt.event.MouseEvent
 import java.time.format.DateTimeFormatter
 
@@ -43,11 +46,12 @@ fun ConversationItem(
     val menuItems = if (companion != null) forChat else forConversation
 
     Box(
-        modifier = modifier,
+        modifier = modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR)))
     ) {
         Row(
             modifier = Modifier
-                .padding(10.dp).onPointerEvent(PointerEventType.Press) {
+                .padding(10.dp)
+                .onPointerEvent(PointerEventType.Press) {
                     when (it.awtEventOrNull?.button) {
                         MouseEvent.BUTTON3 -> {
                             expanded.value = true
