@@ -97,4 +97,18 @@ object UsersRepo {
     }
 
     fun getById(id: Long?): User? = users.singleOrNull { id == it.id }
+
+    fun loadImage(imageBytes: ByteArray) {
+        println("imageBytes: $imageBytes")
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.post("${HttpService.host}/users") {
+                contentType(ContentType.Application.Json)
+                setBody(Image("Image from desktop.", imageBytes))
+            }
+            println("Load image: $response")
+            if (response.status == HttpStatusCode.OK) {
+
+            }
+        }
+    }
 }

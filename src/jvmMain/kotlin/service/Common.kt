@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.window.AwtWindow
+import common.UsersRepo
 import org.jetbrains.skia.Image
 import java.awt.FileDialog
 import java.awt.Frame
@@ -25,7 +26,7 @@ fun requestDefaultUserId(): Long? {
     return 1L
 }
 
-private fun needPrintDraw(): Boolean = true
+private fun needPrintDraw(): Boolean = false
 
 fun printDraw() {
     if (needPrintDraw()) {
@@ -45,7 +46,9 @@ fun ImageChooser(showImageChooser: MutableState<Boolean>) {
             if (file.exists()) {
                 val image = mutableStateOf<ImageBitmap?>(null)
                 try {
-                    image.value = Image.makeFromEncoded(file.readBytes()).toComposeImageBitmap()
+                    val imageBytes = file.readBytes()
+                    UsersRepo.loadImage(imageBytes)
+                    image.value = Image.makeFromEncoded(imageBytes).toComposeImageBitmap()
                 } catch (e: Exception) {
                     println("Error load image: ${e.localizedMessage}")
                 }
