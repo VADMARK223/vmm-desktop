@@ -25,6 +25,7 @@ import view.window.Window
 import view.window.WindowType
 import java.awt.Cursor
 import java.awt.Cursor.HAND_CURSOR
+import java.awt.FileDialog
 import java.time.format.DateTimeFormatter
 
 /**
@@ -92,10 +93,11 @@ fun Info() {
                 tint = Color.Gray
             )
         }
-        /*IconButton(
+        IconButton(
             modifier = Modifier.align(Alignment.Center).pointerHoverIcon(PointerIcon(Cursor(HAND_CURSOR))),
             onClick = {
                 println("APLOAD")
+
             }
         ) {
             Icon(
@@ -103,7 +105,7 @@ fun Info() {
                 contentDescription = null,
                 tint = Color.Gray
             )
-        }*/
+        }
         Box(modifier = Modifier.align(Alignment.BottomEnd)) {
             DropdownMenu(
                 expanded = expanded.value,

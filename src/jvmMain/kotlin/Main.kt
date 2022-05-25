@@ -1,8 +1,11 @@
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
@@ -31,6 +34,8 @@ import view.window.BaseWindow
 import view.window.Window
 import view.window.WindowState
 import view.window.WindowType
+import java.awt.FileDialog
+import java.io.File
 
 @Composable
 fun MainScreen() {
@@ -52,6 +57,44 @@ fun MainScreen() {
         }
 
         BaseWindow()
+        val isFileChooserOpen = remember { mutableStateOf<String?>(null) }
+        if (isFileChooserOpen.value != null) {
+            println("GOOD: ${isFileChooserOpen.value}")
+            val file = isFileChooserOpen.value?.let { File(it) }
+            if (file != null) {
+                if (file.exists()) {
+                    Image(
+                        bitmap = org.jetbrains.skia.Image.makeFromEncoded(file.readBytes()).toComposeImageBitmap(),
+                        contentDescription = "Test"
+                    )
+                }
+            }
+        }
+
+        val state1 = rememberWindowState(
+            size = DpSize(100.dp, 100.dp),
+            position = WindowPosition(2300.dp, 300.dp),
+            isMinimized = false
+        )
+
+        Window(
+//            onCloseRequest = ::exitApplication,
+            onCloseRequest = { state1.isMinimized = false },
+            state = state1,
+            true,
+            "Temp"
+        ) {
+            FileDialogTemp(
+                onCloseRequest = {
+                    println("Result: $it")
+                    if (it != null) {
+                        val file = File(it)
+                        println("File exists: ${file.exists()}")
+                        isFileChooserOpen.value = it
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -85,6 +128,8 @@ suspend fun main() = coroutineScope {
             MainScreen()
         }
 
+        /**/
+
         val currentUser = UsersRepo.current().value
         if (currentUser != null) {
             println("User loaded: $currentUser")
@@ -97,6 +142,30 @@ suspend fun main() = coroutineScope {
             }
         }
     }
+}
+
+@Composable
+fun FileDialogTemp(
+    parent: java.awt.Frame? = null,
+    onCloseRequest: (result: String?) -> Unit
+) {
+//    Text("File dialog.")
+    AwtWindow(
+        true,
+        create = {
+            object : FileDialog(parent, "Choose a file", LOAD) {
+                override fun setVisible(b: Boolean) {
+                    println("B: $b")
+                    super.setVisible(b)
+                    if (b) {
+                        println("Call close request.")
+                        onCloseRequest(directory + file)
+                    }
+                }
+            }
+        },
+        dispose = FileDialog::dispose
+    )
 }
 
 suspend fun initUsersWebSocket(userId: Long) {
