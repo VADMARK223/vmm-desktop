@@ -1,10 +1,8 @@
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.DpSize
@@ -33,8 +31,6 @@ import view.window.BaseWindow
 import view.window.Window
 import view.window.WindowState
 import view.window.WindowType
-import java.awt.FileDialog
-import java.io.File
 
 @Composable
 fun MainScreen() {
@@ -56,37 +52,6 @@ fun MainScreen() {
         }
 
         BaseWindow()
-
-        val imageFullName = remember { mutableStateOf<String?>(null) }
-        if (imageFullName.value != null) {
-            println("GOOD: ${imageFullName.value}")
-            val file = imageFullName.value?.let { File(it) }
-            if (file != null) {
-                if (file.exists()) {
-                    Image(
-                        bitmap = org.jetbrains.skia.Image.makeFromEncoded(file.readBytes()).toComposeImageBitmap(),
-                        contentDescription = "Test"
-                    )
-                }
-            }
-        }
-
-        AwtWindow(
-            true,
-            create = {
-                val parent : java.awt.Frame? = null
-                object : FileDialog(parent, "Choose a image", LOAD) {
-                    override fun setVisible(b: Boolean) {
-                        super.setVisible(b)
-                        if (b) {
-                            println("Call close request.")
-                            imageFullName.value = directory + file
-                        }
-                    }
-                }
-            },
-            dispose = FileDialog::dispose
-        )
     }
 }
 

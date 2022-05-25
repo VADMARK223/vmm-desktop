@@ -20,12 +20,12 @@ import common.ConversationsRepo
 import common.User
 import common.UsersRepo
 import kotlinx.datetime.toJavaLocalDateTime
+import service.ImageChooser
 import service.printDraw
 import view.window.Window
 import view.window.WindowType
 import java.awt.Cursor
 import java.awt.Cursor.HAND_CURSOR
-import java.awt.FileDialog
 import java.time.format.DateTimeFormatter
 
 /**
@@ -38,6 +38,7 @@ fun Info() {
     val expanded = remember { mutableStateOf(false) }
     val conversation = ConversationsRepo.selected()
     val companion: User? = UsersRepo.getById(conversation.value?.companionId)
+    val showImageChooser = remember { mutableStateOf(false) }
 
     val (forConversation, forChat) = InfoAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
@@ -96,8 +97,8 @@ fun Info() {
         IconButton(
             modifier = Modifier.align(Alignment.Center).pointerHoverIcon(PointerIcon(Cursor(HAND_CURSOR))),
             onClick = {
-                println("APLOAD")
-
+                println("SHOW IMAGE CHOOSER")
+                showImageChooser.value = true
             }
         ) {
             Icon(
@@ -123,10 +124,6 @@ fun Info() {
                             InfoAction.VIEW_GROUP_INFO -> {
                                 Window.setState(WindowType.VIEW_GROUP_INFO)
                             }
-
-                            /*InfoAction.EDIT_CONTACT -> {
-                                println("Edit contact.")
-                            }*/
                         }
 
                         expanded.value = false
@@ -135,6 +132,10 @@ fun Info() {
                     }
                 }
             }
+        }
+
+        if (showImageChooser.value) {
+            ImageChooser(showImageChooser)
         }
     }
 }
