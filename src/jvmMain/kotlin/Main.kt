@@ -1,7 +1,6 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,10 +56,11 @@ fun MainScreen() {
         }
 
         BaseWindow()
-        val isFileChooserOpen = remember { mutableStateOf<String?>(null) }
-        if (isFileChooserOpen.value != null) {
-            println("GOOD: ${isFileChooserOpen.value}")
-            val file = isFileChooserOpen.value?.let { File(it) }
+
+        val imageFullName = remember { mutableStateOf<String?>(null) }
+        if (imageFullName.value != null) {
+            println("GOOD: ${imageFullName.value}")
+            val file = imageFullName.value?.let { File(it) }
             if (file != null) {
                 if (file.exists()) {
                     Image(
@@ -71,30 +71,22 @@ fun MainScreen() {
             }
         }
 
-        val state1 = rememberWindowState(
-            size = DpSize(100.dp, 100.dp),
-            position = WindowPosition(2300.dp, 300.dp),
-            isMinimized = false
-        )
-
-        Window(
-//            onCloseRequest = ::exitApplication,
-            onCloseRequest = { state1.isMinimized = false },
-            state = state1,
+        AwtWindow(
             true,
-            "Temp"
-        ) {
-            FileDialogTemp(
-                onCloseRequest = {
-                    println("Result: $it")
-                    if (it != null) {
-                        val file = File(it)
-                        println("File exists: ${file.exists()}")
-                        isFileChooserOpen.value = it
+            create = {
+                val parent : java.awt.Frame? = null
+                object : FileDialog(parent, "Choose a image", LOAD) {
+                    override fun setVisible(b: Boolean) {
+                        super.setVisible(b)
+                        if (b) {
+                            println("Call close request.")
+                            imageFullName.value = directory + file
+                        }
                     }
                 }
-            )
-        }
+            },
+            dispose = FileDialog::dispose
+        )
     }
 }
 
@@ -142,30 +134,6 @@ suspend fun main() = coroutineScope {
             }
         }
     }
-}
-
-@Composable
-fun FileDialogTemp(
-    onCloseRequest: (result: String?) -> Unit
-) {
-//    Text("File dialog.")
-    AwtWindow(
-        true,
-        create = {
-            val parent : java.awt.Frame? = null
-            object : FileDialog(parent, "Choose a file", LOAD) {
-                override fun setVisible(b: Boolean) {
-                    println("B: $b")
-                    super.setVisible(b)
-                    if (b) {
-                        println("Call close request.")
-                        onCloseRequest(directory + file)
-                    }
-                }
-            }
-        },
-        dispose = FileDialog::dispose
-    )
 }
 
 suspend fun initUsersWebSocket(userId: Long) {
