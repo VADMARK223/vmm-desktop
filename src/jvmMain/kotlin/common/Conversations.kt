@@ -21,7 +21,6 @@ import service.HttpService
 @Serializable
 data class Conversation(
     val id: Long,
-    var name: String,
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val updateTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val ownerId: Long,
@@ -30,6 +29,11 @@ data class Conversation(
     var lastMessage: Message? = null,
     var companion: User? = null
 ) {
+    var name: String = ""
+        set(value) {
+            visibleName.value = value
+            field = value
+        }
     val visibleName: MutableState<String> = mutableStateOf(name)
     val lastMessageVisible: MutableState<Message?> = mutableStateOf(lastMessage)
 }
@@ -130,9 +134,9 @@ object ConversationsRepo {
     fun update(entity: Conversation?) {
         if (entity != null) {
             for (conversation in conversations) {
-                if(entity.id == conversation.id) {
+                if (entity.id == conversation.id) {
                     conversation.name = entity.name
-                    conversation.visibleName.value = entity.name
+//                    conversation.visibleName.value = entity.name
                 }
             }
         }
