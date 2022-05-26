@@ -44,6 +44,10 @@ fun ConversationItem(
     val companion: User? = UsersRepo.getById(conversation.companionId)
     val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
+    val conversationName = mutableStateOf(conversation.name)
+
+//    println(">>>>>>>>>>> ${conversationName.value}")
+//    println("conversation.test.value: " + conversation.test.value)
 
     Box(
         modifier = modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR)))
@@ -63,7 +67,7 @@ fun ConversationItem(
         ) {
             Box {
                 val avaText =
-                    if (companion != null) "${companion.firstName.first()}${companion.lastName.first()}" else conversation.name.first()
+                    if (companion != null) "${companion.firstName.first()}${companion.lastName.first()}" else conversation.visibleName.value.first() // TODO get only name
                         .toString()
                 Avatar(avaText, mutableStateOf(companion?.online).value)
 
@@ -100,7 +104,7 @@ fun ConversationItem(
             Column {
                 Row {
                     Text(
-                        text = conversation.name,
+                        text = conversation.visibleName.value,
                         style = MaterialTheme.typography.h6,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -128,11 +132,11 @@ fun ConversationItem(
                     )
                 }
 
-                if (conversation.lastMessage != null) {
+                if (conversation.lastMessageVisible.value != null) {
                     val lastMessageText =
-                        if (UsersRepo.current().value?.id != conversation.lastMessage?.ownerId)
-                            conversation.lastMessage?.text ?: ""
-                        else "You: ${conversation.lastMessage?.text}"
+                        if (UsersRepo.current().value?.id != conversation.lastMessageVisible.value?.ownerId)
+                            conversation.lastMessageVisible.value?.text ?: ""
+                        else "You: ${conversation.lastMessageVisible.value?.text}"
                     Text(
                         text = lastMessageText,
                         style = MaterialTheme.typography.overline,

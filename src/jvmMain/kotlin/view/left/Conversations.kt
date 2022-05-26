@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,8 @@ import java.util.*
 fun Conversations(searchState: MutableState<TextFieldValue>) {
     printDraw()
 
+    val selectedConversation = remember { ConversationsRepo.selected() }
+
     Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
         var filteredConversations: List<Conversation>
@@ -45,7 +48,7 @@ fun Conversations(searchState: MutableState<TextFieldValue>) {
 
                 val searchedTextLowercase = searchedText.lowercase(Locale.getDefault())
                 for (conversation in ConversationsRepo.all()) {
-                    if (conversation.name.lowercase().contains(searchedTextLowercase)) {
+                    if (conversation.visibleName.value.lowercase().contains(searchedTextLowercase)) {
                         resultList.add(conversation)
                     }
                 }
@@ -56,14 +59,14 @@ fun Conversations(searchState: MutableState<TextFieldValue>) {
             items(items = filteredConversations) { conversation ->
                 val modifier = Modifier
                     .background(
-                        if (ConversationsRepo.selected().value == conversation) Color(43, 82, 120)
+                        if (selectedConversation.value == conversation) Color(43, 82, 120)
                         else Color(23, 33, 43)
                     )
                     .fillMaxWidth()
-                    .selectable(conversation == ConversationsRepo.selected().value,
+                    .selectable(conversation == selectedConversation.value,
                         onClick = {
-                            if (ConversationsRepo.selected().value != conversation) {
-                                ConversationsRepo.selected().value = conversation
+                            if (selectedConversation.value != conversation) {
+                                selectedConversation.value = conversation
                             }
                         })
 

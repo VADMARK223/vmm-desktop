@@ -55,7 +55,7 @@ fun Info() {
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(
-                text = conversation.value?.name ?: "",
+                text = conversation.value?.visibleName?.value ?: "",
                 style = MaterialTheme.typography.h6,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

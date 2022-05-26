@@ -36,8 +36,8 @@ import java.io.File
 @Composable
 fun MainScreen() {
     printDraw()
-    val tempFile = File("/home/vadmark/Pictures/temp/f408dc7863a3be1ec10c242371d32cac.jpg")
-    UsersRepo.loadImage(tempFile.readBytes())
+//    val tempFile = File("/home/vadmark/Pictures/temp/f408dc7863a3be1ec10c242371d32cac.jpg")
+//    UsersRepo.loadImage(tempFile.readBytes())
 
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 

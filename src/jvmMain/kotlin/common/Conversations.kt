@@ -29,7 +29,10 @@ data class Conversation(
     val membersCount: Int? = null,
     var lastMessage: Message? = null,
     var companion: User? = null
-)
+) {
+    val visibleName: MutableState<String> = mutableStateOf(name)
+    val lastMessageVisible: MutableState<Message?> = mutableStateOf(lastMessage)
+}
 
 object ConversationsRepo {
     private val selected = mutableStateOf<Conversation?>(null)
@@ -111,7 +114,7 @@ object ConversationsRepo {
     fun updateLastMessage(conversationId: Long, message: Message?) {
         for (conversation in conversations) {
             if (conversation.id == conversationId) {
-                conversations[conversations.indexOf(conversation)] = conversation.copy(lastMessage = message)
+                conversation.lastMessageVisible.value = message
             }
         }
     }
