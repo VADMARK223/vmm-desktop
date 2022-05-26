@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import common.ConversationsRepo
 import common.MessagesRepo
+import common.User
 import common.UsersRepo
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -130,7 +131,7 @@ suspend fun initUsersWebSocket(userId: Long) {
 
                 if (userNotification.type == ChangeType.UPDATE) {
                     ConversationsRepo.updateCompanion(userNotification.entity)
-                    UsersRepo.update(userNotification.entity)
+                    UsersRepo.update(userNotification.entity as User)
                 }
 
             }
@@ -175,6 +176,7 @@ suspend fun initConversationsWebSocket(userId: Long) {
                             conversationNotification.id,
                             conversationNotification.message
                         )
+                        ChangeType.UPDATE -> ConversationsRepo.update(conversationNotification.entity)
 
                         else -> {
                             println("Unknown notification type ${conversationNotification.type}.")

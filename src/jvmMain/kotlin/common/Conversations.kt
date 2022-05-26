@@ -126,6 +126,17 @@ object ConversationsRepo {
             selected.value = null
         }
     }
+
+    fun update(entity: Conversation?) {
+        if (entity != null) {
+            for (conversation in conversations) {
+                if(entity.id == conversation.id) {
+                    conversation.name = entity.name
+                    conversation.visibleName.value = entity.name
+                }
+            }
+        }
+    }
 }
 
 @Serializable

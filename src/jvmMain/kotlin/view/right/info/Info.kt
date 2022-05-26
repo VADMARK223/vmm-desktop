@@ -118,7 +118,7 @@ fun Info() {
                     DropdownMenuItem(onClick = {
                         when (it) {
                             InfoAction.VIEW_PROFILE -> {
-                                Window.setState(WindowType.VIEW_PROFILE)
+                                Window.show(WindowType.VIEW_PROFILE, companion)
                             }
 
                             InfoAction.VIEW_GROUP_INFO -> {

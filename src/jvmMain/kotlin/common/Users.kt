@@ -75,11 +75,22 @@ object UsersRepo {
         current.value = user
     }
 
-    fun update(entity: User?) {
-        for (user in users) {
+    fun update(entity: User) {
+        /*for (user in users) {
             if (user.id == entity?.id) {
                 users[users.indexOf(user)] = entity
                 break
+            }
+        }*/
+
+        HttpService.coroutineScope.launch {
+            val response = HttpService.client.post("${HttpService.host}/users") {
+                contentType(ContentType.Application.Json)
+                setBody(UserDto(entity.id, entity.firstName, entity.lastName))
+            }
+            println("Load image: $response")
+            if (response.status == HttpStatusCode.OK) {
+
             }
         }
     }
@@ -91,7 +102,7 @@ object UsersRepo {
         HttpService.coroutineScope.launch {
             val response = HttpService.client.post("${HttpService.host}/users") {
                 contentType(ContentType.Application.Json)
-                setBody(UserDto(1L, "Image from desktop.", imageBytes)) // TODO: Hardcode
+                setBody(UserDto(1L, "Image from desktop.", "asdasd", imageBytes)) // TODO: Hardcode
             }
             println("Load image: $response")
             if (response.status == HttpStatusCode.OK) {
@@ -104,8 +115,8 @@ object UsersRepo {
 @Serializable
 data class User(
     val id: Long,
-    val firstName: String,
-    val lastName: String,
+    var firstName: String,
+    var lastName: String,
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val online: Boolean = false,
     val image: ByteArray? = null
@@ -121,6 +132,7 @@ data class User(
 @Serializable
 data class UserDto(
     val id: Long,
-    val text: String,
-    val image: ByteArray
+    val firstName: String,
+    val lastName: String,
+    val image: ByteArray? = null
 )
