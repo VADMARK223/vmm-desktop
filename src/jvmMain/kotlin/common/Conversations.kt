@@ -51,12 +51,10 @@ object ConversationsRepo {
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/conversations/$userId")
             try {
-                println("Response conversations: $response")
                 if (response.status == HttpStatusCode.OK) {
                     val responseConversations = response.body<List<Conversation>>()
                     conversations.addAll(responseConversations)
                     selectedFirst()
-                    println("Conversations update and first select.")
                 } else {
                     val responseData = response.body<String>()
                     println(responseData)

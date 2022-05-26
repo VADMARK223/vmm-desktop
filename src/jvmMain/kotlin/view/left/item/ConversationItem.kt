@@ -44,10 +44,6 @@ fun ConversationItem(
     val companion: User? = UsersRepo.getById(conversation.companionId)
     val (forConversation, forChat) = ConversationAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
-    val conversationName = mutableStateOf(conversation.name)
-
-//    println(">>>>>>>>>>> ${conversationName.value}")
-//    println("conversation.test.value: " + conversation.test.value)
 
     Box(
         modifier = modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR)))
@@ -66,10 +62,7 @@ fun ConversationItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box {
-                val avaText =
-                    if (companion != null) "${companion.firstName.first()}${companion.lastName.first()}" else conversation.visibleName.value.first() // TODO get only name
-                        .toString()
-                Avatar(avaText, mutableStateOf(companion?.online).value)
+                Avatar(conversation.visibleName.value, mutableStateOf(companion?.online).value)
 
                 DropdownMenu(
                     expanded = expanded.value,

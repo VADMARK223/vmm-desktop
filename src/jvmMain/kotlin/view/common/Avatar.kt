@@ -25,10 +25,19 @@ import kotlin.random.Random
  */
 @Composable
 fun Avatar(text: String, online: Boolean?, user: User? = null) {
+    val textArray = text.split(" ")
+    val abbr = StringBuilder()
+    for ((count, textArrayItem) in textArray.withIndex()) {
+        abbr.append(textArrayItem.first().uppercase())
+        if (count + 1 == 3) {
+            break
+        }
+    }
+
     val bgColor = remember { mutableStateOf(Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))) }
 
     val size = 50.dp
-    Box{
+    Box {
         Box(
             Modifier
                 .size(size)
@@ -42,7 +51,7 @@ fun Avatar(text: String, online: Boolean?, user: User? = null) {
                 )
             } else {
                 Text(
-                    text = text,
+                    text = abbr.toString(),
                     color = Color.White,
                     modifier = Modifier.align(Alignment.Center)
                 )

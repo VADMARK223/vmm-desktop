@@ -1,6 +1,5 @@
 package view.item.user
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -8,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import common.User
@@ -27,11 +25,7 @@ fun UserItem(user: User, modifier: Modifier) {
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val avaText = user.firstName.first().toString() + user.lastName.first().toString()
-
-
-
-            Avatar(avaText, mutableStateOf(user.online).value, user)
+            Avatar(user.name, mutableStateOf(user.online).value, user)
 
             Column {
                 Text(
