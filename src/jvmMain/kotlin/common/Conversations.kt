@@ -45,7 +45,6 @@ object ConversationsRepo {
     fun all(): List<Conversation> = conversations
 
     fun updateByUserId(userId: Long) {
-        println("Get conversations by user id: $userId")
         conversations.clear()
 
         HttpService.coroutineScope.launch {

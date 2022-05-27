@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,7 +63,7 @@ fun ConversationItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box {
-                Avatar(conversation.visibleName.value, mutableStateOf(companion?.online).value)
+                Avatar(conversation.visibleName.value, mutableStateOf(companion?.online).value, companion)
 
                 DropdownMenu(
                     expanded = expanded.value,
@@ -96,6 +97,14 @@ fun ConversationItem(
 
             Column {
                 Row {
+                    if (conversation.companionId != null) {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = "",
+                            tint = Color.White
+                        )
+                    }
+
                     Text(
                         text = conversation.visibleName.value,
                         style = MaterialTheme.typography.h6,
@@ -103,14 +112,6 @@ fun ConversationItem(
                         overflow = TextOverflow.Ellipsis,
                         color = Color.White
                     )
-
-                    if (conversation.companionId != null) {
-                        Icon(
-                            Icons.Default.Lock,
-                            contentDescription = "",
-                            tint = Color.White
-                        )
-                    }
 
                     Spacer(Modifier.weight(1F))
 

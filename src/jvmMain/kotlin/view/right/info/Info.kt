@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
 import common.User
 import common.UsersRepo
-import kotlinx.datetime.toJavaLocalDateTime
 import service.ImageChooser
 import service.printDraw
 import view.window.Window
@@ -62,19 +61,28 @@ fun Info() {
                 color = Color.White
             )
 
-            var infoText: String
+            val infoText = StringBuilder()
+            if (conversation.value != null) {
+                if (conversation.value!!.companion != null) {
+                    infoText.append("last seen recently")
+                } else {
+                    infoText.append("${conversation.value?.membersCount} members")
+                }
+            }
             val formatter = DateTimeFormatter
                 .ofPattern("hh:mm:ss")
-            infoText =
+
+
+            /*infoText =
                 if (conversation.value == null) ""
                 else "Creation time: ${formatter.format(conversation.value?.createTime?.toJavaLocalDateTime())} Owner: ${conversation.value?.ownerId}"
 
             if (conversation.value != null && conversation.value?.companionId == null) {
                 infoText += " Members: ${conversation.value?.membersCount}"
-            }
+            }*/
 
             Text(
-                text = infoText,
+                text = infoText.toString(),
                 style = MaterialTheme.typography.overline,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

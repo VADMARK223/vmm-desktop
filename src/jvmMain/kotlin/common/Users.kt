@@ -33,7 +33,6 @@ object UsersRepo {
     }
 
     private fun requestDefaultCurrentUser(id: Long) {
-        println("Request default current user: $id.")
         HttpService.coroutineScope.launch {
             val response = HttpService.client.get("${HttpService.host}/users/$id")
             if (response.status == HttpStatusCode.OK) {
@@ -71,7 +70,6 @@ object UsersRepo {
     fun all(): List<User> = users
 
     fun setCurrentUser(user: User) {
-        println("Set current user: $user")
         current.value = user
     }
 

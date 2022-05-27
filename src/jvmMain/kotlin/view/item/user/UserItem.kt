@@ -29,7 +29,7 @@ fun UserItem(user: User, modifier: Modifier) {
 
             Column {
                 Text(
-                    text = user.id.toString() + " " + user.name,
+                    text = user.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.White
