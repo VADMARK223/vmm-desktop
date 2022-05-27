@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import common.User
 import org.jetbrains.skia.Image
@@ -24,7 +26,7 @@ import kotlin.random.Random
  * @since 15.05.2022
  */
 @Composable
-fun Avatar(text: String, online: Boolean?, user: User? = null) {
+fun Avatar(text: String, online: Boolean? = false, user: User? = null) {
     val textArray = text.split(" ")
     val abbr = StringBuilder()
     for ((count, textArrayItem) in textArray.withIndex()) {
@@ -47,7 +49,9 @@ fun Avatar(text: String, online: Boolean?, user: User? = null) {
             if (user?.image != null) {
                 Image(
                     bitmap = Image.makeFromEncoded(user.image).toComposeImageBitmap(),
-                    contentDescription = "Loaded image"
+                    contentDescription = "Image",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.width(size),
                 )
             } else {
                 Text(

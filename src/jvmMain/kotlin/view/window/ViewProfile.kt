@@ -1,9 +1,6 @@
 package view.window
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -16,6 +13,7 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
 import common.User
+import view.common.Avatar
 import java.awt.Cursor
 
 /**
@@ -60,13 +58,22 @@ fun ViewProfile(user: User) {
                 )
             }
         }
+        Spacer(Modifier.height(12.dp))
 
         Divider()
 
-        Text(
-            text = "${user.firstName} ${user.lastName}",
-            color = Color.White,
-            style = MaterialTheme.typography.h6
-        )
+        Spacer(Modifier.height(12.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Avatar(user.name)
+            Spacer(Modifier.width(12.dp))
+            Text(
+                text = user.name,
+                color = Color.White,
+                style = MaterialTheme.typography.h6
+            )
+        }
     }
 }

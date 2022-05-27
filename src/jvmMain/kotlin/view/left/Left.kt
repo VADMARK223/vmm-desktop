@@ -1,26 +1,22 @@
 package view.left
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.UsersRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import service.printDraw
+import view.common.Avatar
 import view.common.Search
 import view.window.Window
 import view.window.WindowType
@@ -78,7 +74,7 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState, searchState: Mut
 @Composable
 fun DrawerView(scope: CoroutineScope, scaffoldState: ScaffoldState) {
     Column {
-        Box(Modifier.padding(start = 12.dp, top = 12.dp)) {
+        /*Box(Modifier.padding(start = 12.dp, top = 12.dp)) {
             val size = 50.dp
             Box(
                 Modifier
@@ -91,6 +87,13 @@ fun DrawerView(scope: CoroutineScope, scaffoldState: ScaffoldState) {
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.width(size),
                 )
+            }
+        }*/
+
+        val currentUser = UsersRepo.current().value
+        if (currentUser != null) {
+            Box(Modifier.padding(start = 12.dp, top = 12.dp)) {
+                Avatar(currentUser.name, false, currentUser)
             }
         }
 

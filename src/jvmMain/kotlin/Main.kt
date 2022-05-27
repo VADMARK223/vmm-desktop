@@ -32,13 +32,10 @@ import view.window.BaseWindow
 import view.window.Window
 import view.window.WindowState
 import view.window.WindowType
-import java.io.File
 
 @Composable
 fun MainScreen() {
     printDraw()
-//    val tempFile = File("/home/vadmark/Pictures/temp/f408dc7863a3be1ec10c242371d32cac.jpg")
-//    UsersRepo.loadImage(tempFile.readBytes())
 
     val mainOutput = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -90,11 +87,9 @@ suspend fun main() = coroutineScope {
             MainScreen()
         }
 
-        /**/
 
         val currentUser = UsersRepo.current().value
         if (currentUser != null) {
-            println("User loaded: $currentUser")
             ConversationsRepo.updateByUserId(currentUser.id)
             launch {
                 initUsersWebSocket(currentUser.id)
