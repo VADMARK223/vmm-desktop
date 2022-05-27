@@ -103,8 +103,17 @@ object MessagesRepo {
 
     fun deleteMessage(message: Message?) {
         if (message != null) {
+            val currentIndex = messages.indexOf(message)
+            val prevMessage = messages.elementAtOrNull(currentIndex - 1)
+            if (prevMessage != null && prevMessage.ownerId == -1L) {
+                messages.remove(prevMessage)
+            }
+
             if (conversationByMessages.containsKey(message.conversationId)) {
                 conversationByMessages[message.conversationId]?.remove(message)
+                if (prevMessage != null && prevMessage.ownerId == -1L) {
+                    conversationByMessages[message.conversationId]?.remove(prevMessage)
+                }
             }
             messages.remove(message)
         }
