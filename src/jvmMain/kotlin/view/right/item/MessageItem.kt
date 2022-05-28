@@ -51,7 +51,9 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
             .onPointerEvent(PointerEventType.Press) {
                 when (it.awtEventOrNull?.button) {
                     MouseEvent.BUTTON3 -> {
-                        expanded.value = true
+                        if (!message.isSystem) {
+                            expanded.value = true
+                        }
                     }
                 }
             }
@@ -87,6 +89,9 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
             }
         ) {
             menuItems.forEach {
+                if (it == MessageAction.EDIT && message.ownerId != UsersRepo.current().value?.id) {
+                    return@forEach
+                }
                 DropdownMenuItem(onClick = {
                     when (it) {
                         MessageAction.EDIT -> {
