@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -34,18 +33,18 @@ import java.awt.Cursor
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InputMessage(mainOutput: MutableState<TextFieldValue>) {
+fun InputMessage() {
     printDraw()
-    val mainOutputEmpty = mutableStateOf(mainOutput.value.text.isNotEmpty())
+    val mainOutputEmpty = mutableStateOf(InputMessageState.textOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(
-            value = mainOutput.value,
+            value = InputMessageState.textOutput.value,
             onValueChange = {
-                mainOutput.value = it
+                InputMessageState.textOutput.value = it
             },
             modifier = Modifier.fillMaxWidth().onKeyEvent {
                 if (it.key == Key.Enter || it.key == Key.NumPadEnter) {
-                    sendMessage(mainOutput)
+                    sendMessage()
                 }
                 false
             },
@@ -83,7 +82,7 @@ fun InputMessage(mainOutput: MutableState<TextFieldValue>) {
                         IconButton(
                             modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
                             onClick = {
-                                sendMessage(mainOutput)
+                                sendMessage()
                             }
                         ) {
                             Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))
@@ -95,11 +94,11 @@ fun InputMessage(mainOutput: MutableState<TextFieldValue>) {
     }
 }
 
-private fun sendMessage(mainOutput: MutableState<TextFieldValue>) {
-    if (mainOutput.value.text.isNotEmpty()) {
+private fun sendMessage() {
+    if (InputMessageState.textOutput.value.text.isNotEmpty()) {
         val conversationSelectedId = ConversationsRepo.selected().value?.id
         val currentUserId = UsersRepo.current().value?.id
-        MessagesRepo.put(mainOutput.value.text, conversationSelectedId, currentUserId)
-        mainOutput.value = TextFieldValue("")
+        MessagesRepo.put(InputMessageState.textOutput.value.text, conversationSelectedId, currentUserId)
+        InputMessageState.textOutput.value = TextFieldValue("")
     }
 }

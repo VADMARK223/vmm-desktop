@@ -11,7 +11,6 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -26,6 +25,7 @@ import common.Message
 import common.MessagesRepo
 import common.UsersRepo
 import kotlinx.datetime.toJavaLocalDateTime
+import view.right.InputMessageState
 import java.awt.event.MouseEvent
 import java.time.format.DateTimeFormatter
 
@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
+fun MessageItem(message: Message) {
     val expanded = remember { mutableStateOf(false) }
     val menuItems = MessageAction.values()
     Column(
@@ -89,13 +89,14 @@ fun MessageItem(message: Message, mainOutput: MutableState<TextFieldValue>) {
             }
         ) {
             menuItems.forEach {
-                if (it == MessageAction.EDIT && message.ownerId != UsersRepo.current().value?.id) {
+                if (it == MessageAction.EDIT && !message.isMy) {
                     return@forEach
                 }
                 DropdownMenuItem(onClick = {
                     when (it) {
                         MessageAction.EDIT -> {
-                            mainOutput.value = TextFieldValue(message.text)
+                            InputMessageState.editMode.value = true
+                            InputMessageState.textOutput.value = TextFieldValue(message.text)
                         }
                         MessageAction.REMOVE -> {
                             MessagesRepo.delete(message.id)

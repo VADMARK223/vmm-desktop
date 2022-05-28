@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import common.ConversationsRepo
 import service.printDraw
 import view.right.info.Info
@@ -20,7 +18,7 @@ import view.right.info.Info
  * @since 21.05.2022
  */
 @Composable
-fun Right(mainOutput: MutableState<TextFieldValue>) {
+fun Right() {
     printDraw()
     val conversationSelected = ConversationsRepo.selected().value
 
@@ -34,11 +32,14 @@ fun Right(mainOutput: MutableState<TextFieldValue>) {
             Messages(
                 Modifier
                     .weight(1f)
-                    .background(color = Color(14, 22, 33)),
-                mainOutput
+                    .background(color = Color(14, 22, 33))
             )
 
-            InputMessage(mainOutput)
+            if (InputMessageState.editMode.value) {
+                EditMessageInfo()
+            }
+
+            InputMessage()
         }
     } else {
         Box(Modifier.fillMaxSize().background(color = Color(14, 22, 33))) {

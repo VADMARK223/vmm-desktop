@@ -28,6 +28,7 @@ data class Message(
         get() {
             return ownerId == -1L
         }
+    val isMy: Boolean = ownerId == UsersRepo.current().value?.id
 }
 
 object MessagesRepo {
