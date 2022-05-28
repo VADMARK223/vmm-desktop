@@ -9,7 +9,6 @@ import kotlinx.datetime.*
 import kotlinx.serialization.Serializable
 import service.HttpService
 import java.time.format.DateTimeFormatter
-import kotlin.random.Random
 
 /**
  * @author Markitanov Vadim
@@ -19,10 +18,10 @@ import kotlin.random.Random
 data class Message(
     val id: Long = -1,
     val text: String = "Unknown",
-    val ownerId: Long = -1,
+    val ownerId: Long? = -1,
     val edited: Boolean = false,
-    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-    val conversationId: Long = Random.nextLong()
+    val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val conversationId: Long? = -1
 ) {
     val isSystem: Boolean
         get() {
@@ -39,14 +38,25 @@ object MessagesRepo {
         return messages
     }
 
-    fun put(text: String, conversationId: Long?, currentUserId: Long?) {
-        val messageDto = MessageDto(text = text, conversationId = conversationId, ownerId = currentUserId)
+    /*fun put(text: String, conversationId: Long?, currentUserId: Long?, message: Message? = null) {
+        val messageDto = MessageDto(id, text, conversationId, currentUserId, isEdited)
         println("Put message: $messageDto")
 
         HttpService.coroutineScope.launch {
             HttpService.client.put("${HttpService.host}/messages") {
                 contentType(ContentType.Application.Json)
                 setBody(messageDto)
+            }
+        }
+    }*/
+
+    fun put(message: Message) {
+        println("Put message: $message")
+
+        HttpService.coroutineScope.launch {
+            HttpService.client.put("${HttpService.host}/messages") {
+                contentType(ContentType.Application.Json)
+                setBody(message)
             }
         }
     }
@@ -91,14 +101,26 @@ object MessagesRepo {
         }
     }
 
-    fun getById(messageId: Long?): Message? = messages.singleOrNull { it.id == messageId }
+    private fun getById(messageId: Long?): Message? = messages.singleOrNull { it.id == messageId }
 
     fun addMessage(message: Message?) {
         if (message != null) {
-            if (conversationByMessages.containsKey(message.conversationId)) {
-                conversationByMessages[message.conversationId]?.add(message)
+            if (message.edited) {
+                val mes = getById(message.id)
+                messages[messages.indexOf(mes)] = message
+
+                if (conversationByMessages.containsKey(message.conversationId)) {
+                    conversationByMessages[message.conversationId]?.let {
+                        conversationByMessages[message.conversationId]?.set(
+                            it.indexOf(mes), message)
+                    }
+                }
+            } else {
+                if (conversationByMessages.containsKey(message.conversationId)) {
+                    conversationByMessages[message.conversationId]?.add(message)
+                }
+                messages.add(message)
             }
-            messages.add(message)
         }
     }
 
@@ -120,6 +142,3 @@ object MessagesRepo {
         }
     }
 }
-
-@Serializable
-data class MessageDto(val text: String, val conversationId: Long?, val ownerId: Long?)

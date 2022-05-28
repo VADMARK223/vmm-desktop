@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 //@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditMessageInfo() {
+    val oldMessage = remember { InputMessageState.textOutput.value.text }
     Row(
         modifier = Modifier.background(Color(23, 33, 43)),
         verticalAlignment = Alignment.CenterVertically
@@ -38,7 +40,7 @@ fun EditMessageInfo() {
         Spacer(Modifier.width(12.dp))
         Column {
             Text("Edit message", color = Color(82, 136, 193))
-            Text(InputMessageState.textOutput.value.text, color = Color.White)
+            Text(oldMessage, color = Color.White)
         }
 
         Spacer(Modifier.weight(1F))
@@ -47,7 +49,7 @@ fun EditMessageInfo() {
 //        ) {
         IconButton(
             onClick = {
-                InputMessageState.editMode.value = false
+                InputMessageState.editMessage.value = null
                 InputMessageState.textOutput.value = TextFieldValue("")
             }) {
             Icon(

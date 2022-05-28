@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
+import common.Message
 import common.MessagesRepo
 import common.UsersRepo
 import service.printDraw
@@ -35,6 +37,7 @@ import java.awt.Cursor
 @Composable
 fun InputMessage() {
     printDraw()
+
     val mainOutputEmpty = mutableStateOf(InputMessageState.textOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -44,7 +47,7 @@ fun InputMessage() {
             },
             modifier = Modifier.fillMaxWidth().onKeyEvent {
                 if (it.key == Key.Enter || it.key == Key.NumPadEnter) {
-                    sendMessage()
+                    putMessage()
                 }
                 false
             },
@@ -82,10 +85,14 @@ fun InputMessage() {
                         IconButton(
                             modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
                             onClick = {
-                                sendMessage()
+                                putMessage()
                             }
                         ) {
-                            Icon(Icons.Filled.Send, contentDescription = "Send message", tint = Color(82, 136, 193))
+                            Icon(
+                                if (InputMessageState.editMessage.value != null) Icons.Filled.Done else Icons.Filled.Send,
+                                contentDescription = "Put message",
+                                tint = Color(82, 136, 193)
+                            )
                         }
                     }
                 }
@@ -94,11 +101,37 @@ fun InputMessage() {
     }
 }
 
-private fun sendMessage() {
+private fun putMessage() {
+    val message = InputMessageState.editMessage.value
     if (InputMessageState.textOutput.value.text.isNotEmpty()) {
         val conversationSelectedId = ConversationsRepo.selected().value?.id
         val currentUserId = UsersRepo.current().value?.id
-        MessagesRepo.put(InputMessageState.textOutput.value.text, conversationSelectedId, currentUserId)
+
+        if (message == null) {
+            val newMessage = Message(
+                text = InputMessageState.textOutput.value.text,
+                conversationId = conversationSelectedId,
+                ownerId = currentUserId
+            )
+
+            println("PUT NEW>")
+            MessagesRepo.put(newMessage)
+        } else {
+            println("EDIT")
+            MessagesRepo.put(
+                message.copy(
+                    text = InputMessageState.textOutput.value.text,
+                    edited = true
+                )
+            )
+        }
+
+
+//        MessagesRepo.put(InputMessageState.textOutput.value.text, conversationSelectedId, currentUserId, message)
         InputMessageState.textOutput.value = TextFieldValue("")
+
+        if (InputMessageState.editMessage.value != null) {
+            InputMessageState.editMessage.value = null
+        }
     }
 }

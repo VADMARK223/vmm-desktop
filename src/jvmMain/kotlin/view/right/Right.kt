@@ -35,7 +35,7 @@ fun Right() {
                     .background(color = Color(14, 22, 33))
             )
 
-            if (InputMessageState.editMode.value) {
+            if (InputMessageState.editMessage.value != null) {
                 EditMessageInfo()
             }
 

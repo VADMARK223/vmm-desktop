@@ -66,7 +66,7 @@ fun MessageItem(message: Message) {
             ) {
                 if (message.edited) {
                     Text(
-                        text = "edited",
+                        text = "edited ",
                         style = MaterialTheme.typography.overline,
                         color = Color.Gray
                     )
@@ -95,7 +95,8 @@ fun MessageItem(message: Message) {
                 DropdownMenuItem(onClick = {
                     when (it) {
                         MessageAction.EDIT -> {
-                            InputMessageState.editMode.value = true
+                            InputMessageState.editMessage.value = message
+                            println("Message for edit: $message")
                             InputMessageState.textOutput.value = TextFieldValue(message.text)
                         }
                         MessageAction.REMOVE -> {
