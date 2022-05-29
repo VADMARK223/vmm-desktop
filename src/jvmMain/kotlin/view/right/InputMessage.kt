@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +27,7 @@ import common.ConversationsRepo
 import common.Message
 import common.MessagesRepo
 import common.UsersRepo
+import service.ImageChooser
 import service.printDraw
 import java.awt.Cursor
 
@@ -37,6 +39,7 @@ import java.awt.Cursor
 @Composable
 fun InputMessage() {
     printDraw()
+    val showImageChooser = remember { mutableStateOf(false) }
 
     val mainOutputEmpty = mutableStateOf(InputMessageState.textOutput.value.text.isNotEmpty())
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -64,7 +67,7 @@ fun InputMessage() {
                 IconButton(
                     modifier = Modifier.pointerHoverIcon(PointerIcon(Cursor(Cursor.HAND_CURSOR))),
                     onClick = {
-                        println("Add file")
+                        showImageChooser.value = true
                     }
                 ) {
                     Icon(Icons.Filled.Add, contentDescription = "Add file")
@@ -98,6 +101,12 @@ fun InputMessage() {
                 }
             }
         )
+    }
+
+    if (showImageChooser.value) {
+        ImageChooser {
+            println("AAAAAAAAAAAAAAAAAAAAAA $it")
+        }
     }
 }
 

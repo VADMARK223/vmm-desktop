@@ -1,10 +1,7 @@
 package view.right.item
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -23,7 +20,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.Message
 import common.MessagesRepo
-import common.UsersRepo
 import kotlinx.datetime.toJavaLocalDateTime
 import view.right.InputMessageState
 import java.awt.event.MouseEvent
@@ -40,8 +36,9 @@ fun MessageItem(message: Message) {
     val menuItems = MessageAction.values()
     Column(
         modifier = Modifier
+            .widthIn(0.dp, 430.dp)
             .background(
-                color = when (message.ownerId == UsersRepo.current().value?.id) {
+                color = when (message.isMy) {
                     true -> Color(43, 82, 120)
                     else -> Color(24, 37, 51)
                 },

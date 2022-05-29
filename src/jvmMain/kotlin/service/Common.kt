@@ -1,15 +1,9 @@
 package service
 
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.window.AwtWindow
-import common.UsersRepo
-import org.jetbrains.skia.Image
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
@@ -37,29 +31,30 @@ fun printDraw() {
 }
 
 @Composable
-fun ImageChooser(showImageChooser: MutableState<Boolean>) {
+fun ImageChooser(imageLoaded: (ByteArray) -> Unit) {
     val imageFullName = remember { mutableStateOf<String?>(null) }
     if (imageFullName.value != null) {
-        println("GOOD: ${imageFullName.value}")
+        println("Image loaded: ${imageFullName.value}")
 //        showImageChooser.value = false
         val file = imageFullName.value?.let { File(it) }
         if (file != null) {
             if (file.exists()) {
-                val image = mutableStateOf<ImageBitmap?>(null)
+//                val image = mutableStateOf<ImageBitmap?>(null)
                 try {
-                    val imageBytes = file.readBytes()
-                    UsersRepo.loadImage(imageBytes)
-                    image.value = Image.makeFromEncoded(imageBytes).toComposeImageBitmap()
+                    imageLoaded.invoke(file.readBytes())
+//                    val imageBytes = file.readBytes()
+//                    UsersRepo.loadImage(imageBytes)
+//                    image.value = Image.makeFromEncoded(imageBytes).toComposeImageBitmap()
                 } catch (e: Exception) {
                     println("Error load image: ${e.localizedMessage}")
                 }
 
-                if (image.value != null) {
-                    Image(
-                        bitmap = image.value!!,
-                        contentDescription = "Test"
-                    )
-                }
+//                if (image.value != null) {
+//                    Image(
+//                        bitmap = image.value!!,
+//                        contentDescription = "Test"
+//                    )
+//                }
             }
         }
     }

@@ -11,10 +11,12 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
 import common.MessagesRepo
@@ -27,9 +29,7 @@ import view.right.item.MessageItem
  * @since 23.04.2022
  */
 @Composable
-fun Messages(
-    modifier: Modifier
-) {
+fun Messages(modifier: Modifier) {
     printDraw()
 
     val scope = rememberCoroutineScope()

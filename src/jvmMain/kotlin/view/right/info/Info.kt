@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import common.ConversationsRepo
 import common.User
 import common.UsersRepo
-import service.ImageChooser
 import service.printDraw
 import view.window.Window
 import view.window.WindowType
@@ -37,7 +35,6 @@ fun Info() {
     val expanded = remember { mutableStateOf(false) }
     val conversation = ConversationsRepo.selected()
     val companion: User? = UsersRepo.getById(conversation.value?.companionId)
-    val showImageChooser = remember { mutableStateOf(false) }
 
     val (forConversation, forChat) = InfoAction.values().partition { it.isConversation }
     val menuItems = if (companion != null) forChat else forConversation
@@ -102,19 +99,7 @@ fun Info() {
                 tint = Color.Gray
             )
         }
-        IconButton(
-            modifier = Modifier.align(Alignment.Center).pointerHoverIcon(PointerIcon(Cursor(HAND_CURSOR))),
-            onClick = {
-                println("SHOW IMAGE CHOOSER")
-                showImageChooser.value = true
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Face,
-                contentDescription = null,
-                tint = Color.Gray
-            )
-        }
+
         Box(modifier = Modifier.align(Alignment.BottomEnd)) {
             DropdownMenu(
                 expanded = expanded.value,
@@ -140,10 +125,6 @@ fun Info() {
                     }
                 }
             }
-        }
-
-        if (showImageChooser.value) {
-            ImageChooser(showImageChooser)
         }
     }
 }
