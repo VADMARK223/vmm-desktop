@@ -51,7 +51,7 @@ fun MainScreen() {
 
     MaterialTheme(colors = darkThemeColors) {
         HorizontalSplitPane {
-            first(400.dp) {
+            first(200.dp) {
                 Left()
             }
             second {

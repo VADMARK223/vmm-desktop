@@ -34,7 +34,7 @@ fun Conversations(searchState: MutableState<TextFieldValue>) {
 
     val selectedConversation = remember { ConversationsRepo.selected() }
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(14, 22, 33))) {
+    Box(modifier = Modifier.background(Color(14, 22, 33))) {
         val usersLazyListState = rememberLazyListState()
         var filteredConversations: List<Conversation>
         LazyColumn(
@@ -62,7 +62,7 @@ fun Conversations(searchState: MutableState<TextFieldValue>) {
                         if (selectedConversation.value == conversation) Color(43, 82, 120)
                         else Color(23, 33, 43)
                     )
-                    .fillMaxWidth()
+//                    .fillMaxWidth()
                     .selectable(conversation == selectedConversation.value,
                         onClick = {
                             if (selectedConversation.value != conversation) {

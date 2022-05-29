@@ -3,7 +3,6 @@ package view.left.item
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +58,7 @@ fun ConversationItem(
                         }
                     }
                 },
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box {
@@ -96,7 +95,7 @@ fun ConversationItem(
             }
 
             Column {
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     if (conversation.companionId != null) {
                         Icon(
                             Icons.Default.Person,
@@ -107,7 +106,7 @@ fun ConversationItem(
 
                     Text(
                         text = conversation.visibleName.value,
-                        style = MaterialTheme.typography.h6,
+                        style = MaterialTheme.typography.body2,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         color = Color.White
@@ -120,8 +119,9 @@ fun ConversationItem(
                     val updateTimeText = formatter.format(conversation.updateTime.toJavaLocalDateTime())
 
                     Text(
+                        maxLines = 1,
                         text = updateTimeText,
-                        style = MaterialTheme.typography.overline,
+                        style = MaterialTheme.typography.body2,
                         color = Color.Gray
                     )
                 }
@@ -140,7 +140,6 @@ fun ConversationItem(
                     )
                 }
             }
-
         }
     }
 }
