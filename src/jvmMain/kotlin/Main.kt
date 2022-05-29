@@ -1,6 +1,14 @@
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -19,6 +27,8 @@ import kotlinx.serialization.decodeFromString
 import model.ChangeType
 import model.ConversationNotification
 import model.UserNotification
+import org.jetbrains.compose.splitpane.ExperimentalSplitPaneApi
+import org.jetbrains.compose.splitpane.HorizontalSplitPane
 import resources.darkThemeColors
 import service.HttpService
 import service.printDraw
@@ -29,15 +39,44 @@ import view.window.BaseWindow
 import view.window.Window
 import view.window.WindowState
 import view.window.WindowType
+import java.awt.Cursor
 
+private fun Modifier.cursorForHorizontalResize(): Modifier =
+    pointerHoverIcon(PointerIcon(Cursor(Cursor.E_RESIZE_CURSOR)))
+
+@OptIn(ExperimentalSplitPaneApi::class)
 @Composable
 fun MainScreen() {
     printDraw()
 
     MaterialTheme(colors = darkThemeColors) {
-        Row {
-            Left()
-            Right()
+        HorizontalSplitPane {
+            first(400.dp) {
+                Left()
+            }
+            second {
+                Right()
+            }
+            splitter {
+                visiblePart {
+                    Box(
+                        Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
+                            .background(MaterialTheme.colors.background)
+                    )
+                }
+                handle {
+                    Box(
+                        Modifier
+                            .markAsHandle()
+                            .cursorForHorizontalResize()
+                            .background(SolidColor(Color.Gray), alpha = 0.50f)
+                            .width(1.dp)
+                            .fillMaxHeight()
+                    )
+                }
+            }
         }
 
         if (UsersRepo.current().value == null) {
