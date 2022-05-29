@@ -114,6 +114,8 @@ fun ConversationItem(
 
                     Spacer(Modifier.weight(1F))
 
+                    Spacer(Modifier.width(5.dp))
+
                     val formatter = DateTimeFormatter
                         .ofPattern("hh:mm:ss")
                     val updateTimeText = formatter.format(conversation.updateTime.toJavaLocalDateTime())
@@ -122,7 +124,8 @@ fun ConversationItem(
                         maxLines = 1,
                         text = updateTimeText,
                         style = MaterialTheme.typography.body2,
-                        color = Color.Gray
+                        color = Color.Gray,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 

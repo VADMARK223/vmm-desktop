@@ -51,10 +51,10 @@ fun MainScreen() {
 
     MaterialTheme(colors = darkThemeColors) {
         HorizontalSplitPane {
-            first(200.dp) {
+            first(350.dp) {
                 Left()
             }
-            second {
+            second(250.dp) {
                 Right()
             }
             splitter {
@@ -120,7 +120,6 @@ suspend fun main() = coroutineScope {
         ) {
             MainScreen()
         }
-
 
         val currentUser = UsersRepo.current().value
         if (currentUser != null) {
