@@ -114,7 +114,7 @@ object UsersRepo {
 data class User(
     val id: Long,
     var firstName: String,
-    var lastName: String,
+    var lastName: String = "",
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val online: Boolean = false,
     val image: ByteArray? = null

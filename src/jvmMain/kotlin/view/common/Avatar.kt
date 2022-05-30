@@ -30,7 +30,10 @@ fun Avatar(text: String, online: Boolean? = false, user: User? = null) {
     val textArray = text.split(" ")
     val abbr = StringBuilder()
     for ((count, textArrayItem) in textArray.withIndex()) {
-        abbr.append(textArrayItem.first().uppercase())
+        if (textArrayItem.isNotEmpty()) {
+            abbr.append(textArrayItem.first().uppercase())
+        }
+
         if (count + 1 == 3) {
             break
         }

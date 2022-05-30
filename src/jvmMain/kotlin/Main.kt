@@ -51,7 +51,7 @@ fun MainScreen() {
 
     MaterialTheme(colors = darkThemeColors) {
         HorizontalSplitPane {
-            first(350.dp) {
+            first(450.dp) {
                 Left()
             }
             second(250.dp) {
@@ -96,7 +96,7 @@ suspend fun main() = coroutineScope {
 
     application {
         val icon = painterResource("favicon.ico")
-        val width = 1000.dp
+        val width = 1200.dp
         val height = 700.dp
         val state = rememberWindowState(
             size = DpSize(width, height),

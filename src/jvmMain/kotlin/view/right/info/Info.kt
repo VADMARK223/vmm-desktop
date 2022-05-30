@@ -47,7 +47,7 @@ fun Info() {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(23, 33, 43))
-            .padding(4.dp)
+            .padding(start = 12.dp, top = 3.dp, end = 0.dp, bottom = 3.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(

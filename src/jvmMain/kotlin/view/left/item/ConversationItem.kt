@@ -139,7 +139,7 @@ fun ConversationItem(
                         style = MaterialTheme.typography.overline,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = Color.Gray
+                        color = Color.White
                     )
                 }
             }
