@@ -12,5 +12,6 @@ enum class WindowType {
     ADD_MEMBERS,
     VIEW_PROFILE,
     VIEW_GROUP_INFO,
-    EDIT_CONTACT
+    EDIT_CONTACT,
+    MESSAGE_FILES
 }

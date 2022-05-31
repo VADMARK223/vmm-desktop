@@ -59,6 +59,7 @@ fun BaseWindow() {
                 WindowType.VIEW_PROFILE -> ViewProfile(Window.state.value.data as User)
                 WindowType.VIEW_GROUP_INFO -> ViewGroupInfo()
                 WindowType.EDIT_CONTACT -> EditContact(Window.state.value.data as User)
+                WindowType.MESSAGE_FILES -> MessageFiles()
                 else -> Window.hide()
             }
         }

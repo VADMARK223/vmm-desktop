@@ -127,7 +127,6 @@ fun EditContact(user: User) {
                         } else if (lastName.value.text.isEmpty()) {
                             lastNameEmpty.value = true
                         } else {
-//                                    UsersRepo.addUser(firstName.value.text, lastName.value.text)
                             contactState.value = ContactState.HIDE
                         }
                     } else if (contactState.value == ContactState.EDIT) {

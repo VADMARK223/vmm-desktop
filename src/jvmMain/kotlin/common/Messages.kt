@@ -50,6 +50,19 @@ object MessagesRepo {
         }
     }*/
 
+    fun put(text: String) {
+        val conversationSelectedId = ConversationsRepo.selected().value?.id
+        val currentUserId = UsersRepo.current().value?.id
+
+        put(
+            Message(
+                text = text,
+                conversationId = conversationSelectedId,
+                ownerId = currentUserId
+            )
+        )
+    }
+
     fun put(message: Message) {
         println("Put message: $message")
 
@@ -112,7 +125,8 @@ object MessagesRepo {
                 if (conversationByMessages.containsKey(message.conversationId)) {
                     conversationByMessages[message.conversationId]?.let {
                         conversationByMessages[message.conversationId]?.set(
-                            it.indexOf(mes), message)
+                            it.indexOf(mes), message
+                        )
                     }
                 }
             } else {

@@ -23,12 +23,11 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import common.ConversationsRepo
-import common.Message
 import common.MessagesRepo
-import common.UsersRepo
 import service.ImageChooser
 import service.printDraw
+import view.window.Window
+import view.window.WindowType
 import java.awt.Cursor
 
 /**
@@ -106,6 +105,7 @@ fun InputMessage() {
     if (showImageChooser.value) {
         ImageChooser {
             println("AAAAAAAAAAAAAAAAAAAAAA $it")
+            Window.show(WindowType.MESSAGE_FILES)
         }
     }
 }
@@ -113,20 +113,9 @@ fun InputMessage() {
 private fun putMessage() {
     val message = InputMessageState.editMessage.value
     if (InputMessageState.textOutput.value.text.isNotEmpty()) {
-        val conversationSelectedId = ConversationsRepo.selected().value?.id
-        val currentUserId = UsersRepo.current().value?.id
-
         if (message == null) {
-            val newMessage = Message(
-                text = InputMessageState.textOutput.value.text,
-                conversationId = conversationSelectedId,
-                ownerId = currentUserId
-            )
-
-            println("PUT NEW>")
-            MessagesRepo.put(newMessage)
+            MessagesRepo.put(InputMessageState.textOutput.value.text)
         } else {
-            println("EDIT")
             MessagesRepo.put(
                 message.copy(
                     text = InputMessageState.textOutput.value.text,
@@ -135,8 +124,6 @@ private fun putMessage() {
             )
         }
 
-
-//        MessagesRepo.put(InputMessageState.textOutput.value.text, conversationSelectedId, currentUserId, message)
         InputMessageState.textOutput.value = TextFieldValue("")
 
         if (InputMessageState.editMessage.value != null) {
