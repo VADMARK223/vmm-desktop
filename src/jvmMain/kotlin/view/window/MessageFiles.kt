@@ -1,5 +1,6 @@
 package view.window
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -11,20 +12,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import common.MessagesRepo
+import org.jetbrains.skia.Image
 
 /**
  * @author Markitanov Vadim
  * @since 31.05.2022
  */
 @Composable
-fun MessageFiles() {
+fun MessageFiles(byteArray: ByteArray?) {
+    if (byteArray == null) {
+        throw RuntimeException("File is null.")
+    }
     Column(Modifier.height(300.dp)) {
         Text(
             text = "1 files selected",
             color = Color.White
+        )
+
+        Image(
+            modifier = Modifier.width(130.dp),
+            bitmap = Image.makeFromEncoded(byteArray).toComposeImageBitmap(),
+            contentDescription = "Image"
         )
 
         val comment = remember { mutableStateOf(TextFieldValue("")) }
@@ -59,7 +71,7 @@ fun MessageFiles() {
                 onClick = {
                     println("Send")
                     if (comment.value.text.isNotEmpty()) {
-                        MessagesRepo.put(comment.value.text)
+                        MessagesRepo.put(comment.value.text, byteArray)
                     }
                     Window.hide()
                 },

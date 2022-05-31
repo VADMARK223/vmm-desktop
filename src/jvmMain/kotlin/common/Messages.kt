@@ -21,13 +21,17 @@ data class Message(
     val ownerId: Long? = -1,
     val edited: Boolean = false,
     val createTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-    val conversationId: Long? = -1
+    val conversationId: Long? = -1,
+    val file: ByteArray? = null
 ) {
     val isSystem: Boolean
         get() {
             return ownerId == -1L
         }
     val isMy: Boolean = ownerId == UsersRepo.current().value?.id
+    override fun toString(): String {
+        return "Message(id=${id}, text=${text})"
+    }
 }
 
 object MessagesRepo {
@@ -50,7 +54,7 @@ object MessagesRepo {
         }
     }*/
 
-    fun put(text: String) {
+    fun put(text: String, file: ByteArray? = null) {
         val conversationSelectedId = ConversationsRepo.selected().value?.id
         val currentUserId = UsersRepo.current().value?.id
 
@@ -58,7 +62,8 @@ object MessagesRepo {
             Message(
                 text = text,
                 conversationId = conversationSelectedId,
-                ownerId = currentUserId
+                ownerId = currentUserId,
+                file = file
             )
         )
     }
@@ -96,10 +101,14 @@ object MessagesRepo {
                     val currentIndex = responseMessages.indexOf(message)
                     val prevMessage = responseMessages.elementAtOrNull(currentIndex - 1)
                     if (prevMessage == null) {
-                        newMessages.add(Message(text = formatter.format(message.createTime.toJavaLocalDateTime())))
+                        newMessages.add(Message(
+                            text = formatter.format(message.createTime.toJavaLocalDateTime())
+                        ))
                     } else {
                         if (message.createTime.date.dayOfYear != prevMessage.createTime.date.dayOfYear) {
-                            newMessages.add(Message(text = formatter.format(message.createTime.toJavaLocalDateTime())))
+                            newMessages.add(Message(
+                                text = formatter.format(message.createTime.toJavaLocalDateTime())
+                            ))
                         }
                     }
 

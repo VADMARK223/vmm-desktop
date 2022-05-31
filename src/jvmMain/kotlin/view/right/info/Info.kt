@@ -115,7 +115,7 @@ fun Info() {
                             }
 
                             InfoAction.VIEW_GROUP_INFO -> {
-                                Window.setState(WindowType.VIEW_GROUP_INFO)
+                                Window.show(WindowType.VIEW_GROUP_INFO)
                             }
                         }
 

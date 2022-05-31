@@ -104,8 +104,8 @@ fun InputMessage() {
 
     if (showImageChooser.value) {
         ImageChooser {
-            println("AAAAAAAAAAAAAAAAAAAAAA $it")
-            Window.show(WindowType.MESSAGE_FILES)
+            Window.show(WindowType.MESSAGE_FILES, it)
+            showImageChooser.value = false
         }
     }
 }
