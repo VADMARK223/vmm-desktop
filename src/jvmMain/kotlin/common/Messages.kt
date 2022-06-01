@@ -42,18 +42,6 @@ object MessagesRepo {
         return messages
     }
 
-    /*fun put(text: String, conversationId: Long?, currentUserId: Long?, message: Message? = null) {
-        val messageDto = MessageDto(id, text, conversationId, currentUserId, isEdited)
-        println("Put message: $messageDto")
-
-        HttpService.coroutineScope.launch {
-            HttpService.client.put("${HttpService.host}/messages") {
-                contentType(ContentType.Application.Json)
-                setBody(messageDto)
-            }
-        }
-    }*/
-
     fun put(text: String, file: ByteArray? = null) {
         val conversationSelectedId = ConversationsRepo.selected().value?.id
         val currentUserId = UsersRepo.current().value?.id

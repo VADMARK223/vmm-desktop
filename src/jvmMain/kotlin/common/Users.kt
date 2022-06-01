@@ -82,32 +82,14 @@ object UsersRepo {
         }*/
 
         HttpService.coroutineScope.launch {
-            val response = HttpService.client.post("${HttpService.host}/users") {
+            HttpService.client.post("${HttpService.host}/users") {
                 contentType(ContentType.Application.Json)
                 setBody(UserDto(entity.id, entity.firstName, entity.lastName))
-            }
-            println("Load image: $response")
-            if (response.status == HttpStatusCode.OK) {
-
             }
         }
     }
 
     fun getById(id: Long?): User? = users.singleOrNull { id == it.id }
-
-    fun loadImage(imageBytes: ByteArray) {
-        println("imageBytes: $imageBytes")
-        HttpService.coroutineScope.launch {
-            val response = HttpService.client.post("${HttpService.host}/users") {
-                contentType(ContentType.Application.Json)
-                setBody(UserDto(1L, "Image from desktop.", "asdasd", imageBytes)) // TODO: Hardcode
-            }
-            println("Load image: $response")
-            if (response.status == HttpStatusCode.OK) {
-
-            }
-        }
-    }
 }
 
 @Serializable
