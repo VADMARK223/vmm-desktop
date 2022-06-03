@@ -24,9 +24,9 @@ import io.ktor.client.request.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
-import model.ChangeType
-import model.ConversationNotification
-import model.UserNotification
+import common.ChangeType
+import common.ConversationNotification
+import common.UserNotification
 import org.jetbrains.compose.splitpane.ExperimentalSplitPaneApi
 import org.jetbrains.compose.splitpane.HorizontalSplitPane
 import resources.darkThemeColors

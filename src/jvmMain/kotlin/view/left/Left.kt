@@ -31,7 +31,7 @@ fun Left() {
     printDraw()
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
 
-    Box(/*modifier = Modifier.width(400.dp)*/) {
+    Box {
         val scope = rememberCoroutineScope()
         val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
         Scaffold(

@@ -1,8 +1,4 @@
-package model
-
-import common.Conversation
-import common.Message
-import common.User
+package common
 
 /**
  * @author Markitanov Vadim
